@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kapitel 1.1 – Logistische Lösungen entwickeln & planen</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --surface2: #eeecea;
+    --border: #dddbd6;
+    --text: #1a1917;
+    --text2: #5a5854;
+    --text3: #8a8884;
+    --blue: #1a56db;
+    --blue-bg: #eff4ff;
+    --blue-border: #c3d3fd;
+    --green: #1a7a4a;
+    --green-bg: #f0faf4;
+    --green-border: #a7dfc0;
+    --amber: #92500a;
+    --amber-bg: #fffbf0;
+    --amber-border: #f5d48a;
+    --purple: #5522cc;
+    --purple-bg: #f4f0ff;
+    --purple-border: #c8b8f8;
+    --red: #9b1c1c;
+    --red-bg: #fff5f5;
+    --red-border: #f8b4b4;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* Header */
+  .site-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .site-header a {
+    font-size: 13px;
+    color: var(--text3);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+  }
+  .site-header a:hover { color: var(--blue); }
+  .header-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    flex: 1;
+  }
+  .header-badge {
+    font-size: 11px;
+    background: var(--blue-bg);
+    color: var(--blue);
+    border: 1px solid var(--blue-border);
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  /* Layout */
+  .layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: calc(100vh - 56px);
+    max-width: 1100px;
+    margin: 0 auto;
+    gap: 0;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 1.5rem 0;
+    position: sticky;
+    top: 56px;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+  }
+  .sidebar-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--text3);
+    padding: .5rem 1.25rem;
+    margin-bottom: .25rem;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    padding: .55rem 1.25rem;
+    font-size: 13px;
+    color: var(--text2);
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    transition: all .15s;
+    user-select: none;
+  }
+  .nav-item:hover { background: var(--bg); color: var(--text); }
+  .nav-item.active {
+    color: var(--blue);
+    background: var(--blue-bg);
+    border-left-color: var(--blue);
+    font-weight: 500;
+  }
+  .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+  .nav-item.active .nav-dot { background: var(--blue); }
+
+  /* Main Content */
+  .main {
+    padding: 2rem 2.5rem;
+    max-width: 780px;
+  }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* Page Header */
+  .page-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .page-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: .4rem;
+  }
+  .page-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .page-desc {
+    font-size: 14px;
+    color: var(--text2);
+    margin-top: .5rem;
+    line-height: 1.6;
+  }
+
+  /* Sections */
+  .section { margin-bottom: 2rem; }
+  .section-title {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.25rem;
+    margin-bottom: .75rem;
+  }
+  .card.blue { border-left: 3px solid var(--blue); background: var(--blue-bg); border-color: var(--blue-border); }
+  .card.green { border-left: 3px solid var(--green); background: var(--green-bg); border-color: var(--green-border); }
+  .card.amber { border-left: 3px solid var(--amber); background: var(--amber-bg); border-color: var(--amber-border); }
+  .card.purple { border-left: 3px solid var(--purple); background: var(--purple-bg); border-color: var(--purple-border); }
+  .card.red { border-left: 3px solid var(--red); background: var(--red-bg); border-color: var(--red-border); }
+
+  .term {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: .35rem;
+  }
+  .def {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+  .example {
+    font-size: 12px;
+    color: var(--text3);
+    margin-top: .5rem;
+    padding-top: .5rem;
+    border-top: 1px solid var(--border);
+    font-style: italic;
+  }
+  .example::before { content: "→ "; font-style: normal; }
+
+  /* Merksatz */
+  .merksatz {
+    background: var(--amber-bg);
+    border: 1px solid var(--amber-border);
+    border-radius: var(--radius);
+    padding: .85rem 1rem .85rem 1.1rem;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.65;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  .merksatz::before {
+    content: "MERKSATZ";
+    display: block;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    color: var(--amber);
+    margin-bottom: .3rem;
+  }
+
+  /* Grids */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: .75rem; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .75rem; margin-bottom: .75rem; }
+
+  .mini-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: .85rem 1rem;
+  }
+  .mini-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: .25rem;
+  }
+  .mini-text {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  /* Badges */
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-bottom: .4rem;
+  }
+  .badge.a { background: #dbeafe; color: #1e40af; }
+  .badge.b { background: #d1fae5; color: #065f46; }
+  .badge.c { background: #e5e7eb; color: #374151; }
+  .badge.x { background: #ccfbf1; color: #0f5132; }
+  .badge.y { background: #fef3c7; color: #78350f; }
+  .badge.z { background: #fee2e2; color: #7f1d1d; }
+
+  /* Formula */
+  .formula {
+    font-family: var(--mono);
+    font-size: 13px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: .75rem 1rem;
+    margin-bottom: .75rem;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  /* Table */
+  .table-wrap { overflow-x: auto; margin-bottom: 1rem; border-radius: var(--radius-lg); border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th {
+    background: var(--surface2);
+    padding: .6rem .9rem;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--text2);
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: .55rem .9rem; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--bg); }
+
+  /* Progress indicator */
+  .progress-bar {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 1.5rem;
+    padding: .75rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    align-items: center;
+  }
+  .prog-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .prog-dot.done { background: var(--green); }
+  .prog-dot.current { background: var(--blue); transform: scale(1.3); }
+  .prog-label {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--text3);
+    font-family: var(--mono);
+  }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar {
+      position: static;
+      height: auto;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      padding: .75rem 0;
+      display: flex;
+      overflow-x: auto;
+      gap: 0;
+    }
+    .sidebar-label { display: none; }
+    .nav-item { border-left: none; border-bottom: 2px solid transparent; white-space: nowrap; padding: .5rem 1rem; }
+    .nav-item.active { border-bottom-color: var(--blue); border-left: none; }
+    .main { padding: 1.25rem 1rem; }
+    .grid2, .grid3 { grid-template-columns: 1fr; }
+    .page-title { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="index.html">← Übersicht</a>
+  <div class="header-title">Fachwirt für Logistiksysteme</div>
+  <span class="header-badge">IHK</span>
+</header>
+
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-label">Kapitel 1.1</div>
+    <div class="nav-item active" onclick="show('overview')"><span class="nav-dot"></span>Überblick &amp; Begriffe</div>
+    <div class="nav-item" onclick="show('abc')"><span class="nav-dot"></span>ABC/XYZ-Analyse</div>
+    <div class="nav-item" onclick="show('beschaffung')"><span class="nav-dot"></span>Beschaffung</div>
+    <div class="nav-item" onclick="show('bedarf')"><span class="nav-dot"></span>Bedarfsrechnung</div>
+    <div class="nav-item" onclick="show('bestellung')"><span class="nav-dot"></span>Bestellverfahren</div>
+    <div class="nav-item" onclick="show('tools')"><span class="nav-dot"></span>Analysetools</div>
+  </nav>
+
+  <main class="main">
+
+    <!-- ÜBERBLICK -->
+    <div class="page active" id="page-overview">
+      <div class="page-header">
+        <div class="page-eyebrow">Kapitel 1.1 · Logistische Lösungen entwickeln &amp; planen</div>
+        <div class="page-title">Überblick &amp; Kernbegriffe</div>
+        <div class="page-desc">Dozent: Christian Gruber · Februar 2026 · IHK-Weiterbildung</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Die 9 Logistikbereiche</div>
+        <div class="grid3">
+          <div class="mini-card"><div class="mini-title">Beschaffung</div><div class="mini-text">Einkauf, Lieferanten – dein Alltag im Bestellwesen</div></div>
+          <div class="mini-card"><div class="mini-title">Lager</div><div class="mini-text">Ein-/Auslagerung, Inventur – dein Kernbereich</div></div>
+          <div class="mini-card"><div class="mini-title">Distribution</div><div class="mini-text">Lieferung an Kunden – im E-Commerce: Versand</div></div>
+          <div class="mini-card"><div class="mini-title">Transport</div><div class="mini-text">LKW, Bahn, Luft, Schiff</div></div>
+          <div class="mini-card"><div class="mini-title">Produktion</div><div class="mini-text">Materialbereitstellung für Fertigung</div></div>
+          <div class="mini-card"><div class="mini-title">Entsorgung</div><div class="mini-text">Rücklauf, Recycling, Retouren</div></div>
+          <div class="mini-card"><div class="mini-title">Information</div><div class="mini-text">Datenfluss, ERP, dein Artikelsystem</div></div>
+          <div class="mini-card"><div class="mini-title">Ersatzteile</div><div class="mini-text">Verfügbarkeit von Serviceteilen</div></div>
+          <div class="mini-card"><div class="mini-title">Instandhaltung</div><div class="mini-text">Wartung von Maschinen &amp; Anlagen</div></div>
+        </div>
+        <div class="merksatz">Logistik = die richtigen Güter, in der richtigen Menge, am richtigen Ort, zur richtigen Zeit, in der richtigen Qualität – zu minimalen Kosten.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Wichtige Fachbegriffe</div>
+        <div class="card blue">
+          <div class="term">Supply Chain (Lieferkette)</div>
+          <div class="def">Verbund aller Stufen vom Rohstofflieferanten bis zum Endkunden. Jede Stufe ist mit der nächsten verknüpft.</div>
+          <div class="example">E-Commerce: Hersteller → dein Lager → Paketdienstleister → Kunde</div>
+        </div>
+        <div class="card blue">
+          <div class="term">SCM – Supply Chain Management</div>
+          <div class="def">Aktive Steuerung und Optimierung der gesamten Lieferkette. Ziel: Kundenzufriedenheit durch effiziente Prozesse. ECR (Efficient Consumer Response) = effiziente Reaktion auf Kundenwünsche.</div>
+        </div>
+        <div class="card blue">
+          <div class="term">Wertschöpfungskette</div>
+          <div class="def">Alle Tätigkeiten, die ein Produkt vom Rohstoff zum verkaufsfähigen Artikel machen. Jede Stufe fügt Mehrwert hinzu.<br><br>Formel: Erlöse – Vorleistungen (z.B. Materialeinsatz) = Bruttowertschöpfung</div>
+        </div>
+        <div class="card blue">
+          <div class="term">Benchmarking</div>
+          <div class="def">Vergleich eigener Prozesse mit dem Branchen-Besten, um Schwächen zu identifizieren.<br><br>3 Arten: Intern (Abteilungen) · Wettbewerb (Branche) · Branchenübergreifend</div>
+          <div class="example">Dein Lager braucht 2 Tage Lieferzeit – Benchmark sagt 1 Tag → Handlungsbedarf.</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Belieferungsstrategien</div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Strategie</th><th>Prinzip</th><th>Praxisbeispiel</th></tr>
+            <tr><td><strong>Direktbelieferung</strong></td><td>Hersteller → Kunde direkt (Dropshipping)</td><td>Amazon Marketplace</td></tr>
+            <tr><td><strong>Hub &amp; Spoke</strong></td><td>Umschlagszentrum sammelt und verteilt</td><td>DHL-Paketzentrum</td></tr>
+            <tr><td><strong>Milkrun</strong></td><td>Feste Routen, volle Ladung hin / Leergut zurück</td><td>KANBAN in Automobilfabrik</td></tr>
+            <tr><td><strong>Teilladungen</strong></td><td>Mehrere Empfänger auf einer Tour</td><td>Speditions-Sammelgut</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">IT-Systeme in der Logistik</div>
+        <div class="grid2">
+          <div class="mini-card"><div class="mini-title">EDI</div><div class="mini-text">Electronic Data Interchange – vollautomatischer Datenaustausch mit Lieferanten/Kunden. Kein manuelles Eingreifen.</div></div>
+          <div class="mini-card"><div class="mini-title">MDE</div><div class="mini-text">Mobile Datenerfassung – Barcodescanner im Lager sendet Daten ans Warenwirtschaftssystem.</div></div>
+          <div class="mini-card"><div class="mini-title">RFID</div><div class="mini-text">Funketiketten auf Ware – kontaktloses Auslesen beim Wareneingang/Inventur.</div></div>
+          <div class="mini-card"><div class="mini-title">VMI</div><div class="mini-text">Vendor Managed Inventory – Lieferant überwacht und steuert selbst deinen Lagerbestand.</div></div>
+        </div>
+        <div class="merksatz">VMI = der Lieferant schaut in dein Lager und bestellt selbst nach. Komfortabel – aber du gibst Kontrolle ab. In der Prüfung: Vor- und Nachteile nennen können!</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Nachhaltigkeit – 3 Dimensionen</div>
+        <div class="grid3">
+          <div class="mini-card"><div class="mini-title">Ökologisch</div><div class="mini-text">Umwelt für künftige Generationen erhalten. CO₂ reduzieren, Ressourcen schonen.</div></div>
+          <div class="mini-card"><div class="mini-title">Ökonomisch</div><div class="mini-text">Langfristiger Erfolg statt kurzfristiger Quartalsergebnisse. Investitionen in die Zukunft.</div></div>
+          <div class="mini-card"><div class="mini-title">Sozial</div><div class="mini-text">Alle Gesellschaftsgruppen einbeziehen. Faire Arbeitsbedingungen in der Lieferkette.</div></div>
+        </div>
+        <div class="card amber">
+          <div class="term">Zielkonflikt: Ökologie vs. Ökonomie (Prüfungsklassiker!)</div>
+          <div class="def">Was ökologisch sinnvoll ist, ist oft teurer oder umständlicher:<br><br>
+            Bahntransport statt LKW → umständlich, Umschlagskosten<br>
+            Regionale Beschaffung → möglicherweise nicht kostengünstig<br>
+            Geringe Bestellmengen → höhere Einkaufspreise
+          </div>
+          <div class="example">Dein Chef will günstige Masseneinkäufe aus Fernost (ökonomisch), ihr sollt aber CO₂ reduzieren (ökologisch) → klassischer Zielkonflikt.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABC/XYZ -->
+    <div class="page" id="page-abc">
+      <div class="page-header">
+        <div class="page-eyebrow">Kapitel 1.1 · Analysemethoden</div>
+        <div class="page-title">ABC/XYZ-Analyse</div>
+        <div class="page-desc">Das wichtigste Werkzeug zur Priorisierung von Artikeln im Lager und Einkauf.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">ABC-Analyse – Artikel nach Wert</div>
+        <div class="merksatz">20 % der Artikel machen ca. 80 % des gesamten Einkaufswertes aus. Diese A-Artikel verdienen deine volle Aufmerksamkeit!</div>
+        <div class="grid3">
+          <div class="mini-card">
+            <span class="badge a">A-Güter</span>
+            <div class="mini-title">~20 % der Artikel</div>
+            <div class="mini-text">~80 % des Wertes<br><br>Intensiv betreuen: Preisverhandlung, Rahmenverträge, genaue Terminverfolgung, Lagerzeiten minimieren</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge b">B-Güter</span>
+            <div class="mini-title">~30 % der Artikel</div>
+            <div class="mini-text">~15 % des Wertes<br><br>Mittlere Aufmerksamkeit. Regelmäßig prüfen, ob eine Umstufung nötig ist.</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge c">C-Güter</span>
+            <div class="mini-title">~50 % der Artikel</div>
+            <div class="mini-text">~5 % des Wertes<br><br>Vereinfacht behandeln: große Sicherheitsbestände, Sammelbestellungen, wenig Aufwand</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="term">Ablauf der ABC-Analyse (3 Schritte)</div>
+          <div class="def">
+            1. <strong>Erfassen:</strong> Jahresverbrauch in Stück × Preis = Jahreswert in €<br>
+            2. <strong>Sortieren:</strong> Artikel absteigend nach Jahreswert, kumulierten %-Anteil berechnen<br>
+            3. <strong>Auswerten:</strong> Wertgruppen A/B/C zuordnen und Maßnahmen ableiten
+          </div>
+          <div class="example">Artikel-Nr. 5432 hat 42 % des Gesamtjahreswertes → automatisch A-Artikel → Rahmenvertrag abschließen, tägliche Bestandsprüfung!</div>
+        </div>
+
+        <div class="card purple">
+          <div class="term">Prüfungstipp: Tabelle lesen &amp; einordnen</div>
+          <div class="def">In der Prüfung bekommst du eine fertige Tabelle. Du musst die kumulierten %-Anteile lesen und A/B/C zuordnen.<br><br>Typische Grenzen: A = bis 80 % · B = bis 95 % · C = Rest</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">XYZ-Analyse – Artikel nach Verbrauchsschwankung</div>
+        <div class="grid3">
+          <div class="mini-card">
+            <span class="badge x">X-Güter</span>
+            <div class="mini-title">Konstanter Verbrauch</div>
+            <div class="mini-text">Hohe Vorhersagegenauigkeit. Ideal für JIT oder KANBAN.</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge y">Y-Güter</span>
+            <div class="mini-title">Schwankender Verbrauch</div>
+            <div class="mini-text">Mittlere Genauigkeit. Oft saisonal beeinflusst (z.B. Winterjacken).</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge z">Z-Güter</span>
+            <div class="mini-title">Sporadischer Verbrauch</div>
+            <div class="mini-text">Niedrige Genauigkeit. Unregelmäßige, nicht planbare Bedarfe.</div>
+          </div>
+        </div>
+
+        <div class="card green">
+          <div class="term">ABC + XYZ kombinieren = starkes Dispositions-Tool</div>
+          <div class="def">
+            <strong>AX</strong> = hoher Wert + stabiler Verbrauch → JIT-Belieferung, kein Lager nötig<br>
+            <strong>AZ</strong> = hoher Wert + unregelmäßig → schwer zu disponieren, Sicherheitsbestand nötig<br>
+            <strong>CX</strong> = günstig + stabil → KANBAN-Behälter, Bestellpunktverfahren<br>
+            <strong>CZ</strong> = günstig + sporadisch → großer Puffer, kaum Aufwand
+          </div>
+          <div class="example">Topseller im E-Commerce (AX) → täglich beliefert, kein Lageraufbau. Sonderartikel (CZ) → großer Puffer auf Lager, selten bestellen.</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Marktanalyse – Wettbewerbsstruktur</div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Marktform</th><th>Angebots-Seite</th><th>Nachfrage-Seite</th><th>Deine Verhandlungsmacht als Käufer</th></tr>
+            <tr><td><strong>Monopol</strong></td><td>1 Anbieter</td><td>1 Nachfrager</td><td>Gering (Angebotsmonopol = Lieferant hat Macht)</td></tr>
+            <tr><td><strong>Oligopol</strong></td><td>Wenige Anbieter</td><td>Wenige Nachfrager</td><td>Mittel</td></tr>
+            <tr><td><strong>Polypol</strong></td><td>Viele Anbieter</td><td>Viele Nachfrager</td><td>Hoch – du hast viele Alternativen</td></tr>
+          </table>
+        </div>
+        <div class="example" style="font-size:13px;color:var(--text2);font-style:italic;padding:.75rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)">→ Für Standardkartons (Polypol) drückst du den Preis. Für ein Spezialregal von einem einzigen Hersteller (Angebotsmonopol) hast du kaum Spielraum.</div>
+      </div>
+    </div>
+
+    <!-- BESCHAFFUNG -->
+    <div class="page" id="page-beschaffung">
+      <div class="page-header">
+        <div class="page-eyebrow">Kapitel 1.1 · Einkauf &amp; Bestellwesen</div>
+        <div class="page-title">Beschaffungsstrategien</div>
+        <div class="page-desc">Wie und wo du einkaufst – und welche Risiken damit verbunden sind.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Nach Lieferanten</div>
+        <div class="card blue">
+          <div class="term">Single Sourcing</div>
+          <div class="def">Bewusste Entscheidung für einen einzigen Lieferanten. Vorteil: enge Partnerschaft, günstige Konditionen, wenig Aufwand. Nachteil: hohe Abhängigkeit, kein Ausweichen möglich.</div>
+          <div class="example">Alle Kleiderbügel nur bei einem Hersteller → bei Lieferengpass steht dein Lager still.</div>
+        </div>
+        <div class="card amber">
+          <div class="term">Sole Sourcing</div>
+          <div class="def">Kein Ausweg: der Lieferant ist Monopolist. Du musst dort kaufen – egal zu welchen Konditionen. Keine strategische Wahl, sondern eine Zwangslage.</div>
+        </div>
+        <div class="card green">
+          <div class="term">Dual Sourcing / Multiple Sourcing</div>
+          <div class="def">Zwei oder mehr Lieferanten für dasselbe Produkt. Mehr Versorgungssicherheit, aber höherer Verwaltungsaufwand.<br><br>Multiple Sourcing: Quotenbezug empfohlen, z.B. 60/40-Aufteilung zwischen zwei Lieferanten.</div>
+          <div class="example">Empfehlung für A-Artikel: immer mindestens Dual Sourcing, um Ausfallrisiko zu minimieren!</div>
+        </div>
+        <div class="card">
+          <div class="term">Unit Sourcing / Modular Sourcing</div>
+          <div class="def"><strong>Unit Sourcing:</strong> Einzelbeschaffung aller notwendigen Teile.<br><strong>Modular Sourcing:</strong> Beschaffung ganzer Baugruppen (z.B. Antriebseinheit statt Einzelteile).</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Nach Märkten</div>
+        <div class="grid3">
+          <div class="mini-card">
+            <div class="mini-title">Global Sourcing</div>
+            <div class="mini-text">Weltweiter Einkauf – günstigste Preise. Aber: lange Lieferzeiten, CO₂, politische Risiken, Qualitätskontrolle schwierig.</div>
+          </div>
+          <div class="mini-card">
+            <div class="mini-title">Local Sourcing</div>
+            <div class="mini-text">Regionale Lieferanten. Schnell, flexibel, nachhaltig. Oft teurer, aber geringes Ausfallrisiko.</div>
+          </div>
+          <div class="mini-card">
+            <div class="mini-title">Domestic Sourcing</div>
+            <div class="mini-text">Lieferanten im selben Land. Kompromiss zwischen Kosten und Liefersicherheit.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Beschaffungskonzepte</div>
+        <div class="card">
+          <div class="term">Vorratsbeschaffung</div>
+          <div class="def">Große Mengen auf Lager legen. Unabhängig vom Beschaffungsmarkt, kurzfristig lieferfähig.<br><br>Nachteil: hohe Lagerkosten, gebundenes Kapital, Verderb/Veralterungsrisiko.</div>
+        </div>
+        <div class="card">
+          <div class="term">Einzelbeschaffung</div>
+          <div class="def">Erst bestellen, wenn der Bedarf konkret da ist. Kein Lager nötig.<br><br>Risiko: Lieferverzögerungen können Produktion oder Versand komplett stoppen.</div>
+        </div>
+        <div class="card green">
+          <div class="term">Just-in-Time (JIT)</div>
+          <div class="def">Material kommt genau dann, wenn es gebraucht wird. Kombination aus Vorrats- und Einzelbeschaffung.<br><br>Voraussetzungen: Genaue Fertigungspläne · Serienfertigung · Zuverlässige Lieferanten · Rahmenverträge mit Strafklauseln (BGB).</div>
+          <div class="example">Saisonartikel (Weihnachtsdeko) kommen erst im Oktober, nicht schon im Juli → Lagerplatz gespart, Kapital nicht gebunden.</div>
+        </div>
+        <div class="card blue">
+          <div class="term">KANBAN – selbststeuerndes System</div>
+          <div class="def">Hol-Prinzip: der Verbraucher holt sich Material von der Vorstufe. Eine Karte oder ein leerer Behälter signalisiert den Nachschub-Bedarf automatisch.<br><br>Ziele: Geringe Bestände · Kurze Durchlaufzeiten · Hohe Termintreue · Senkung der Herstellkosten<br><br>Ursprung: Toyota, 1950er Jahre (Korea-Krieg, hohe Umschlagshäufigkeit gefordert).</div>
+          <div class="example">Leeres Regalfach im Versandlager → Scanner erkennt Unterschreitung → Nachbestellung wird automatisch ausgelöst.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BEDARFSRECHNUNG -->
+    <div class="page" id="page-bedarf">
+      <div class="page-header">
+        <div class="page-eyebrow">Kapitel 1.1 · Disposition</div>
+        <div class="page-title">Bedarfsermittlung &amp; Prognosen</div>
+        <div class="page-desc">Wie viel musst du bestellen? Die Grundlage jeder Disposition.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Bedarfsarten – was du bestellen musst</div>
+        <div class="card"><div class="term">Primärbedarf</div><div class="def">Fertige verkaufsfähige Produkte und Ersatzteile. Kommt direkt aus Kundenaufträgen oder dem Lager.</div></div>
+        <div class="card"><div class="term">Sekundärbedarf</div><div class="def">Einzelteile/Komponenten für die Fertigung. Ergibt sich aus Primärbedarf × Stücklistenmenge.</div></div>
+        <div class="card"><div class="term">Tertiärbedarf</div><div class="def">Hilfs- und Betriebsstoffe (Schmiermittel, Verpackungsmaterial) – diese stehen nicht in der Stückliste.</div></div>
+        <div class="card amber">
+          <div class="term">Brutto- vs. Nettobedarf</div>
+          <div class="def">
+            <strong>Bruttobedarf</strong> = Sekundärbedarf + Zusatzbedarf (Ausschuss, Schwund)<br><br>
+            <strong>Nettobedarf</strong> = Bruttobedarf<br>
+            &nbsp;&nbsp;&nbsp;− Lagerbestand<br>
+            &nbsp;&nbsp;&nbsp;− Bestellbestand (bereits unterwegs)<br>
+            &nbsp;&nbsp;&nbsp;− Werkstattbestand<br>
+            &nbsp;&nbsp;&nbsp;+ Reservierungsbestand<br>
+            &nbsp;&nbsp;&nbsp;+ Sicherheitsbestand
+          </div>
+          <div class="example">Du brauchst 500 Stück brutto, hast 120 auf Lager und 80 bereits bestellt → Nettobedarf = 300 Stück bestellen.</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Bedarfsermittlungsmethoden</div>
+        <div class="grid3">
+          <div class="mini-card"><span class="badge a">Deterministisch</span><div class="mini-title">Programmgesteuert</div><div class="mini-text">Aus Stückliste + Produktionsplan. Exakt, aber aufwändig. Für A-/B-Artikel.</div></div>
+          <div class="mini-card"><span class="badge b">Stochastisch</span><div class="mini-title">Verbrauchsorientiert</div><div class="mini-text">Aus Vergangenheitswerten schätzen. Für C-Artikel, Betriebsstoffe, Tankware.</div></div>
+          <div class="mini-card"><span class="badge c">Heuristisch</span><div class="mini-title">Schätzung</div><div class="mini-text">Erfahrungswerte. Wenn keine Daten vorhanden sind.</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Stochastische Prognosemethoden</div>
+
+        <div class="card">
+          <div class="term">Arithmetischer Mittelwert</div>
+          <div class="def">Alle Verbrauchswerte addieren, durch Anzahl Perioden teilen. Nur bei konstantem Verbrauch sinnvoll. Erkennt keine Trends.</div>
+        </div>
+        <div class="formula">V = (T1 + T2 + ... + Tn) ÷ n</div>
+
+        <div class="card">
+          <div class="term">Gleitender Mittelwert</div>
+          <div class="def">Nur die letzten n Perioden werden betrachtet. Ältester Wert fällt raus, neuer kommt dazu. Reagiert schneller auf Schwankungen.</div>
+        </div>
+        <div class="formula">V = (T1 + T2 + T3 + T4) ÷ 4</div>
+
+        <div class="card">
+          <div class="term">Gewogener gleitender Mittelwert</div>
+          <div class="def">Wie gleitender MW, aber jüngere Monate bekommen höhere Gewichtung. Erkennt Trends besser.</div>
+        </div>
+        <div class="formula">V = (T1×G1 + T2×G2 + ... + Tn×Gn) ÷ (G1+G2+...+Gn)</div>
+
+        <div class="card green">
+          <div class="term">Rechenbeispiel aus dem Skript</div>
+          <div class="def">
+            Verbrauchswerte Jan–Jul: 4.000 / 4.200 / 4.500 / 4.500 / 4.600 / 4.900 / 4.900 kg<br>
+            Gewichtungen: Letzter Monat 40% · Vorletzter 30% · Drittletzter 20% · Viertletzter 10%<br><br>
+            <strong>Arithm. MW (7 Monate):</strong> 31.600 ÷ 7 = 4.514 kg<br>
+            <strong>Gleitender MW August (letzte 4):</strong> (4.500+4.600+4.900+4.900) ÷ 4 = 4.725 kg<br>
+            <strong>Gewogener gleit. MW August:</strong> (4.500×0,10)+(4.600×0,20)+(4.900×0,30)+(4.900×0,40) = 4.800 kg
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="term">Exponentielle Glättung (1. Ordnung)</div>
+          <div class="def">Korrigiert den alten Prognosewert anhand der tatsächlichen Abweichung. Glättungsfaktor α zwischen 0 und 1. Nur bei konstantem Verbrauch sinnvoll.</div>
+        </div>
+        <div class="formula">Vn = Va + α × (Vt − Va)
+Vn = neue Prognose · Va = alte Prognose · α = Glättungsfaktor · Vt = tatsächlicher Verbrauch</div>
+      </div>
+    </div>
+
+    <!-- BESTELLVERFAHREN -->
+    <div class="page" id="page-bestellung">
+      <div class="page-header">
+        <div class="page-eyebrow">Kapitel 1.1 · Disposition</div>
+        <div class="page-title">Bestellverfahren &amp; optimale Bestellmenge</div>
+        <div class="page-desc">Wann bestellst du – und wie viel? Die zwei wichtigsten Verfahren plus die Andler-Formel.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Bestellpunktverfahren (Mengenverfahren)</div>
+        <div class="card green">
+          <div class="term">Prinzip: Gleiche Menge, unterschiedliche Zeitpunkte</div>
+          <div class="def">Sobald der Lagerbestand den Meldebestand (= Bestellpunkt) unterschreitet, wird automatisch eine feste Menge bestellt. Der Meldebestand muss so hoch sein, dass der Sicherheitsbestand während der Wiederbeschaffungszeit nicht angetastet wird.</div>
+          <div class="example">Meldebestand = 500 Stück, Sicherheitsbestand = 100. Sobald dein System 500 Stück anzeigt → Bestellung auslösen.</div>
+        </div>
+        <div class="formula">BM = (TW + TU) × P + BS
+
+BM = Meldebestand
+TW = Wiederbeschaffungszeit (in Tagen/Perioden)
+TU = Überprüfungszeit (Wareneingangskontrolle)
+P  = Bedarf pro Periode
+BS = Sicherheitsbestand</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Bestellrhythmusverfahren (Terminverfahren)</div>
+        <div class="card blue">
+          <div class="term">Prinzip: Feste Zeitpunkte, variable Menge</div>
+          <div class="def">Zu festgelegten Terminen (z.B. jeden Montag) wird geprüft: wie weit ist der Bestand vom Maximalvorrat entfernt? Diese Differenz wird bestellt.<br><br>Vorteil: Bedarfe lassen sich bündeln → günstigere Einkaufskonditionen, größere Mengen.<br>Nachteil: höherer Durchschnittsbestand als beim Bestellpunktverfahren.</div>
+          <div class="example">Sinnvoll bei günstigen C-Artikeln (z.B. Verpackungsmaterial): einmal im Monat alles zusammen bestellen.</div>
+        </div>
+        <div class="formula">Bmax = V × (TW + TU + TP) + BS
+
+Bmax = Maximalbestand (Bestellziel)
+V    = Verbrauch pro Tag
+TW   = Wiederbeschaffungszeit in Tagen
+TU   = Überprüfungszeit in Tagen
+TP   = Vorhersageperiode (Intervall zwischen Bestellterminen)
+BS   = Sicherheitsbestand</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Optimale Bestellmenge – Andler-Formel</div>
+        <div class="merksatz">Ziel: Bestellkosten und Lagerhaltungskosten ins Gleichgewicht bringen. Je öfter du bestellst → höhere Bestellkosten, aber niedrigere Lagerkosten. Die Andler-Formel findet den optimalen Punkt dazwischen.</div>
+        <div class="formula">Optimale Menge = √(200 × M × BK) ÷ (E × LKS)
+
+M   = Jahresbedarf (Stück)
+BK  = Bestellkosten pro Bestellung (€)
+E   = Einstandspreis pro Stück (€)
+LKS = Lagerhaltungskostensatz (%)</div>
+
+        <div class="card amber">
+          <div class="term">Kostenarten im Überblick</div>
+          <div class="def">
+            <strong>LKS (Lagerhaltungskostensatz)</strong> = Zinssatz (%) + Lagerkostensatz (%)<br><br>
+            <strong>Lagerkostensatz (LS)</strong> = (Lagerkosten × 100 × 2) ÷ (Ø-Lagerbestand × Einstandspreis)<br><br>
+            <strong>Ø-Lagerbestand</strong> = (Anfangsbestand + Summe 12 Monatsendbestände) ÷ 13<br><br>
+            <strong>Ø-Lagerkapitalbindung</strong> = Ø-Lagerbestand × Einstandspreis
+          </div>
+        </div>
+
+        <div class="card purple">
+          <div class="term">Prüfungstipp: Andler-Formel</div>
+          <div class="def">Die Formel kommt garantiert in der Prüfung. Lerne sie auswendig und übe die Eingabe der Werte. Typische Fallen: LKS als Dezimalzahl eingeben (20% = 0,20), Jahresbedarf nicht mit monatlichem Bedarf verwechseln.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANALYSETOOLS -->
+    <div class="page" id="page-tools">
+      <div class="page-header">
+        <div class="page-eyebrow">Kapitel 1.1 · Strategische Analyse</div>
+        <div class="page-title">Analyse- &amp; Planungstools</div>
+        <div class="page-desc">Werkzeuge zur Prozessoptimierung und strategischen Entscheidungsfindung.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">SWOT-Analyse</div>
+        <div class="grid2">
+          <div class="mini-card"><div class="mini-title">S – Strengths (Stärken)</div><div class="mini-text">Was kann dein Unternehmen besser als andere? Z.B. schnelle Lieferzeiten, günstige Einkaufspreise, starke IT.</div></div>
+          <div class="mini-card"><div class="mini-title">W – Weaknesses (Schwächen)</div><div class="mini-text">Wo hapert es intern? Z.B. veraltetes Lagersystem, hohe Fehlerquote bei Inventuren, zu viel Handarbeit.</div></div>
+          <div class="mini-card"><div class="mini-title">O – Opportunities (Chancen)</div><div class="mini-text">Welche Markttrends lassen sich nutzen? Z.B. wachsender E-Commerce, neue Lieferanten, Automatisierung.</div></div>
+          <div class="mini-card"><div class="mini-title">T – Threats (Risiken)</div><div class="mini-text">Was könnte schaden? Z.B. Lieferkettenprobleme, neuer Wettbewerber, steigende Energiepreise.</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">GAP-Analyse (Lückenanalyse)</div>
+        <div class="card blue">
+          <div class="term">Strategische Lücke = Ziel − Ist-Zustand</div>
+          <div class="def">Soll-Vorgabe (langfristiges Ziel) minus tatsächlicher Ist-Zustand = die Lücke (GAP), die es zu schließen gilt. Dann: realistische neue Sollvorgabe festlegen und Maßnahmen ableiten.</div>
+          <div class="example">Ziel: 98 % Liefertreue. Aktuell: 91 %. GAP = 7 % → Ursachen suchen (→ Ishikawa!), Maßnahmen einleiten.</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Ishikawa-Diagramm (Fischgräten-Diagramm)</div>
+        <div class="merksatz">Visualisiert alle möglichen Ursachen eines Problems in 6 Kategorien: Material · Maschine · Methode · Mensch · Milieu (Umfeld) · Management</div>
+        <div class="card purple">
+          <div class="term">Praxisbeispiel: Warum kommen Bestellungen zu spät?</div>
+          <div class="def">
+            <strong>Material:</strong> Falsche Artikel vom Lieferanten geliefert<br>
+            <strong>Maschine:</strong> Lagerschlittenausfall, Scanner defekt<br>
+            <strong>Methode:</strong> Kein standardisierter Bestellprozess<br>
+            <strong>Mensch:</strong> Mitarbeiter nicht geschult, Krankenstand<br>
+            <strong>Milieu:</strong> Chaotisches Lager, schlechte Wegführung<br>
+            <strong>Management:</strong> Fehlende Bestandsübersicht, keine Kennzahlen
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Muda &amp; Wertstromanalyse</div>
+        <div class="grid2">
+          <div class="mini-card">
+            <div class="mini-title">Muda (Verschwendung)</div>
+            <div class="mini-text">Japanisch für "Vergeudung". Eliminiere alle Schritte, die keinen Mehrwert für den Kunden schaffen.<br><br>Beispiel: Doppeltes Eintippen von Bestelldaten in zwei verschiedene Systeme = Muda.</div>
+          </div>
+          <div class="mini-card">
+            <div class="mini-title">Wertstromanalyse</div>
+            <div class="mini-text">Visualisierung aller Prozesse vom Lieferanten bis zum Kunden. Zeigt Engpässe, Wartezeiten und Verschwendung auf einem Blick.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Kapazitätsplanung</div>
+        <div class="formula">Kapazitätsbedarf = (Auftragsmenge × Bearbeitungszeit/Stück + Rüstzeit) × Leistungsgrad
+
+Leistungsgrad = (Istleistung ÷ Normalleistung) × 100</div>
+        <div class="card">
+          <div class="term">Leistungsgrad verstehen</div>
+          <div class="def">
+            Leistungsgrad &lt; 100 % → Mitarbeiter/Maschine läuft unter Normalleistung (z.B. Einarbeitung)<br>
+            Leistungsgrad = 100 % → Normalleistung wird erbracht<br>
+            Leistungsgrad &gt; 100 % → Überlastung, nicht dauerhaft haltbar
+          </div>
+          <div class="example">Normalleistung: 100 Pakete/Stunde. Tatsächlich: 85 Pakete/Stunde → Leistungsgrad = 85 %.</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  const pages = ['overview','abc','beschaffung','bedarf','bestellung','tools'];
+
+  function show(id) {
+    pages.forEach(p => {
+      document.getElementById('page-' + p).classList.remove('active');
+    });
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    event.currentTarget.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
