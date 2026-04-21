@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kommunikation, Führung & Zusammenarbeit</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#f5f4f0;--surface:#fff;--surface2:#eeecea;--border:#dddbd6;
+    --text:#1a1917;--text2:#5a5854;--text3:#8a8884;
+    --blue:#1a56db;--blue-bg:#eff4ff;--blue-border:#c3d3fd;
+    --green:#1a7a4a;--green-bg:#f0faf4;--green-border:#a7dfc0;
+    --amber:#92500a;--amber-bg:#fffbf0;--amber-border:#f5d48a;
+    --purple:#5522cc;--purple-bg:#f4f0ff;--purple-border:#c8b8f8;
+    --red:#9b1c1c;--red-bg:#fff5f5;--red-border:#f8b4b4;
+    --font:'IBM Plex Sans',sans-serif;--radius:8px;--radius-lg:12px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6}
+  .site-header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.5rem;display:flex;align-items:center;gap:1rem;height:56px;position:sticky;top:0;z-index:100}
+  .site-header a{font-size:13px;color:var(--text3);text-decoration:none}
+  .site-header a:hover{color:var(--blue)}
+  .header-title{font-size:14px;font-weight:600;color:var(--text);flex:1}
+  .header-badge{font-size:11px;background:var(--surface2);color:var(--text3);border:1px solid var(--border);padding:2px 8px;border-radius:20px;font-weight:500}
+  .layout{display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 56px);max-width:1100px;margin:0 auto}
+  .sidebar{background:var(--surface);border-right:1px solid var(--border);padding:1.5rem 0;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
+  .sidebar-label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);padding:.5rem 1.25rem;margin-bottom:.25rem}
+  .nav-item{display:flex;align-items:center;gap:.6rem;padding:.55rem 1.25rem;font-size:13px;color:var(--text2);cursor:pointer;border-left:2px solid transparent;transition:all .15s;user-select:none}
+  .nav-item:hover{background:var(--bg);color:var(--text)}
+  .nav-item.active{color:var(--blue);background:var(--blue-bg);border-left-color:var(--blue);font-weight:500}
+  .nav-dot{width:6px;height:6px;border-radius:50%;background:var(--border);flex-shrink:0}
+  .nav-item.active .nav-dot{background:var(--blue)}
+  .main{padding:2rem 2.5rem;max-width:780px}
+  .page{display:none}.page.active{display:block}
+  .page-header{margin-bottom:2rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
+  .page-eyebrow{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:.4rem}
+  .page-title{font-size:22px;font-weight:600;color:var(--text);line-height:1.3}
+  .page-desc{font-size:14px;color:var(--text2);margin-top:.5rem}
+  .section{margin-bottom:2rem}
+  .section-title{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+  .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:.75rem}
+  .card.blue{border-left:3px solid var(--blue);background:var(--blue-bg);border-color:var(--blue-border)}
+  .card.green{border-left:3px solid var(--green);background:var(--green-bg);border-color:var(--green-border)}
+  .card.amber{border-left:3px solid var(--amber);background:var(--amber-bg);border-color:var(--amber-border)}
+  .card.purple{border-left:3px solid var(--purple);background:var(--purple-bg);border-color:var(--purple-border)}
+  .card.red{border-left:3px solid var(--red);background:var(--red-bg);border-color:var(--red-border)}
+  .term{font-size:14px;font-weight:600;color:var(--text);margin-bottom:.35rem}
+  .def{font-size:13px;color:var(--text2);line-height:1.6}
+  .example{font-size:12px;color:var(--text3);margin-top:.5rem;padding-top:.5rem;border-top:1px solid var(--border);font-style:italic}
+  .example::before{content:"→ ";font-style:normal}
+  .merksatz{background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:var(--radius);padding:.85rem 1rem;font-size:13px;color:var(--text);line-height:1.65;margin-bottom:1rem}
+  .merksatz::before{content:"MERKSATZ";display:block;font-size:9px;font-weight:700;letter-spacing:.1em;color:var(--amber);margin-bottom:.3rem}
+  .pruefung{background:var(--purple-bg);border:1px solid var(--purple-border);border-radius:var(--radius);padding:.85rem 1rem;font-size:13px;color:var(--text);line-height:1.65;margin-bottom:1rem}
+  .pruefung::before{content:"PRÜFUNGSTIPP";display:block;font-size:9px;font-weight:700;letter-spacing:.1em;color:var(--purple);margin-bottom:.3rem}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:.75rem}
+  .mini-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.85rem 1rem}
+  .mini-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:.25rem}
+  .mini-text{font-size:12px;color:var(--text2);line-height:1.5}
+  .badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:4px;margin-bottom:.4rem}
+  .badge.blue{background:#dbeafe;color:#1e40af}
+  .badge.green{background:#d1fae5;color:#065f46}
+  .badge.gray{background:#e5e7eb;color:#374151}
+  .badge.amber{background:#fef3c7;color:#78350f}
+  .badge.red{background:#fee2e2;color:#7f1d1d}
+  .badge.purple{background:#ede9fe;color:#4c1d95}
+  .table-wrap{overflow-x:auto;margin-bottom:1rem;border-radius:var(--radius-lg);border:1px solid var(--border)}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{background:var(--surface2);padding:.6rem .9rem;text-align:left;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--text2);border-bottom:1px solid var(--border)}
+  td{padding:.55rem .9rem;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:var(--bg)}
+  .step-list{margin-bottom:.75rem}
+  .step-item{display:flex;gap:.75rem;margin-bottom:.6rem;font-size:13px;color:var(--text2);align-items:flex-start}
+  .step-num{background:var(--blue);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;margin-top:1px}
+  .vier-ohren{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem}
+  .ohr-card{border-radius:var(--radius);padding:.85rem 1rem;border:1px solid}
+  .ohr-card.sach{background:#eff4ff;border-color:#c3d3fd}
+  .ohr-card.bez{background:#f0faf4;border-color:#a7dfc0}
+  .ohr-card.selbst{background:#fffbf0;border-color:#f5d48a}
+  .ohr-card.appell{background:#fff5f5;border-color:#f8b4b4}
+  .ohr-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.25rem}
+  .ohr-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:.2rem}
+  .ohr-text{font-size:12px;color:var(--text2);line-height:1.45}
+  @media(max-width:700px){
+    .layout{grid-template-columns:1fr}
+    .sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(--border);padding:.75rem 0;display:flex;overflow-x:auto}
+    .sidebar-label{display:none}
+    .nav-item{border-left:none;border-bottom:2px solid transparent;white-space:nowrap;padding:.5rem 1rem}
+    .nav-item.active{border-bottom-color:var(--blue);border-left:none}
+    .main{padding:1.25rem 1rem}
+    .grid2,.grid3,.vier-ohren{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="index.html">← Übersicht</a>
+  <div class="header-title">Logistik Lernportal</div>
+  <span class="header-badge">GK · Führung</span>
+</header>
+
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-label">Kommunikation & Führung</div>
+    <div class="nav-item active" onclick="show('kommunikation')"><span class="nav-dot"></span>Kap. 1 – Kommunikation</div>
+    <div class="nav-item" onclick="show('praesentation')"><span class="nav-dot"></span>Kap. 1 – Präsentation</div>
+    <div class="nav-item" onclick="show('personalauswahl')"><span class="nav-dot"></span>Kap. 2 – Personalauswahl</div>
+    <div class="nav-item" onclick="show('personaleinsatz')"><span class="nav-dot"></span>Kap. 3 – Personaleinsatz</div>
+    <div class="nav-item" onclick="show('fuehrung')"><span class="nav-dot"></span>Kap. 4 – Führung</div>
+    <div class="nav-item" onclick="show('ausbildung')"><span class="nav-dot"></span>Kap. 5 – Ausbildung</div>
+    <div class="nav-item" onclick="show('entwicklung')"><span class="nav-dot"></span>Kap. 6 – Personalentwicklung</div>
+    <div class="nav-item" onclick="show('arbeitsschutz')"><span class="nav-dot"></span>Kap. 7 – Arbeitsschutz</div>
+  </nav>
+
+  <main class="main">
+
+    <!-- KAP 1: KOMMUNIKATION -->
+    <div class="page active" id="page-kommunikation">
+      <div class="page-header">
+        <div class="page-eyebrow">Kapitel 1 · Situationsgerechte Kommunikation</div>
+        <div class="page-title">Kommunikation – Grundlagen, Modelle &amp; Konflikte</div>
+        <div class="page-desc">Warum Kommunikation so oft schiefläuft – und wie man es besser macht.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Grundlagen der Kommunikation</div>
+        <div class="card blue">
+          <div class="term">Kommunikation = entscheidender Erfolgsfaktor</div>
+          <div class="def">Prozesse abstimmen · Kunden überzeugen · Mitarbeiter informieren<br><br>Kommunikation ist vielfältig und schwer interpretierbar. Die Gefahr von Missverständnissen ist immer da.</div>
+        </div>
+        <div class="merksatz">Nur weil man etwas hört, heißt das nicht, dass es auch verstanden wurde.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Axiome nach Watzlawick</div>
+        <div class="card">
+          <div class="term">Axiom = Grundsatz, den man nicht beweisen muss</div>
+          <div class="def">Paul Watzlawick definierte 5 Grundsätze der Kommunikation. Der wichtigste:<br><br>"Man kann nicht nicht kommunizieren." – Auch Schweigen ist eine Botschaft.</div>
+        </div>
+        <div class="pruefung">Die Axiome nach Watzlawick werden gerne abgefragt. Wichtigste Aussage: Kommunikation findet immer statt, auch nonverbal.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">4-Ohren-Modell (Schulz von Thun)</div>
+        <div class="merksatz">Jede Nachricht enthält 4 Ebenen gleichzeitig. Sender meint oft etwas anderes als Empfänger versteht!</div>
+        <div class="vier-ohren">
+          <div class="ohr-card sach">
+            <div class="ohr-label" style="color:#1e40af">Sachinhalt</div>
+            <div class="ohr-title">Was wird mitgeteilt?</div>
+            <div class="ohr-text">Reine Sachinformation<br>"Ist noch Kaffee da?"</div>
+          </div>
+          <div class="ohr-card bez">
+            <div class="ohr-label" style="color:#065f46">Beziehungshinweis</div>
+            <div class="ohr-title">Wie stehen wir zueinander?</div>
+            <div class="ohr-text">Signalisiert Verhältnis<br>"Immer muss ich frischen Kaffee kochen!"</div>
+          </div>
+          <div class="ohr-card selbst">
+            <div class="ohr-label" style="color:#78350f">Selbstkundgabe</div>
+            <div class="ohr-title">Was sage ich über mich?</div>
+            <div class="ohr-text">Teilt Befinden mit<br>"Ich mag Kaffee."</div>
+          </div>
+          <div class="ohr-card appell">
+            <div class="ohr-label" style="color:#7f1d1d">Appell</div>
+            <div class="ohr-title">Was soll der andere tun?</div>
+            <div class="ohr-text">Aufforderung<br>"Ich will, dass du Kaffee kochst!"</div>
+          </div>
+        </div>
+        <div class="example" style="font-size:13px;color:var(--text2);padding:.75rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);font-style:normal">Chef sagt: "Das hätte ich anders gemacht." → Sachlich: Info. Beziehung: Kritik. Selbst: Chef hätte es besser gewusst. Appell: Mach es nächstes Mal anders! – Du hörst je nach Stimmung mit einem anderen Ohr.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Feedbackkultur im Unternehmen</div>
+        <div class="card green">
+          <div class="term">Feedback ≠ Kritik</div>
+          <div class="def">Feedback = Rückmeldung zum wahrgenommenen Verhalten auf freiwilliger Basis. Verlangt keine Veränderungen!<br><br>Kritik = objektive Analyse von Defiziten + Vereinbarungen für die Zukunft<br>Anerkennung = besonders gute Leistungen hervorheben</div>
+        </div>
+        <div class="card">
+          <div class="term">Die "3 W" des Feedbacks</div>
+          <div class="def"><strong>Wahrnehmung:</strong> Was habe ich beobachtet? (konkret, keine Interpretation)<br><strong>Wirkung:</strong> Was hat das bei mir ausgelöst? (Ich-Botschaft)<br><strong>Wunsch:</strong> Was wünsche ich mir zukünftig?</div>
+          <div class="example">Nicht: "Du bist immer unzuverlässig." Sondern: "Ich habe bemerkt, dass die Lieferliste gestern fehlte (W1). Das hat mich in Stress gebracht (W2). Ich wünsche mir, dass du mich früh informierst, wenn etwas nicht klappt (W3)."</div>
+        </div>
+        <div class="card amber">
+          <div class="term">Feedback-Regeln</div>
+          <div class="def">Beschreibend statt bewertend · Konkret statt allgemein · Zeitnah · Ich-Botschaften · Nicht zu viel auf einmal · Erwünscht oder eingeholt</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Moderation</div>
+        <div class="card">
+          <div class="term">Moderation = mäßigen, steuern, lenken (lat.)</div>
+          <div class="def">Verschiedene Meinungen anhören, integrieren und gemeinsam auswerten. Einsatz: Prozessentwicklung, Weiterentwicklung, Konfliktmanagement.</div>
+        </div>
+        <div class="card">
+          <div class="term">Ablauf einer Moderation (6 Phasen)</div>
+          <div class="def">
+            1. Begrüßung, Vorstellung, Ablauf &amp; Ziel erklären<br>
+            2. Ideensammlung (z.B. Brainstorming) ohne Kommentare<br>
+            3. Ideen prüfen (Pro &amp; Kontra, wichtigste herausarbeiten)<br>
+            4. Ausarbeitung in Gruppen, Lösungen finden<br>
+            5. Ergebnisse festhalten, Maßnahmen mit Verantwortlichen und Zeitvorgaben<br>
+            6. Zusammenfassung, Bedankung, nächste Schritte festlegen
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Konflikte</div>
+        <div class="card amber">
+          <div class="term">Konflikt = Zusammenprall unvereinbarer Handlungspläne</div>
+          <div class="def">Konflikte sind normal – und haben auch positive Wirkungen:<br>Problemfelder sichtbar machen · Interesse der Beteiligten zeigen · Energie für Lösungen freisetzen · Gruppe formen · Grenzen kennenlernen</div>
+        </div>
+        <div class="section-title" style="margin-top:1rem">Konfliktarten nach Beteiligten</div>
+        <div class="grid2">
+          <div class="mini-card">
+            <span class="badge gray">Intrapersonell</span>
+            <div class="mini-title">Konflikt mit sich selbst</div>
+            <div class="mini-text">Z.B. Rollenkonflikt "Führungskraft": will kollegial sein, muss aber Entscheidungen durchsetzen</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge blue">Interpersonell</span>
+            <div class="mini-title">Zwischen mehreren Personen</div>
+            <div class="mini-text">4 Grundarten: Bewertungskonflikt · Beurteilungskonflikt · Verteilungskonflikt · Beziehungskonflikt</div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Konfliktart</th><th>Entstehung durch</th><th>Beispiel im Lager</th></tr>
+            <tr><td><strong>Bewertungskonflikt</strong></td><td>Unterschiedliche Zielvorstellungen, widersprechende Ziele</td><td>A will schnell liefern, B will erst Qualität prüfen</td></tr>
+            <tr><td><strong>Beurteilungskonflikt</strong></td><td>Verschiedene Vorstellungen zur Zielerreichung</td><td>Welches ERP-System ist das Beste?</td></tr>
+            <tr><td><strong>Verteilungskonflikt</strong></td><td>Mittel/Ressourcen: Mitarbeiter, Raum, Budget, Zeit</td><td>Wer bekommt das neue Gerät?</td></tr>
+            <tr><td><strong>Beziehungskonflikt</strong></td><td>Störung der Beziehungsebene (Antipathie, Vorurteile)</td><td>Zwei Mitarbeiter können nicht miteinander</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Konfliktdynamik nach Glasl &amp; Mobbing</div>
+        <div class="card red">
+          <div class="term">Eskalationsstufen nach Glasl</div>
+          <div class="def">Sobald ein Konflikt über die erste Stufe hinausgeht, ist "Win-Win" kaum noch möglich.<br><br>Stufe 1–3: Beteiligten können selbst lösen<br>Stufe 4–6: Moderation/Mediation durch neutrale Person nötig<br>Stufe 7–9: Beide kämpfen bis zum Ende – niemand gewinnt</div>
+        </div>
+        <div class="card red">
+          <div class="term">Mobbing = Sonderform des Konflikts</div>
+          <div class="def">Systematische Ausgrenzung über längeren Zeitraum. Folgen: Krankenstand steigt · Imageschaden · wirtschaftlicher Schaden.<br><br>Warnsignale: Ironie · mangelndes Zuhören · Herabsetzung oder Beleidigung</div>
+          <div class="example">Als Logistikmanager: Wenn du merkst, dass ein Mitarbeiter systematisch aus Gruppengesprächen ausgeschlossen wird → sofort handeln!</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Interkulturelle Kommunikation</div>
+        <div class="card">
+          <div class="term">Besondere Herausforderungen</div>
+          <div class="def">Kommunikation ist generell komplex – mit Personen aus anderen Kulturkreisen noch anspruchsvoller.<br><br>Herausforderungen: Unterschiedliche Kommunikationsstile · Nonverbale Missverständnisse · Zeitverständnis · Hierarchievorstellungen · Tabuthemen</div>
+          <div class="example">In manchen Kulturen ist direkte Kritik unhöflich – was als Zustimmung gedeutet wird, ist vielleicht nur höfliche Ablehnung.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KAP 1: PRÄSENTATION -->
+    <div class="page" id="page-praesentation">
+      <div class="page-header">
+        <div class="page-eyebrow">Kapitel 1 · Zielgruppengerechte Präsentation</div>
+        <div class="page-title">Präsentationen vorbereiten, halten &amp; nachbereiten</div>
+        <div class="page-desc">Wie man eine Präsentation professionell aufbaut und durchführt.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Was ist eine Präsentation?</div>
+        <div class="card blue">
+          <div class="term">Präsentation = mediengestützter Vortrag</div>
+          <div class="def">Worte werden durch Bilder und Texte unterstützt → Erinnerungsgrad bei Zuhörern erhöhen!<br><br>Einsatzgebiete: Interne &amp; externe Information · Ideen &amp; Strategien · Verkauf von Produkten &amp; Dienstleistungen</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">5-Phasen-Modell der Vorbereitung</div>
+        <div class="step-list">
+          <div class="step-item"><div class="step-num">1</div><div><strong>Ideensammlung:</strong> Alle Ideen sammeln, die für die Präsentation geeignet sind (z.B. Brainstorming)</div></div>
+          <div class="step-item"><div class="step-num">2</div><div><strong>Sortieren:</strong> Ideen nach Stellenwert und Zusammenhängen ordnen</div></div>
+          <div class="step-item"><div class="step-num">3</div><div><strong>Strukturieren:</strong> Reihenfolge definieren, überlegen welche Elemente zusammen gehören</div></div>
+          <div class="step-item"><div class="step-num">4</div><div><strong>Kontrollieren:</strong> Ergebnisse aus Phase 2 und 3 nochmals sichten und prüfen</div></div>
+          <div class="step-item"><div class="step-num">5</div><div><strong>Üben:</strong> Präsentation üben, Stichwortnotizen anfertigen</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Aufbau jeder Präsentation</div>
+        <div class="grid3">
+          <div class="mini-card">
+            <span class="badge blue">Einleitung (ca. 15%)</span>
+            <div class="mini-title">Einstieg</div>
+            <div class="mini-text">Vorstellung · Ziel der Präsentation · Ablauf erklären</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge green">Hauptteil (ca. 75%)</span>
+            <div class="mini-title">Inhalt</div>
+            <div class="mini-text">Themen kurz und prägnant behandeln</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge gray">Schluss (ca. 10%)</span>
+            <div class="mini-title">Abschluss</div>
+            <div class="mini-text">Hauptteil zusammenfassen · Fazit ziehen</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Verständlichkeit nach Schulz von Thun (4 Kriterien)</div>
+        <div class="grid2">
+          <div class="mini-card"><div class="mini-title">Einfachheit</div><div class="mini-text">Kurze Sätze, geläufige Worte für die Zielgruppe verwenden</div></div>
+          <div class="mini-card"><div class="mini-title">Gliederung/Ordnung</div><div class="mini-text">Nachvollziehbare Struktur und gekonnte Überleitungen</div></div>
+          <div class="mini-card"><div class="mini-title">Kürze/Prägnanz</div><div class="mini-text">Zielorientiert und ohne Abschweifungen vortragen</div></div>
+          <div class="mini-card"><div class="mini-title">Anregende Zusätze</div><div class="mini-text">Beispiele, Abbildungen, unterschiedliche Medien einsetzen</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Verbale vs. nonverbale Kommunikation</div>
+        <div class="grid2">
+          <div class="mini-card">
+            <span class="badge blue">Verbal</span>
+            <div class="mini-title">Was du sagst</div>
+            <div class="mini-text">Auf Zielgruppe abstimmen (Fachbegriffe und Satzbau anpassen!)</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge amber">Nonverbal</span>
+            <div class="mini-title">Entscheidend für den Erfolg!</div>
+            <div class="mini-text">Offene Gestik und Mimik · gerade Haltung · guter Stand · dynamische Bewegung · Blickkontakt · Stimme variieren</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Präsentationsmedien im Überblick</div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Medium</th><th>Vorteile</th><th>Hinweis</th></tr>
+            <tr><td><strong>Whiteboard/Flipchart</strong></td><td>Spontanes Mitschreiben, Themen dauerhaft visualisieren</td><td>Nur für kleine Gruppen</td></tr>
+            <tr><td><strong>PowerPoint/Beamer</strong></td><td>Große Gruppen, Animationen, Grafiken, Handouts schnell erstellen</td><td>Fließtexte vermeiden!</td></tr>
+            <tr><td><strong>Metaplan/Pinnwand</strong></td><td>Schrittweise Themen erarbeiten, Brainstorming visualisieren</td><td>Häufig in Moderation</td></tr>
+            <tr><td><strong>Dokumentenkamera</strong></td><td>Variables Mitschreiben und Zeigen möglich</td><td>Ersetzt Overhead-Projektor</td></tr>
+            <tr><td><strong>Handout</strong></td><td>Mindestens Inhalt der Präsentation, weiterführende Infos möglich</td><td>Erst am Ende aushändigen!</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Nachbereitung einer Präsentation</div>
+        <div class="step-list">
+          <div class="step-item"><div class="step-num">1</div><div><strong>Feedback einholen:</strong> Gezielte Bitte nach Teilnehmerfeedback, Abgleich Selbst- und Fremdbild</div></div>
+          <div class="step-item"><div class="step-num">2</div><div><strong>Selbstreflexion:</strong> Eigene Stärken und Schwächen analysieren, kritisch mit der eigenen Leistung auseinanderzusetzen</div></div>
+          <div class="step-item"><div class="step-num">3</div><div><strong>Follow-up:</strong> Vereinbarungen umsetzen, Unterlagen an Teilnehmer senden, ggf. telefonische Kontaktaufnahme</div></div>
+        </div>
+        <div class="merksatz">Nachbereitung = Grundstein für eine erfolgreiche nächste Präsentation!</div>
+      </div>
+    </div>
+
+    <!-- KAP 2: PERSONALAUSWAHL -->
+    <div class="page" id="page-personalauswahl">
+      <div class="page-header">
+        <div class="page-eyebrow">Kapitel 2 · Personalrekrutierung</div>
+        <div class="page-title">Personalauswahl &amp; Rekrutierung</div>
+        <div class="page-desc">Kriterien festlegen, Bewerber auswählen und das Auswahlverfahren gestalten.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Personalbedarfsermittlung</div>
+        <div class="card blue">
+          <div class="term">Warum Personalbedarf ermitteln?</div>
+          <div class="def">Unternehmen müssen sicherstellen, dass die richtigen Personen in der richtigen Anzahl zur richtigen Zeit mit der richtigen Qualifikation verfügbar sind.</div>
+        </div>
+        <div class="grid2">
+          <div class="mini-card">
+            <span class="badge blue">Quantitativer Bedarf</span>
+            <div class="mini-title">Wie viele Mitarbeiter?</div>
+            <div class="mini-text">Anzahl der benötigten Mitarbeiter für eine Stelle oder Abteilung</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge green">Qualitativer Bedarf</span>
+            <div class="mini-title">Welche Qualifikationen?</div>
+            <div class="mini-text">Fachliche und persönliche Anforderungen an die Mitarbeiter</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Interne vs. externe Personalbeschaffung</div>
+        <div class="grid2">
+          <div class="mini-card">
+            <span class="badge green">Intern</span>
+            <div class="mini-title">Vorteile</div>
+            <div class="mini-text">Mitarbeiter kennen das Unternehmen · Geringere Einarbeitungszeit · Motivation durch Aufstieg · Geringere Kosten</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge blue">Extern</span>
+            <div class="mini-title">Vorteile</div>
+            <div class="mini-text">Frische Ideen von außen · Größere Auswahl · Neue Fähigkeiten ins Unternehmen bringen</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Auswahlverfahren</div>
+        <div class="card">
+          <div class="term">Typische Instrumente der Personalauswahl</div>
+          <div class="def">
+            Analyse der Bewerbungsunterlagen (Anschreiben, Lebenslauf, Zeugnisse)<br>
+            Vorstellungsgespräch (strukturiert oder unstrukturiert)<br>
+            Assessment Center (AC) – mehrstufige Prüfung mit verschiedenen Aufgaben<br>
+            Probearbeit / Schnuppertag<br>
+            Psychologische Tests (Persönlichkeit, Intelligenz, Fähigkeiten)
+          </div>
+        </div>
+        <div class="pruefung">Im Assessment Center kommen Gruppenübungen, Präsentationen, Rollenspiele und Einzelinterviews zusammen. Für Führungspositionen Standard.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Das Vorstellungsgespräch</div>
+        <div class="card green">
+          <div class="term">Aufbau eines strukturierten Interviews</div>
+          <div class="def">
+            1. Begrüßung und Vorstellung<br>
+            2. Vorstellung des Unternehmens und der Stelle<br>
+            3. Selbstpräsentation des Bewerbers<br>
+            4. Fachliche Fragen und Situationsfragen<br>
+            5. Fragen des Bewerbers<br>
+            6. Weiteres Vorgehen erklären
+          </div>
+        </div>
+        <div class="card amber">
+          <div class="term">Unzulässige Fragen im Vorstellungsgespräch</div>
+          <div class="def">Schwangerschaft · Familienplanung · Religion · Parteizugehörigkeit · Vorstrafen (außer jobrelevant) · Krankheiten (außer jobrelevant)<br><br>Grund: Allgemeines Gleichbehandlungsgesetz (AGG)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KAP 3: PERSONALEINSATZ -->
+    <div class="page" id="page-personaleinsatz">
+      <div class="page-header">
+        <div class="page-eyebrow">Kapitel 3 · Personaleinsatz</div>
+        <div class="page-title">Planung &amp; Steuerung des Personaleinsatzes</div>
+        <div class="page-desc">Wie man Mitarbeiter optimal einsetzt, Schichten plant und Fehlzeiten managt.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Personaleinsatzplanung</div>
+        <div class="card blue">
+          <div class="term">Ziel: Richtige Person, zur richtigen Zeit, am richtigen Ort</div>
+          <div class="def">Die Personaleinsatzplanung stellt sicher, dass alle betrieblichen Aufgaben mit den verfügbaren Mitarbeitern abgedeckt werden – unter Berücksichtigung von Arbeitsrecht, Qualifikationen und Mitarbeiterwünschen.</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Arbeitszeitmodelle</div>
+        <div class="grid2">
+          <div class="mini-card"><div class="mini-title">Gleitzeit</div><div class="mini-text">Mitarbeiter wählen Beginn/Ende selbst im Rahmen von Kernzeiten</div></div>
+          <div class="mini-card"><div class="mini-title">Schichtarbeit</div><div class="mini-text">Früh-, Spät-, Nachtschicht – besonders in Lager und Produktion</div></div>
+          <div class="mini-card"><div class="mini-title">Teilzeit</div><div class="mini-text">Reduzierte Stundenzahl – rechtlicher Anspruch nach TzBfG</div></div>
+          <div class="mini-card"><div class="mini-title">Homeoffice</div><div class="mini-text">Arbeiten von zuhause – nur für geeignete Tätigkeiten möglich</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Fehlzeitenmanagement</div>
+        <div class="card">
+          <div class="term">Arten von Fehlzeiten</div>
+          <div class="def">Krankheit (entschuldigt) · Unentschuldigtes Fehlen · Urlaub · Weiterbildung · Elternzeit · Betriebsunfall</div>
+        </div>
+        <div class="card amber">
+          <div class="term">Maßnahmen bei hohem Krankenstand</div>
+          <div class="def">Rückkehrgespräch nach Krankenstand · Betriebliches Eingliederungsmanagement (BEM) · Gesundheitsförderungsprogramme · Arbeitsplatzanalyse</div>
+          <div class="example">Ab 6 Wochen Krankenstand innerhalb von 12 Monaten: BEM-Gespräch ist Pflicht (§ 167 SGB IX).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KAP 4: FÜHRUNG -->
+    <div class="page" id="page-fuehrung">
+      <div class="page-header">
+        <div class="page-eyebrow">Kapitel 4 · Führungsmethoden</div>
+        <div class="page-title">Situationsgerechte Führung</div>
+        <div class="page-desc">Führungsstile, Motivationstheorien und wie man als Führungskraft wirksam ist.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Klassische Führungsstile</div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Stil</th><th>Merkmale</th><th>Wann sinnvoll?</th></tr>
+            <tr><td><strong>Autoritär</strong></td><td>Chef entscheidet allein, klare Anweisungen, kaum Mitsprache</td><td>Krisen, Zeitdruck, unerfahrene Mitarbeiter</td></tr>
+            <tr><td><strong>Kooperativ</strong></td><td>Entscheidungen gemeinsam, MA können mitreden</td><td>Erfahrene Teams, kreative Aufgaben</td></tr>
+            <tr><td><strong>Laissez-faire</strong></td><td>Mitarbeiter entscheiden weitgehend selbst</td><td>Hoch qualifizierte, selbstständige Experten</td></tr>
+          </table>
+        </div>
+        <div class="merksatz">Es gibt keinen "besten" Führungsstil. Situationsgerecht = je nach Mitarbeiter, Aufgabe und Situation anpassen!</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Situatives Führen (Hersey & Blanchard)</div>
+        <div class="card blue">
+          <div class="term">Reifegrad des Mitarbeiters bestimmt den Führungsstil</div>
+          <div class="def">
+            Reifegrad 1 (niedrig): Anweisen – klare Anweisungen, viel Kontrolle<br>
+            Reifegrad 2: Trainieren – erklären und überzeugen<br>
+            Reifegrad 3: Partizipieren – gemeinsam entscheiden<br>
+            Reifegrad 4 (hoch): Delegieren – Aufgabe übertragen, Mitarbeiter eigenverantwortlich
+          </div>
+          <div class="example">Neuer Lagermitarbeiter (R1): genaue Einweisung wo was hinkommt. Erfahrener Logistikmanager (R4): bekommt Projekt und erledigt es selbstständig.</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Motivationstheorien</div>
+        <div class="card">
+          <div class="term">Maslow'sche Bedürfnispyramide</div>
+          <div class="def">
+            5. Selbstverwirklichung (höchste Stufe)<br>
+            4. Ich-Bedürfnisse (Anerkennung, Status)<br>
+            3. Soziale Bedürfnisse (Zugehörigkeit, Team)<br>
+            2. Sicherheitsbedürfnisse (fester Job, Gehalt)<br>
+            1. Physiologische Bedürfnisse (Essen, Schlaf)
+          </div>
+          <div class="example">Mitarbeiter der Hunger hat (Stufe 1), ist nicht motivierbar durch Lob (Stufe 4). Erst die unteren Stufen erfüllen!</div>
+        </div>
+        <div class="card">
+          <div class="term">Herzberg – Zwei-Faktoren-Theorie</div>
+          <div class="def"><strong>Hygienefaktoren</strong> (verhindern Unzufriedenheit): Gehalt, sichere Arbeitsbedingungen, Unternehmenskultur<br><br><strong>Motivatoren</strong> (erzeugen Zufriedenheit): Anerkennung, Verantwortung, Aufstieg, interessante Arbeit</div>
+          <div class="example">Gutes Gehalt macht nicht zufrieden, aber schlechtes Gehalt macht unzufrieden (Hygienefaktor).</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Führungsinstrumente</div>
+        <div class="grid2">
+          <div class="mini-card"><div class="mini-title">Mitarbeitergespräch</div><div class="mini-text">Regelmäßiger Austausch, Zielvereinbarungen, Feedback geben und empfangen</div></div>
+          <div class="mini-card"><div class="mini-title">Delegation</div><div class="mini-text">Aufgaben, Verantwortung und Kompetenzen übertragen – entlastet Führungskraft und entwickelt Mitarbeiter</div></div>
+          <div class="mini-card"><div class="mini-title">Zielvereinbarung (MbO)</div><div class="mini-text">Management by Objectives: SMART-Ziele gemeinsam vereinbaren und messen</div></div>
+          <div class="mini-card"><div class="mini-title">Teamentwicklung</div><div class="mini-text">Phasen nach Tuckman: Forming → Storming → Norming → Performing</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KAP 5: AUSBILDUNG -->
+    <div class="page" id="page-ausbildung">
+      <div class="page-header">
+        <div class="page-eyebrow">Kapitel 5 · Berufsausbildung</div>
+        <div class="page-title">Planen &amp; Durchführen der Berufsausbildung</div>
+        <div class="page-desc">Rechtliche Grundlagen und praktische Umsetzung der Ausbildung im Betrieb.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Rechtliche Grundlagen</div>
+        <div class="card blue">
+          <div class="term">Berufsbildungsgesetz (BBiG)</div>
+          <div class="def">Das BBiG regelt die duale Berufsausbildung in Deutschland. Wichtigste Grundlage für alle Ausbilder.</div>
+        </div>
+        <div class="grid2">
+          <div class="mini-card">
+            <span class="badge blue">Duales System</span>
+            <div class="mini-title">Betrieb + Berufsschule</div>
+            <div class="mini-text">Praktische Ausbildung im Betrieb + theoretische Ausbildung in der Berufsschule</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge green">Ausbildungsrahmenplan</span>
+            <div class="mini-title">Was muss gelernt werden?</div>
+            <div class="mini-text">Definiert Mindestinhalte der Ausbildung für jeden Beruf</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Ausbilder-Eignungsverordnung (AEVO)</div>
+        <div class="card amber">
+          <div class="term">Wer darf ausbilden?</div>
+          <div class="def">Ausbilder müssen persönlich und fachlich geeignet sein (§ 30 BBiG). Die AEVO regelt den Nachweis der Eignung – meist durch den "Ausbilderschein" (AdA-Prüfung).</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">4-Stufen-Methode der Unterweisung</div>
+        <div class="step-list">
+          <div class="step-item"><div class="step-num">1</div><div><strong>Vorbereiten:</strong> Auszubildenden auf die Aufgabe vorbereiten, Vorwissen aktivieren</div></div>
+          <div class="step-item"><div class="step-num">2</div><div><strong>Vormachen:</strong> Ausbilder führt die Tätigkeit vor und erklärt dabei</div></div>
+          <div class="step-item"><div class="step-num">3</div><div><strong>Nachmachen:</strong> Auszubildender führt die Tätigkeit aus, Ausbilder beobachtet und korrigiert</div></div>
+          <div class="step-item"><div class="step-num">4</div><div><strong>Üben:</strong> Selbstständiges Üben, Ausbilder zieht sich zurück</div></div>
+        </div>
+        <div class="pruefung">Die 4-Stufen-Methode ist Prüfungsklassiker! Reihenfolge und Inhalte kennen.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Ausbildungsnachweis &amp; Beurteilung</div>
+        <div class="card">
+          <div class="term">Pflichten des Ausbildungsbetriebs</div>
+          <div class="def">Ausbildungsvertrag abschließen · Berichtsheft führen lassen · Zwischenprüfung ermöglichen · Abschlussprüfung anmelden · Zeugnis ausstellen</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KAP 6: PERSONALENTWICKLUNG -->
+    <div class="page" id="page-entwicklung">
+      <div class="page-header">
+        <div class="page-eyebrow">Kapitel 6 · Personalentwicklung</div>
+        <div class="page-title">Fördern der beruflichen Entwicklung &amp; Weiterbildung</div>
+        <div class="page-desc">Wie man Mitarbeiter systematisch entwickelt – und den Erfolg misst.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Arten von Personalentwicklungsmaßnahmen</div>
+        <div class="grid3">
+          <div class="mini-card">
+            <span class="badge blue">On the Job</span>
+            <div class="mini-title">Während der Arbeit</div>
+            <div class="mini-text">Jobrotation · Coaching · Mentoring · Projektarbeit · Lernpartnerschaften</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge green">Near the Job</span>
+            <div class="mini-title">Arbeitsnah</div>
+            <div class="mini-text">Qualitätszirkel · Lernstatt · Unternehmensplanspiele · Projektgruppen</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge amber">Off the Job</span>
+            <div class="mini-title">Außerhalb der Arbeit</div>
+            <div class="mini-text">Seminare · Workshops · Kongresse · Selbstlernprogramme · Studium</div>
+          </div>
+        </div>
+        <div class="card red">
+          <div class="term">Out of the Job – Outplacement</div>
+          <div class="def">Wenn Stellen wegfallen: Unternehmen unterstützen betroffene Mitarbeiter beim Übergang. Bewerbungstraining · Fachseminare · Coachings</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Laufbahn- vs. Nachfolgeplanung</div>
+        <div class="grid2">
+          <div class="mini-card">
+            <span class="badge blue">Laufbahnplanung</span>
+            <div class="mini-title">Theoretische Möglichkeiten aufzeigen</div>
+            <div class="mini-text">Unverbindlich · Individuell oder allgemein · "So könnte Ihre Karriere aussehen"</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge purple">Nachfolgeplanung</span>
+            <div class="mini-title">Systematische Vorbereitung</div>
+            <div class="mini-text">Konkrete Vorbereitung auf neue Stelle (meist Führungsposition) · Verbindlicher als Laufbahnplanung</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Erfolgskontrolle von Personalentwicklung</div>
+        <div class="grid2">
+          <div class="mini-card">
+            <span class="badge blue">Ökonomisch</span>
+            <div class="mini-title">Kosten &amp; Nutzen</div>
+            <div class="mini-text">Kosten: Seminargebühren · Unterkunft · Fahrt · Trainer · Fehlzeiten<br>Nutzen: Verkaufszahlen · Fehlerquoten · Unfallzahlen (vor/nach Maßnahme)</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge green">Pädagogisch</span>
+            <div class="mini-title">Lernen &amp; Lehren</div>
+            <div class="mini-text">Was sollte/wurde gelernt? Wie? Was wird angewendet? → Instrumente: Feedbackbögen, Tests, Mitarbeitergespräche</div>
+          </div>
+        </div>
+        <div class="card amber">
+          <div class="term">Transfer in die Praxis sicherstellen</div>
+          <div class="def">Zielvereinbarungen in Mitarbeitergesprächen · Befragung nach 3 und 6 Monaten · Teilnehmer als Multiplikatoren einsetzen (Wissen weitergeben!)</div>
+          <div class="example">Du machst diese Weiterbildung → danach sollst du das Gelernte im Unternehmen anwenden UND weitergeben. Das ist der Transfer.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KAP 7: ARBEITSSCHUTZ -->
+    <div class="page" id="page-arbeitsschutz">
+      <div class="page-header">
+        <div class="page-eyebrow">Kapitel 7 · Arbeitsschutz</div>
+        <div class="page-title">Gestaltung des Arbeitsschutzes</div>
+        <div class="page-desc">Rechtliche Grundlagen, Gefährdungsbeurteilung und betriebliche Gesundheitsförderung.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Rechtliche Grundlagen (EU &amp; Deutschland)</div>
+        <div class="card blue">
+          <div class="term">EU-Recht → Deutsches Recht</div>
+          <div class="def">EU gibt Mindestvorschriften vor (Richtlinien). Deutschland setzt diese in nationales Recht um – darf strengere Vorschriften haben.<br><br>Wichtige Gesetze:<br>Arbeitsschutzgesetz (ArbSchG) · Arbeitsstättenverordnung · PSA-Benutzerverordnung</div>
+        </div>
+        <div class="card">
+          <div class="term">CE-Kennzeichnung</div>
+          <div class="def">"Conformité Européenne" – Produkte müssen richtlinienkonform hergestellt sein. Nur auf Produkten, für die sie vorgeschrieben ist (z.B. Spielzeug, elektrische Geräte, PSA).</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Duales Arbeitsschutzsystem</div>
+        <div class="grid2">
+          <div class="mini-card">
+            <span class="badge blue">Staatlicher Arbeitsschutz</span>
+            <div class="mini-title">Gesetze &amp; Verordnungen</div>
+            <div class="mini-text">ArbSchG, Arbeitsstättenverordnung etc. · Kontrolle durch staatliche Arbeitsschutzaufsicht des Bundeslandes</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge green">Gesetzliche Unfallversicherung</span>
+            <div class="mini-title">Berufsgenossenschaften</div>
+            <div class="mini-text">Unfallverhütungsvorschriften (DGUV) · Kontrolle durch Technischen Aufsichtsdienst</div>
+          </div>
+        </div>
+        <div class="card amber">
+          <div class="term">Arbeitsschutzausschuss (ASA)</div>
+          <div class="def">Pflicht ab 20 Beschäftigten (§11 ASiG). Zusammensetzung: Arbeitgeber/Beauftragter · 2 Betriebsratsmitglieder · Betriebsarzt · Fachkraft für Arbeitssicherheit · Sicherheitsbeauftragter<br><br>Tagung: mindestens 1× pro Quartal</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Gefährdungsbeurteilung</div>
+        <div class="card green">
+          <div class="term">Gesetzliche Pflicht nach §5 ArbSchG</div>
+          <div class="def">Arbeitgeber sind verpflichtet, Gefährdungen zu ermitteln und Schutzmaßnahmen festzulegen. Unterscheidung:<br><br><strong>Vorausschauend:</strong> Bei neuen Tätigkeiten, wesentlichen Änderungen<br><strong>Zurückblickend:</strong> Nach Unfällen oder Berufskrankheiten</div>
+        </div>
+        <div class="card blue">
+          <div class="term">STOP-Prinzip (Rangfolge der Maßnahmen)</div>
+          <div class="def">
+            <strong>S – Substitution:</strong> Gefahren beseitigen (z.B. ungefährliche Stoffe verwenden)<br>
+            <strong>T – Technisch:</strong> Technische Schutzeinrichtungen einbauen<br>
+            <strong>O – Organisatorisch:</strong> Abläufe ändern, Mitarbeiter unterweisen, Expositionsdauer senken<br>
+            <strong>P – Persönlich:</strong> Persönliche Schutzausrüstung (PSA) als letzte Option
+          </div>
+          <div class="example">Lärmgefährdung: 1. Leisere Maschine kaufen (S) 2. Schallschutzwand einbauen (T) 3. Rotation der Mitarbeiter (O) 4. Gehörschutz tragen (P)</div>
+        </div>
+        <div class="card">
+          <div class="term">Risikobewertung &amp; Dokumentation</div>
+          <div class="def">Beurteilung nach: Eintrittswahrscheinlichkeit · Expositionsdauer · Schadensschwere → Risikomaßzahl<br><br>Dokumentation: formfrei (Papier oder elektronisch), erkennbar dass Beurteilung angemessen durchgeführt wurde</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Sozialer Arbeitsschutz – Arbeitszeitvergleich</div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Regelung</th><th>JArbSchG (Jugendliche)</th><th>MuSchG (Mütter)</th><th>ArbZG (Allgemein)</th></tr>
+            <tr><td>Tägliche Arbeitszeit</td><td>8 Std. (max. 8,5)</td><td>8,5 Std.</td><td>8 Std. (max. 10)</td></tr>
+            <tr><td>Wöchentliche AZ</td><td>40 Std.</td><td>90 Std./2 Wochen</td><td>48-60 Std.</td></tr>
+            <tr><td>Ruhezeit</td><td>12 Std.</td><td>11 Std.</td><td>11 Std.</td></tr>
+            <tr><td>Nachtruhe</td><td>20-6 Uhr</td><td>20-6 Uhr</td><td>Keine Regelung</td></tr>
+            <tr><td>Sonn- &amp; Feiertage</td><td>Nicht zulässig</td><td>Nicht zulässig</td><td>Mit Ausnahmen nicht zulässig</td></tr>
+          </table>
+        </div>
+        <div class="pruefung">Diese Tabelle kommt gerne in der Prüfung! Besonders die Unterschiede zwischen JArbSchG und ArbZG merken.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Betriebliche Gesundheitsförderung</div>
+        <div class="card green">
+          <div class="term">Ziel: Krankenstand senken &amp; Mitarbeiterbindung stärken</div>
+          <div class="def">Arbeitgeber unterstützen Mitarbeiter, eigene Gesundheit und Wohlbefinden zu verbessern (Work-Life-Balance).<br><br>Kennzahlen zur Analyse: Krankenstand · Unfallzahlen · Mitarbeiterzufriedenheit · Mitarbeiterfluktuation · Psychische Belastungen</div>
+        </div>
+        <div class="card">
+          <div class="term">Unterweisung (§12 ArbSchG)</div>
+          <div class="def">Arbeitgeber müssen Mitarbeiter über Sicherheit und Gesundheitsschutz unterweisen.<br><br>Häufigkeit: Mindestens 1× jährlich · Jugendliche 2× jährlich · Bei neuen Tätigkeiten und Verfahren<br><br>Dokumentation: Wann? Wer? Was? (Unterschrift als Nachweis!)</div>
+        </div>
+        <div class="grid3">
+          <div class="mini-card">
+            <span class="badge blue">Erstunterweisung</span>
+            <div class="mini-title">Beim Start</div>
+            <div class="mini-text">Vor Aufnahme einer neuen Tätigkeit oder bei neuen Arbeitsverfahren</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge green">Wiederholungsunterweisung</span>
+            <div class="mini-title">Regelmäßig</div>
+            <div class="mini-text">In bestimmten Zeitabständen wiederholen (mind. 1× jährlich)</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge amber">Anlassunterweisung</span>
+            <div class="mini-title">Bei Bedarf</div>
+            <div class="mini-text">Z.B. bei Fehlverhalten oder nach Unfällen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
