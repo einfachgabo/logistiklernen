@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log. Abläufe & Systemanalyse</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#f5f4f0;--surface:#fff;--surface2:#eeecea;--border:#dddbd6;
+    --text:#1a1917;--text2:#5a5854;--text3:#8a8884;
+    --blue:#1a56db;--blue-bg:#eff4ff;--blue-border:#c3d3fd;
+    --green:#1a7a4a;--green-bg:#f0faf4;--green-border:#a7dfc0;
+    --amber:#92500a;--amber-bg:#fffbf0;--amber-border:#f5d48a;
+    --purple:#5522cc;--purple-bg:#f4f0ff;--purple-border:#c8b8f8;
+    --red:#9b1c1c;--red-bg:#fff5f5;--red-border:#f8b4b4;
+    --font:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;
+    --radius:8px;--radius-lg:12px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6}
+  .site-header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.5rem;display:flex;align-items:center;gap:1rem;height:56px;position:sticky;top:0;z-index:100}
+  .site-header a{font-size:13px;color:var(--text3);text-decoration:none}
+  .site-header a:hover{color:var(--blue)}
+  .header-title{font-size:14px;font-weight:600;color:var(--text);flex:1}
+  .header-badge{font-size:11px;background:var(--surface2);color:var(--text3);border:1px solid var(--border);padding:2px 8px;border-radius:20px;font-weight:500}
+  .layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 56px);max-width:1100px;margin:0 auto}
+  .sidebar{background:var(--surface);border-right:1px solid var(--border);padding:1.5rem 0;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
+  .sidebar-label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);padding:.5rem 1.25rem;margin-bottom:.25rem}
+  .nav-item{display:flex;align-items:center;gap:.6rem;padding:.55rem 1.25rem;font-size:13px;color:var(--text2);cursor:pointer;border-left:2px solid transparent;transition:all .15s;user-select:none}
+  .nav-item:hover{background:var(--bg);color:var(--text)}
+  .nav-item.active{color:var(--blue);background:var(--blue-bg);border-left-color:var(--blue);font-weight:500}
+  .nav-dot{width:6px;height:6px;border-radius:50%;background:var(--border);flex-shrink:0}
+  .nav-item.active .nav-dot{background:var(--blue)}
+  .main{padding:2rem 2.5rem;max-width:780px}
+  .page{display:none}.page.active{display:block}
+  .page-header{margin-bottom:2rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
+  .page-eyebrow{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:.4rem}
+  .page-title{font-size:22px;font-weight:600;color:var(--text);line-height:1.3}
+  .page-desc{font-size:14px;color:var(--text2);margin-top:.5rem}
+  .section{margin-bottom:2rem}
+  .section-title{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+  .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:.75rem}
+  .card.blue{border-left:3px solid var(--blue);background:var(--blue-bg);border-color:var(--blue-border)}
+  .card.green{border-left:3px solid var(--green);background:var(--green-bg);border-color:var(--green-border)}
+  .card.amber{border-left:3px solid var(--amber);background:var(--amber-bg);border-color:var(--amber-border)}
+  .card.purple{border-left:3px solid var(--purple);background:var(--purple-bg);border-color:var(--purple-border)}
+  .card.red{border-left:3px solid var(--red);background:var(--red-bg);border-color:var(--red-border)}
+  .term{font-size:14px;font-weight:600;color:var(--text);margin-bottom:.35rem}
+  .def{font-size:13px;color:var(--text2);line-height:1.6}
+  .example{font-size:12px;color:var(--text3);margin-top:.5rem;padding-top:.5rem;border-top:1px solid var(--border);font-style:italic}
+  .example::before{content:"→ ";font-style:normal}
+  .merksatz{background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:var(--radius);padding:.85rem 1rem;font-size:13px;color:var(--text);line-height:1.65;margin-bottom:1rem}
+  .merksatz::before{content:"MERKSATZ";display:block;font-size:9px;font-weight:700;letter-spacing:.1em;color:var(--amber);margin-bottom:.3rem}
+  .pruefung{background:var(--purple-bg);border:1px solid var(--purple-border);border-radius:var(--radius);padding:.85rem 1rem;font-size:13px;color:var(--text);line-height:1.65;margin-bottom:1rem}
+  .pruefung::before{content:"PRÜFUNGSTIPP";display:block;font-size:9px;font-weight:700;letter-spacing:.1em;color:var(--purple);margin-bottom:.3rem}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:.75rem}
+  .mini-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.85rem 1rem;display:flex;flex-direction:column}
+  .mini-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:.25rem}
+  .mini-text{font-size:12px;color:var(--text2);line-height:1.5}
+  .badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:4px;margin-bottom:.4rem}
+  .badge.blue{background:#dbeafe;color:#1e40af}
+  .badge.green{background:#d1fae5;color:#065f46}
+  .badge.gray{background:#e5e7eb;color:#374151}
+  .badge.amber{background:#fef3c7;color:#78350f}
+  .badge.red{background:#fee2e2;color:#7f1d1d}
+  .badge.purple{background:#ede9fe;color:#4c1d95}
+  .formula{font-family:var(--mono);font-size:13px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:.75rem 1rem;margin-bottom:.75rem;color:var(--text);line-height:1.5}
+  .table-wrap{overflow-x:auto;margin-bottom:1rem;border-radius:var(--radius-lg);border:1px solid var(--border)}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{background:var(--surface2);padding:.6rem .9rem;text-align:left;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--text2);border-bottom:1px solid var(--border)}
+  td{padding:.55rem .9rem;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:var(--bg)}
+  .step-list{counter-reset:steps;margin-bottom:.75rem}
+  .step-item{display:flex;gap:.75rem;margin-bottom:.6rem;font-size:13px;color:var(--text2);align-items:flex-start}
+  .step-num{background:var(--blue);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;margin-top:1px}
+  /* NOTIZEN */
+  .note-toggle{display:inline-flex;align-items:center;gap:.4rem;font-size:12px;color:var(--text3);background:none;border:1px dashed var(--border);border-radius:var(--radius);padding:4px 10px;cursor:pointer;margin-top:.5rem;transition:all .15s;user-select:none}
+  .note-toggle:hover{border-color:var(--amber);color:var(--amber);background:var(--amber-bg)}
+  .note-toggle.has-note{border-color:var(--amber);color:var(--amber);background:var(--amber-bg)}
+  .note-box{display:none;margin-top:.5rem;background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:var(--radius);padding:.75rem}
+  .note-box.open{display:block}
+  .note-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:.35rem}
+  .note-textarea{width:100%;background:transparent;border:none;outline:none;resize:none;font-family:var(--font);font-size:13px;color:var(--text);line-height:1.6;min-height:70px}
+  .note-textarea::placeholder{color:var(--text3)}
+
+  @media(max-width:700px){
+    .layout{grid-template-columns:1fr}
+    .sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(--border);padding:.75rem 0;display:flex;overflow-x:auto}
+    .sidebar-label{display:none}
+    .nav-item{border-left:none;border-bottom:2px solid transparent;white-space:nowrap;padding:.5rem 1rem}
+    .nav-item.active{border-bottom-color:var(--blue);border-left:none}
+    .main{padding:1.25rem 1rem}
+    .grid2,.grid3{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="index.html">← Übersicht</a>
+  <div class="header-title">Logistik Lernportal</div>
+  <span class="header-badge">GK · Kap. 1.1</span>
+</header>
+
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-label">Logist. Abläufe & Systeme</div>
+    <div class="nav-item active" onclick="show('grundlagen')"><span class="nav-dot"></span>Grundlagen &amp; Ziele</div>
+    <div class="nav-item" onclick="show('wertschoepfung')"><span class="nav-dot"></span>Wertschöpfung</div>
+    <div class="nav-item" onclick="show('prozesse')"><span class="nav-dot"></span>Prozesse</div>
+    <div class="nav-item" onclick="show('leistungsarten')"><span class="nav-dot"></span>Leistungsarten &amp; Kosten</div>
+    <div class="nav-item" onclick="show('scm')"><span class="nav-dot"></span>SCM &amp; Bullwhip</div>
+    <div class="nav-item" onclick="show('systemfaktoren')"><span class="nav-dot"></span>Systemfaktoren</div>
+    <div class="nav-item" onclick="show('organisation')"><span class="nav-dot"></span>Organisation</div>
+    <div class="nav-item" onclick="show('orgformen')"><span class="nav-dot"></span>Organisationsformen</div>
+  </nav>
+
+  <main class="main">
+
+    <!-- GRUNDLAGEN -->
+    <div class="page active" id="page-grundlagen">
+      <div class="page-header">
+        <div class="page-eyebrow">Kap. 1.1 · Logistikstruktur</div>
+        <div class="page-title">Grundlagen, Ziele &amp; Objekte der Logistik</div>
+        <div class="page-desc">Was bewegt die Logistik – und was sind ihre Aufgaben, Ziele und Objekte?</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Begriff der Logistik</div>
+        <div class="card blue">
+          <div class="term">Zwei Kernaspekte</div>
+          <div class="def">1. Transport von Waren und Gütern (klassisch)<br>2. Vernetzung von Maßnahmen und Prozessen hinsichtlich Material-, Wert- und Informationsfluss (modern)<br><br>Führt zu: Logistikkonzepten und SCM (Supply Chain Management)</div>
+        </div>
+        <div class="merksatz">Logistik ist heute eine Querschnittsfunktion aller Unternehmensbereiche – kein isolierter Bereich mehr, sondern der Verbindungskanal zwischen allen Abteilungen.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Aufgaben der Logistik – die 5 R</div>
+        <div class="grid3">
+          <div class="mini-card"><div class="mini-title">Richtiges Produkt</div><div class="mini-text">Der korrekte Artikel – nicht Artikel A statt B</div></div>
+          <div class="mini-card"><div class="mini-title">Richtige Menge</div><div class="mini-text">Weder zu viel noch zu wenig</div></div>
+          <div class="mini-card"><div class="mini-title">Richtiger Ort</div><div class="mini-text">Dorthin, wo es gebraucht wird</div></div>
+          <div class="mini-card"><div class="mini-title">Richtige Zeit</div><div class="mini-text">Pünktlich – nicht zu früh, nicht zu spät</div></div>
+          <div class="mini-card"><div class="mini-title">Richtige Qualität</div><div class="mini-text">Unbeschädigt, normengerecht</div></div>
+          <div class="mini-card"><div class="mini-title">+ Informationen</div><div class="mini-text">Die richtigen Daten zur richtigen Zeit (6./7. R)</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Ziele der Logistik</div>
+        <div class="grid2">
+          <div class="mini-card">
+            <span class="badge blue">Formalziele</span>
+            <div class="mini-title">Leistungserfüllung</div>
+            <div class="mini-text">Die Logistik soll ihre Kernaufgaben erfüllen – Liefertreue, Verfügbarkeit, Qualität sicherstellen.</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge green">Sachziele</span>
+            <div class="mini-title">Strategisch &amp; operativ</div>
+            <div class="mini-text">Langfristige Positionierung (strategisch) und täglicher Betrieb (operativ). Können komplementär oder konkurrierend sein.</div>
+          </div>
+        </div>
+        <div class="card amber">
+          <div class="term">Komplementäre vs. konkurrierende Ziele</div>
+          <div class="def">Komplementär = Ziele unterstützen sich gegenseitig (z.B. Qualität + Kundenzufriedenheit)<br>Konkurrierend = Ziele behindern sich (z.B. niedrige Bestände vs. hohe Lieferbereitschaft)</div>
+          <div class="example">Typischer Zielkonflikt: Du willst geringe Bestände (spart Kosten), aber gleichzeitig hohe Lieferbereitschaft (braucht Puffer). Beides gleichzeitig geht nicht optimal.</div>
+        </div>
+        <div class="pruefung">Zielkonflikte in der Logistik sind ein Prüfungsklassiker! Immer Beispiele parat haben: Niedrige Bestände vs. hohe Lieferbereitschaft, Kosten vs. Qualität, Geschwindigkeit vs. Nachhaltigkeit.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Objekte der Logistik – was bewegt wird</div>
+        <div class="grid3">
+          <div class="mini-card"><div class="mini-title">Güter</div><div class="mini-text">Waren, Rohstoffe, Fertigprodukte – das Kerngeschäft</div></div>
+          <div class="mini-card"><div class="mini-title">Personen</div><div class="mini-text">Personenlogistik, Pendlerverkehre, Werkspersonal</div></div>
+          <div class="mini-card"><div class="mini-title">Kapital</div><div class="mini-text">Finanzströme, die mit Warenflüssen verbunden sind</div></div>
+          <div class="mini-card"><div class="mini-title">Energie</div><div class="mini-text">Energieversorgung entlang der Lieferkette</div></div>
+          <div class="mini-card"><div class="mini-title">Informationen</div><div class="mini-text">Bestelldaten, Trackingnummern, Bestandsdaten</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Tätigkeiten der Logistik</div>
+        <div class="grid3">
+          <div class="mini-card">
+            <span class="badge blue">Physisch</span>
+            <div class="mini-title">Ausführend</div>
+            <div class="mini-text">Lagern, Transportieren, Kommissionieren, Verpacken</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge green">Administrativ</span>
+            <div class="mini-title">Informationsverarbeitend</div>
+            <div class="mini-text">Informations- und Auftragsabwicklung, Dokumentation</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge amber">Dispositiv</span>
+            <div class="mini-title">Planend &amp; steuernd</div>
+            <div class="mini-text">Planung, Steuerung, Überwachung aller logistischen Prozesse</div>
+          </div>
+        </div>
+        <div class="example" style="font-size:13px;color:var(--text2);font-style:italic;padding:.75rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)">→ Dein Job kombiniert alle drei: physisch (Wareneingangsprüfung), administrativ (Bestellüberwachung in der Software) und dispositiv (Entscheiden wann nachbestellt wird).</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Bedeutung der Logistik</div>
+        <div class="grid2">
+          <div class="mini-card">
+            <span class="badge blue">Betriebswirtschaftlich</span>
+            <div class="mini-title">Für das Unternehmen</div>
+            <div class="mini-text">Kapitalbindung senken · Kosten senken · Wettbewerbsvorteile erarbeiten · Komplementäre und substitutive Güter optimal verwalten</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge green">Volkswirtschaftlich</span>
+            <div class="mini-title">Für die Gesellschaft</div>
+            <div class="mini-text">Globalisierte Ströme ermöglichen · Internationale Vertragsgrundlagen · Infrastruktur aufbauen · Standortvorteile schaffen</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Managementansätze in der Logistik</div>
+        <div class="grid3">
+          <div class="mini-card"><span class="badge gray">Wertorientierung</span><div class="mini-title">z.B. Kostenreduktion</div><div class="mini-text">Fokus auf Wirtschaftlichkeit und Effizienz</div></div>
+          <div class="mini-card"><span class="badge blue">Kundenorientierung</span><div class="mini-title">z.B. TQM</div><div class="mini-text">Total Quality Management – der Kunde im Mittelpunkt</div></div>
+          <div class="mini-card"><span class="badge green">Fließorientierung</span><div class="mini-title">z.B. Prozessoptimierung</div><div class="mini-text">Reibungslose Durchläufe, keine Engpässe</div></div>
+        </div>
+        <div class="merksatz">Ganzheitlicher Ansatz: Logistik als Querschnittsfunktion aller Unternehmensbereiche – nicht nur Transport und Lager!</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">ERP-Systeme in der Logistik</div>
+        <div class="card blue">
+          <div class="term">ERP = Enterprise Resource Planning</div>
+          <div class="def">Zentrale Software, die alle Unternehmensbereiche verbindet – von Einkauf über Lager bis Versand.<br><br>Zwei Haupttreiber: Digitalisierung der Prozesse · Automatisierung der Prozesse</div>
+          <div class="example">Dein Artikelstamm, Bestellüberwachung und Inventur laufen in einem ERP-System – das ist genau dieser Punkt.</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Strategischer Faktor Logistik</div>
+        <div class="card green">
+          <div class="term">Logistik als Wettbewerbsvorteil</div>
+          <div class="def">Dezentrale Beschaffung weltweit · Dezentrale Produktion weltweit · Kostensenkung in der Supply Chain · Zentrale Steuerung aller logistischen Prozesse</div>
+          <div class="example">Amazon-Beispiel: Zentrales ERP steuert Tausende Lager weltweit – das ist Logistik als strategischer Vorteil.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WERTSCHÖPFUNG -->
+    <div class="page" id="page-wertschoepfung">
+      <div class="page-header">
+        <div class="page-eyebrow">Kap. 1.1 · Logistikstruktur</div>
+        <div class="page-title">Wertschöpfung &amp; Wertschöpfungskette</div>
+        <div class="page-desc">Was ist Wertschöpfung genau – und wie unterscheiden sich Brutto- und Nettowertschöpfung?</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Begriff der Wertschöpfung</div>
+        <div class="card green">
+          <div class="term">Wertschöpfung = Erlöse – Vorleistungen</div>
+          <div class="def">Wertschöpfung ist das, was ein Unternehmen über den Wert der eingesetzten Vorleistungen hinaus erzeugt. Es ist der "Mehrwert", den jede Stufe der Produktion hinzufügt.</div>
+          <div class="example">Du kaufst Rohstoffe für 100 € und verkaufst das fertige Produkt für 160 € → Wertschöpfung = 60 €.</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Brutto- und Nettowertschöpfung</div>
+        <div class="card">
+          <div class="term">Zu Herstellerpreisen</div>
+          <div class="def">
+            <strong>Bruttowertschöpfung:</strong><br>
+            Produktionswert − Vorleistungen = Bruttowertschöpfung<br><br>
+            <strong>Nettowertschöpfung:</strong><br>
+            Bruttowertschöpfung − Abschreibungen = Nettowertschöpfung
+          </div>
+        </div>
+        <div class="card">
+          <div class="term">Nettowertschöpfung zu Marktpreisen</div>
+          <div class="def">
+            Produktionswert<br>
+            − Vorleistungen<br>
+            + Gütersteuern<br>
+            − Gütersubventionen<br>
+            − Abschreibungen<br>
+            = <strong>Nettowertschöpfung</strong>
+          </div>
+        </div>
+        <div class="pruefung">Merke: Brutto = vor Abschreibungen. Netto = nach Abschreibungen. Zu Marktpreisen kommen noch Steuern und Subventionen dazu.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Wertschöpfungskette</div>
+        <div class="card blue">
+          <div class="term">Upstream → Downstream</div>
+          <div class="def">
+            <strong>UPSTREAM (vorgelagert):</strong> Vorprodukte, Rohstoffe, Lieferanten<br>
+            <strong>Mitte:</strong> Beschaffung, Fertigung, Marketing<br>
+            <strong>DOWNSTREAM (nachgelagert):</strong> Handel, Endkunde
+          </div>
+          <div class="example">In deinem E-Commerce: Upstream = deine Lieferanten. Dein Unternehmen = Mitte. Downstream = dein Endkunde der online bestellt.</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Wertschöpfungskette nach Porter</div>
+        <div class="card">
+          <div class="term">Primäre Aktivitäten (direkte Wertschöpfung)</div>
+          <div class="def">Eingangslogistik → Produktion → Marketing &amp; Vertrieb → Ausgangslogistik → After-Sales</div>
+        </div>
+        <div class="card">
+          <div class="term">Sekundäre Aktivitäten (Unterstützung)</div>
+          <div class="def">Einkauf · Entwicklung · Finanzen &amp; Controlling · Personalwesen<br><br>Diese unterstützen alle primären Aktivitäten gleichzeitig und ermöglichen den Gewinn.</div>
+        </div>
+        <div class="merksatz">Porter: Die primären Aktivitäten schaffen direkt Wert. Die sekundären Aktivitäten unterstützen alle primären Aktivitäten. Zusammen entstehen Gewinn und Wettbewerbsvorteil.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Teilbereiche der Unternehmenslogistik</div>
+        <div class="grid2">
+          <div class="mini-card"><span class="badge blue">Beschaffung</span><div class="mini-title">Wareneingangs-lager</div><div class="mini-text">Einkauf, Lieferantenmanagement, Wareneingang, Qualitätsprüfung</div></div>
+          <div class="mini-card"><span class="badge green">Produktion</span><div class="mini-title">Zwischenlager</div><div class="mini-text">Materialversorgung der Fertigung, Pufferlager, JIT-Belieferung</div></div>
+          <div class="mini-card"><span class="badge amber">Absatz</span><div class="mini-title">Warenausgangs-lager</div><div class="mini-text">Kommissionierung, Verpackung, Versand, Kundenbelieferung</div></div>
+          <div class="mini-card"><span class="badge gray">Entsorgung</span><div class="mini-title">Retouren &amp; Recycling</div><div class="mini-text">Rücknahme, Recycling, Verwertung, Redistribution</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROZESSE -->
+    <div class="page" id="page-prozesse">
+      <div class="page-header">
+        <div class="page-eyebrow">Kap. 1.1 · Logistikstruktur</div>
+        <div class="page-title">Prozesse in der Logistik</div>
+        <div class="page-desc">Was ist ein Prozess – und wie gestaltet, strukturiert und optimiert man ihn?</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Definition Prozess</div>
+        <div class="card green">
+          <div class="term">Prozess = Abfolge von Tätigkeiten mit definiertem Anfang und Ende</div>
+          <div class="def">Ein Prozess wandelt mit untereinander in Beziehung stehenden Tätigkeiten Eingaben (Input) in Ausgaben (Output) um.</div>
+          <div class="example">Bestellprozess: Input = Bestellanforderung → Tätigkeiten: Angebot einholen, Bestellung aufgeben, Wareneingang prüfen → Output = Ware eingelagert und gebucht.</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Merkmale von Prozessen</div>
+        <div class="grid2">
+          <div class="mini-card"><div class="mini-title">Zielgerichtet</div><div class="mini-text">Jeder Prozess hat ein klares Ziel (Output)</div></div>
+          <div class="mini-card"><div class="mini-title">Auslöser</div><div class="mini-text">Interne oder externe Auslöser (Trigger) starten den Prozess</div></div>
+          <div class="mini-card"><div class="mini-title">Leistungsbezogen</div><div class="mini-text">Der Prozess erbringt eine messbare Leistung</div></div>
+          <div class="mini-card"><div class="mini-title">Abnehmer</div><div class="mini-text">Interne oder externe Abnehmer erhalten den Output</div></div>
+          <div class="mini-card"><div class="mini-title">Verrichtungsprinzip</div><div class="mini-text">Klare Tätigkeiten in definierter Reihenfolge</div></div>
+          <div class="mini-card"><div class="mini-title">Zweckgebunden</div><div class="mini-text">Jede Tätigkeit hat einen Zweck im Gesamtprozess</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Vorteile von Prozessen</div>
+        <div class="grid2">
+          <div class="mini-card"><div class="mini-title">Strukturiert</div><div class="mini-text">Klare Abläufe, keine Improvisation nötig</div></div>
+          <div class="mini-card"><div class="mini-title">Zielorientiert</div><div class="mini-text">Fokus auf das Ergebnis</div></div>
+          <div class="mini-card"><div class="mini-title">Wiederholbar</div><div class="mini-text">Einmal optimiert, immer wieder so durchführbar</div></div>
+          <div class="mini-card"><div class="mini-title">Messbar</div><div class="mini-text">KPIs können festgelegt und überwacht werden</div></div>
+        </div>
+        <div class="merksatz">Was man nicht messen kann, kann man auch nicht steuern! → Deshalb braucht jeder Prozess klare Kennzahlen (KPIs).</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Aktivitäten in der Logistik = TUL-Aktivitäten</div>
+        <div class="card blue">
+          <div class="term">TUL = Transport, Umschlag, Lagerung</div>
+          <div class="def">Die kleinsten Elemente eines logistischen Prozesses sind Aktivitäten. Diese werden durch Ereignisse ausgelöst. Auf eine Aktivität folgt wieder ein Ereignis.<br><br>Logistikkette: Logistischer Prozess → Schnittstelle → Logistischer Prozess → Aktivität → Schnittstelle → Aktivität</div>
+          <div class="example">Ereignis: Bestellpunkt unterschritten → Aktivität: Bestellung auslösen → Ereignis: Bestellbestätigung erhalten → Aktivität: Liefertermin überwachen → ...</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">4 Schritte zur Prozessgestaltung</div>
+        <div class="step-list">
+          <div class="step-item"><div class="step-num">1</div><div><strong>Prozess gestalten:</strong> Prozessfelder analysieren, Prozess definieren, Umfang festlegen</div></div>
+          <div class="step-item"><div class="step-num">2</div><div><strong>Prozess strukturieren:</strong> In Teilprozesse zerlegen, Reihenfolge festlegen, Schnittstellen definieren, Prozessparameter und Verantwortlichkeiten festlegen</div></div>
+          <div class="step-item"><div class="step-num">3</div><div><strong>Prozess realisieren:</strong> Prozess einführen, laufend überwachen</div></div>
+          <div class="step-item"><div class="step-num">4</div><div><strong>Prozess optimieren:</strong> Soll/Ist-Abgleich, Abweichungsanalyse, Standardisierung, Übernahme ins Managementsystem</div></div>
+        </div>
+        <div class="pruefung">Diese 4 Schritte kommen gerne in der Prüfung – Reihenfolge und Inhalte merken!</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Prozessebenen</div>
+        <div class="grid2">
+          <div class="mini-card">
+            <span class="badge blue">Hauptprozesse</span>
+            <div class="mini-title">Innerhalb eines Funktionsbereichs</div>
+            <div class="mini-text">z.B. der gesamte Beschaffungsprozess</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge gray">Teilprozesse</span>
+            <div class="mini-title">Arbeitsgänge eines Hauptprozesses</div>
+            <div class="mini-text">z.B. Angebotseinholung, Bestellauslösung, Wareneingang</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge green">Primärprozesse</span>
+            <div class="mini-title">Kernleistung</div>
+            <div class="mini-text">Material- und Informationsflüsse zur fachlichen Abwicklung</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge amber">Sekundärprozesse</span>
+            <div class="mini-title">Unterstützung</div>
+            <div class="mini-text">Unterstützungsleistungen und Führungsaufgaben</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Effektivität vs. Effizienz</div>
+        <div class="grid2">
+          <div class="mini-card">
+            <span class="badge blue">Effektivität</span>
+            <div class="mini-title">"Die richtigen Dinge machen"</div>
+            <div class="mini-text">Erreichen der Prozessziele und Prozessergebnisse. Mache ich das Richtige?</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge green">Effizienz</span>
+            <div class="mini-title">"Die Dinge richtig machen"</div>
+            <div class="mini-text">Erreichen der Ziele mit geringstem Aufwand. Mache ich es mit minimalem Ressourceneinsatz?</div>
+          </div>
+        </div>
+        <div class="example" style="font-size:13px;color:var(--text2);padding:.75rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)">→ Effektiv: Du bestellst genau das, was gebraucht wird. Effizient: Du bestellst es mit dem geringsten Aufwand (automatisch, gebündelt, ohne Rückfragen).</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Inhalte einer Prozessbeschreibung</div>
+        <div class="card">
+          <div class="term">Was in einer Prozessdokumentation stehen muss</div>
+          <div class="def">
+            Prozessaufgabe (Was soll erreicht werden?)<br>
+            Anstoß, Vorgänger und Quellen (Was löst den Prozess aus?)<br>
+            Anfangsaktivität und Endaktivität<br>
+            Senke (Wohin geht der Output?)<br>
+            Hauptaktivitäten (Was passiert im Prozess?)<br>
+            Prozessziele<br>
+            Messgrößen und Prozessparameter (KPIs)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEISTUNGSARTEN -->
+    <div class="page" id="page-leistungsarten">
+      <div class="page-header">
+        <div class="page-eyebrow">Kap. 1.1 · Logistikstruktur</div>
+        <div class="page-title">Leistungsarten &amp; Prozesskosten</div>
+        <div class="page-desc">Was bringt wirklich Wert – und wie ermittelt man ungewollte Prozesskosten?</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Ermittlung ungewollter Prozesskosten</div>
+        <div class="card blue">
+          <div class="term">Prozesswirkungsgrad ermitteln</div>
+          <div class="def">
+            1. Alle Tätigkeiten eines Prozesses erfassen<br>
+            2. Einzelne Tätigkeiten analysieren und einordnen:<br><br>
+            <strong>Wertsteigernd:</strong> Tätigkeiten die dem Kunden Mehrwert bringen<br>
+            <strong>Wertneutral:</strong> Notwendige Tätigkeiten ohne direkten Mehrwert<br>
+            <strong>Wertsenkend:</strong> Unnötige Tätigkeiten, Fehler, Verschwendung
+          </div>
+        </div>
+        <div class="card green">
+          <div class="term">Maßnahmen</div>
+          <div class="def">Wertneutrale Prozessschritte minimieren<br>Wertsenkende Prozessschritte eliminieren</div>
+          <div class="example">Ware zweimal umlagern ohne Grund = wertsenkend → eliminieren. Sicherheitsscan beim Wareneingang = wertneutral → minimieren oder automatisieren.</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Die 4 Leistungsarten</div>
+        <div class="card green">
+          <div class="term">A) Nutzleistung – geplant, direkte Wertsteigerung</div>
+          <div class="def">Tätigkeiten, die aus Kundensicht direkt Mehrwert schaffen.<br>Beispiele: Konstruktion · Entwicklung · Montage · Einkauf / Verkauf</div>
+          <div class="example">Mitarbeiter packt Ware, die sofort zum Kunden geht → direkt Geld wert.</div>
+        </div>
+        <div class="card blue">
+          <div class="term">B) Stützleistung – geplant, indirekte Wertsteigerung</div>
+          <div class="def">Notwendige Hilfsarbeit, die den Betrieb ermöglicht.<br>Beispiele: Rüsten · innerbetriebliche Logistik · Sicherheitspuffer</div>
+          <div class="example">Ware im Lager umstellen, damit man später schneller rankommt – notwendig, aber kein direkter Wert.</div>
+        </div>
+        <div class="card amber">
+          <div class="term">C) Blindleistung – ungeplant, keine Wertsteigerung</div>
+          <div class="def">Tritt bei nicht-optimaler Planung auf. Weder direkte noch indirekte Wertsteigerung.<br>Beispiele: Ungeplante Zwischenlagerung · Rückfragen · überhöhte Sicherheitspuffer</div>
+          <div class="example">Ware wird zweimal hin- und hergefahren ohne Grund = klassische Verschwendung (Muda).</div>
+        </div>
+        <div class="card red">
+          <div class="term">D) Fehlleistung – ungeplant, durch Fehler nicht verwertbar</div>
+          <div class="def">Als Nutz- oder Stützleistung geplant, aber durch Fehler unbrauchbar.<br>Beispiele: Fehlerhaftes Produkt · Ausschuss · Stillstandzeiten</div>
+          <div class="example">Falsche Ware gepackt und zurückgeschickt → gesamte Arbeit war umsonst.</div>
+        </div>
+        <div class="pruefung">Die 4 Leistungsarten kommen sicher in der Prüfung! Geplant (A+B) vs. ungeplant (C+D) ist eine wichtige Unterscheidung.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Prozesswirkungsgrad</div>
+        <div class="card">
+          <div class="term">Berechnung</div>
+          <div class="def">Der Prozesswirkungsgrad ergibt sich durch Zuordnung der einzelnen Leistungsarten im Verhältnis zur Gesamtleistung.<br><br>Ziel: Möglichst hoher Anteil Nutzleistung, möglichst wenig Blind- und Fehlleistung.</div>
+        </div>
+        <div class="formula">Prozesswirkungsgrad = Nutzleistung / Gesamtleistung × 100 %
+
+Gesamtleistung = Nutzleistung + Stützleistung + Blindleistung + Fehlleistung</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Toyota 3M Modell – Ursachen von Verschwendung</div>
+        <div class="grid3">
+          <div class="mini-card">
+            <span class="badge amber">Muda – Verschwendung</span>
+            <div class="mini-title">7 Arten</div>
+            <div class="mini-text">Überproduktion · Wartezeiten · unnötiger Transport · unnötige Bewegung · zu hohe Bestände · unnötige/falsche Prozesse · Produktionsfehler und Nacharbeit</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge blue">Mura – Ungleichmäßigkeit</span>
+            <div class="mini-title">Schwankungen</div>
+            <div class="mini-text">Unausgeglichenheit in der Produktionskette. Prozesse der Maschinen oder Mitarbeiter dauern unterschiedlich lang. Folge: Leerlauf oder Warteschlangen.</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge red">Muri – Überlastung</span>
+            <div class="mini-title">Überbeanspruchung</div>
+            <div class="mini-text">Überbeanspruchung von Maschinen oder Menschen. Folge: Produktionsfehler und Nacharbeit.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCM & BULLWHIP -->
+    <div class="page" id="page-scm">
+      <div class="page-header">
+        <div class="page-eyebrow">Kap. 1.1 · Logistikstruktur</div>
+        <div class="page-title">SCM, Bullwhip-Effekt &amp; Umfeldfaktoren</div>
+        <div class="page-desc">Supply Chain Management im Detail – und wie externe Faktoren die Logistik beeinflussen.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Definition Supply Chain Management</div>
+        <div class="card green">
+          <div class="term">SCM = Verknüpfung &amp; Optimierung aller logistischen Prozesse</div>
+          <div class="def">Vom Lieferanten bis zum Kunden – physische Prozesse, Informationsprozesse und monetäre Prozesse.<br><br>Das SCM überwacht, steuert und regelt in BEIDE Richtungen!</div>
+        </div>
+        <div class="card">
+          <div class="term">Vorteile SCM</div>
+          <div class="def">Abbau von Redundanzen · Abstimmung aller Prozesse · Optimierung der Durchlaufzeiten · Verringerung gebundenen Kapitals · Verwirklichung logistischer Flussorientierung</div>
+        </div>
+        <div class="card blue">
+          <div class="term">Ziele SCM</div>
+          <div class="def">
+            Verbesserung von Effektivität und Effizienz<br>
+            Integration aller Unternehmensaktivitäten (vorgelagert + eigen + nachgelagert)<br><br>
+            Spezielle Ziele:<br>
+            Orientierung am Endkunden (TQM) · Verkürzung der Lieferzeiten · Optimierung der Produktionsabläufe · Vermeidung von "out of stock" · Vermeidung von Bullwhip-Effekten
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Internes vs. externes SCM</div>
+        <div class="grid2">
+          <div class="mini-card">
+            <span class="badge blue">Internes SCM</span>
+            <div class="mini-title">Innerhalb des Unternehmens</div>
+            <div class="mini-text">Produktentwicklung · Beschaffung · Bestandsführung · Produktion · Vertrieb</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge green">Externes SCM</span>
+            <div class="mini-title">Mit Kunden &amp; Lieferanten</div>
+            <div class="mini-text">Rahmenverträge · klare Verantwortlichkeiten · kompatible Systeme · Win-Win-Situationen für alle</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Bullwhip-Effekt</div>
+        <div class="card red">
+          <div class="term">Definition: Peitscheneffekt entlang der Supply Chain</div>
+          <div class="def">Führt zu immer höheren Beständen entlang der gesamten Lieferkette. Kleine Schwankungen beim Endkunden werden in vorgelagerten Stufen immer stärker aufgeschaukelt.</div>
+          <div class="example">Kunde kauft 10 % weniger → Einzelhändler bestellt 20 % weniger → Großhändler −40 % → Hersteller sieht −80 % Einbruch.</div>
+        </div>
+        <div class="section-title" style="margin-top:1rem">Gründe</div>
+        <div class="grid2">
+          <div class="mini-card"><div class="mini-title">Aufschaukeln von Bedarfsverläufen</div><div class="mini-text">Jede Stufe überreagiert auf Schwankungen</div></div>
+          <div class="mini-card"><div class="mini-title">Nachfrageänderungen aufschaukeln</div><div class="mini-text">Saisonale Spitzen werden verstärkt</div></div>
+          <div class="mini-card"><div class="mini-title">Informationsverluste</div><div class="mini-text">Keine Echtzeit-Daten über Endkundennachfrage</div></div>
+          <div class="mini-card"><div class="mini-title">Fehlende Vernetzung</div><div class="mini-text">Jede Stufe disponiert isoliert</div></div>
+        </div>
+        <div class="card green">
+          <div class="term">Gegenmaßnahmen – allgemein</div>
+          <div class="def">Vernetzung der gesamten Supply Chain · Datenübermittlung in Echtzeit · Kompatible Software in allen Instanzen · Integration einheitlicher ERP-Systeme</div>
+        </div>
+        <div class="card green">
+          <div class="term">Gegenmaßnahmen – praktisch</div>
+          <div class="def">Direkter Kontakt des Herstellers mit dem Einzelhandel · Verbesserter Informationsfluss · Direkte Bestellung des Verbrauchers beim Hersteller · Enge Zusammenarbeit mit allen Beteiligten</div>
+        </div>
+        <div class="pruefung">Bullwhip-Effekt = Prüfungsklassiker! Definition, Gründe UND Gegenmaßnahmen (allgemein + praktisch) parat haben.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">8 Umfeldfaktoren (A–H)</div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Markt</th><th>Wichtigste Entwicklungen</th><th>Relevanz für dich</th></tr>
+            <tr><td><strong>A) Absatz</strong></td><td>Individualisierung, kürzere Lebenszyklen, Bestandsreduktion, Lieferkettenunterbrechungen</td><td>Mehr Artikel, kleinere Mengen, schnellere Reaktion</td></tr>
+            <tr><td><strong>B) Beschaffung</strong></td><td>Single/Dual/Multiple, Regional, Modular, Global Sourcing</td><td>Dein Einkauf: welche Strategie wann?</td></tr>
+            <tr><td><strong>C) Technologie</strong></td><td>Industrie 4.0, Big Data, RFID, Tracking, autonome Systeme</td><td>Deine Artikelsoftware wird vernetzter</td></tr>
+            <tr><td><strong>D) Arbeit</strong></td><td>Demografischer Wandel, Fachkräftemangel, schlechtes Image</td><td>Warum Weiterbildung wichtig ist</td></tr>
+            <tr><td><strong>E) Wettbewerb</strong></td><td>Logistik als strategischer Vorteil, integratives Management</td><td>Gute Logistik = Kundenbindung</td></tr>
+            <tr><td><strong>F) Gesellschaft</strong></td><td>Umweltschutz, Nachhaltigkeit als Wettbewerbsfaktor, Redistributionslogistik</td><td>CO₂, Retouren, Verpackung</td></tr>
+            <tr><td><strong>G) Kapital</strong></td><td>Inflation, Konjunktur, schwieriges Kapitalmarktumfeld</td><td>Lagerkapital ist teuer → geringe Bestände</td></tr>
+            <tr><td><strong>H) Staat</strong></td><td>"Regulierungswut", EU-Auflagen, Abgaben, Steuern</td><td>Incoterms, Zölle, Compliance</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SYSTEMFAKTOREN -->
+    <div class="page" id="page-systemfaktoren">
+      <div class="page-header">
+        <div class="page-eyebrow">Kap. 1.1 · Logistikstruktur</div>
+        <div class="page-title">Systemfaktoren in der Logistik</div>
+        <div class="page-desc">Welche Faktoren beeinflussen, wie gut ein Logistiksystem funktioniert?</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Überblick Systemfaktoren</div>
+        <div class="card blue">
+          <div class="term">A) Produkteigenschaften · B) Ressourcen · C) Organisation · D) Flexibilität</div>
+          <div class="def">Diese Faktoren bestimmen zusammen, wie leistungsfähig ein Logistiksystem ist.</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">A) Produkteigenschaften</div>
+        <div class="card">
+          <div class="term">Güter als Problem in der Logistik</div>
+          <div class="def">Eigenschaften der Güter (Geometrie, Sicherheitsanforderungen, Verderblichkeit)<br>Quantität der Güter (Volumen, Gewicht)<br>Kostensensibilität (wie teuer ist das Gut?)<br>Terminrelevanz (wie dringend wird es gebraucht?)</div>
+          <div class="example">Gefahrgut braucht Spezialverpackung → beeinflusst Transport und Lager. Sperrige Ware braucht mehr Fläche → beeinflusst Lagerlayout.</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">B) Ressourcen (B1–B6)</div>
+        <div class="grid2">
+          <div class="mini-card">
+            <span class="badge blue">B1) Personal</span>
+            <div class="mini-title">Der wichtigste Faktor</div>
+            <div class="mini-text">Qualifikation · Motivation · Flexibilität · Einstellungen und Werte · Veränderungs- und Lernbereitschaft</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge gray">B2) Fläche</span>
+            <div class="mini-title">Limitierender Faktor</div>
+            <div class="mini-text">Möglichkeit zur Prozessgestaltung · Fläche begrenzt, was machbar ist</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge green">B3) Technik</span>
+            <div class="mini-title">Werkzeuge</div>
+            <div class="mini-text">Transport- und Fördermittel · Lagertechnik · Kommunikations- und Informationstechnik</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge amber">B4) Lager</span>
+            <div class="mini-title">5 Lagerfunktionen</div>
+            <div class="mini-text">Sicherung &amp; Versorgung · Ausgleich · Aussortierung · Umformung · Spekulation</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge gray">B5) Transport</span>
+            <div class="mini-title">Beförderung</div>
+            <div class="mini-text">Transport- und Fördermittel · Hilfsmittel (Paletten, Container)</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge purple">B6) IuK-Technik</span>
+            <div class="mini-title">Informations- &amp; Kommunikation</div>
+            <div class="mini-text">Hard- und Software · Endgeräte · Übermittlungstechnik: Funk, Draht, Lichtleiter</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">5 Funktionen des Lagers (B4 im Detail)</div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Funktion</th><th>Erklärung</th><th>Praxisbeispiel</th></tr>
+            <tr><td><strong>Sicherungs- &amp; Versorgungsfunktion</strong></td><td>Verfügbarkeit sicherstellen</td><td>Sicherheitsbestand verhindert Lieferengpass</td></tr>
+            <tr><td><strong>Ausgleichsfunktion</strong></td><td>Schwankungen ausgleichen</td><td>Saisonlager für Weihnachtsartikel</td></tr>
+            <tr><td><strong>Aussortierungsfunktion</strong></td><td>Waren prüfen und aussortieren</td><td>Qualitätskontrolle beim Wareneingang</td></tr>
+            <tr><td><strong>Umformungsfunktion</strong></td><td>Ware verändern (sortieren, konfektionieren)</td><td>Kommissionierung, Umverpackung</td></tr>
+            <tr><td><strong>Spekulationsfunktion</strong></td><td>Günstig einkaufen, teurer verkaufen</td><td>Rohstoffkauf bei niedrigen Preisen</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Lager nach Klassifizierbarkeit (B4 Fortsetzung)</div>
+        <div class="grid3">
+          <div class="mini-card"><div class="mini-title">Lagerbauweise</div><div class="mini-text">Flachlager, Hochregallager, Silo etc.</div></div>
+          <div class="mini-card"><div class="mini-title">Lagerart &amp; Lagertyp</div><div class="mini-text">Eingangslager, Zwischenlager, Ausgangslager</div></div>
+          <div class="mini-card"><div class="mini-title">Besonderheiten des Guts</div><div class="mini-text">Gefahrgut, Kühlware, Sperrgut</div></div>
+          <div class="mini-card"><div class="mini-title">Eigentümer</div><div class="mini-text">Eigenlager vs. Fremdlager (Outsourcing)</div></div>
+          <div class="mini-card"><div class="mini-title">Standort</div><div class="mini-text">Zentrallager vs. dezentrale Lager</div></div>
+          <div class="mini-card"><div class="mini-title">Flexibilität</div><div class="mini-text">Wie schnell kann das Lager auf Änderungen reagieren?</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">D) Flexibilität</div>
+        <div class="card blue">
+          <div class="term">Wandlungsfähigkeit bei sich verändernden Bedingungen</div>
+          <div class="def">Change-Management · Transformationsmanagement<br><br>Ein gutes Logistiksystem muss sich schnell an neue Marktbedingungen, Kundenanforderungen oder Störungen anpassen können.</div>
+          <div class="example">Corona 2020: Lieferketten mussten innerhalb von Wochen komplett umgestellt werden. Wer flexible Systeme hatte, überlebte besser.</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Schnittstellen zwischen System und Faktoren</div>
+        <div class="card amber">
+          <div class="term">Datenaustausch im Mittelpunkt</div>
+          <div class="def">Weiterentwicklung der Schnittstellentechnologien (ERP-Konzepte)<br><br>Wichtige Logistik- und Lagerkonzepte an den Schnittstellen:<br>VMI (Vendor Managed Inventory) · Konsignationslager · JIT / JIS · KANBAN</div>
+          <div class="example">VMI: Dein Lieferant sieht deine Lagerbestände in Echtzeit und bestellt automatisch nach → maximale Vernetzung an der Schnittstelle.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORGANISATION -->
+    <div class="page" id="page-organisation">
+      <div class="page-header">
+        <div class="page-eyebrow">Kap. 1.1 · Logistikstruktur</div>
+        <div class="page-title">Aufbau- &amp; Ablauforganisation</div>
+        <div class="page-desc">Wie ist ein Unternehmen strukturiert – und wie laufen Prozesse darin ab?</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Ablauf- vs. Aufbauorganisation</div>
+        <div class="grid2">
+          <div class="mini-card">
+            <span class="badge blue">Ablauforganisation</span>
+            <div class="mini-title">Wie läuft es ab?</div>
+            <div class="mini-text">Beschreibt einzelne Prozesse im Unternehmen. Dynamischer Teil. Werkzeuge: Prozesslandkarten, Stellenbeschreibungen.</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge green">Aufbauorganisation</span>
+            <div class="mini-title">Wie ist es aufgebaut?</div>
+            <div class="mini-text">Struktur und Hierarchie im Unternehmen. Funktionsbereiche. Werkzeug: Organigramm.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Gliederungsmerkmale der Ablauforganisation</div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Merkmal</th><th>Fokus</th><th>Frage</th></tr>
+            <tr><td><strong>Verrichtung</strong></td><td>Tätigkeiten stehen im Vordergrund</td><td>Welche Arbeit wird geleistet?</td></tr>
+            <tr><td><strong>Objekt</strong></td><td>Produkte stehen im Vordergrund</td><td>An was wird Arbeit geleistet?</td></tr>
+            <tr><td><strong>Rang</strong></td><td>Entscheidungsträger stehen im Vordergrund</td><td>Wer entscheidet über die Ausführung?</td></tr>
+            <tr><td><strong>Phase</strong></td><td>Zeitliche Verläufe stehen im Vordergrund</td><td>Welche Phasen hat der Prozess?</td></tr>
+            <tr><td><strong>Zweckbeziehung</strong></td><td>Zusammenhänge stehen im Vordergrund</td><td>Welche Bedeutung haben die Aufgaben?</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Aufgabenanalyse &amp; Aufgabensynthese</div>
+        <div class="card">
+          <div class="term">Aufgabenanalyse</div>
+          <div class="def">Zerlegung einer Gesamtaufgabe in Teilaufgaben nach den 5 Merkmalen: Verrichtung, Objekt, Rang, Phase, Zweckbeziehung.</div>
+        </div>
+        <div class="card">
+          <div class="term">Aufgabensynthese</div>
+          <div class="def">Sinnvolle Zusammenfassung ähnlicher Teilaufgaben (aus der Analyse) zu einer Stelle.<br><br>Stellenbildung = kleinste organisatorische Einheit im Unternehmen:<br>· besetzt durch einen Menschen<br>· Aufgabe, Verantwortung und Befugnisse in Stellenbeschreibung definiert</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Stellenbeschreibung – Vor- und Nachteile</div>
+        <div class="grid2">
+          <div class="mini-card">
+            <span class="badge green">Vorteile</span>
+            <div class="mini-text">Klare Aufgaben, Kompetenzen &amp; Verantwortung · Keine Kompetenzkonflikte · Leichtere Einarbeitung · Effiziente Personalplanung</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge red">Nachteile</span>
+            <div class="mini-text">Fixierung auf beschriebene Tätigkeiten · Inflexibel · Zeit- und Koordinationsaufwand · Kosten durch Einführung, Überarbeitung, Aktualisierung</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Wichtige Begriffe der Aufbauorganisation</div>
+        <div class="grid3">
+          <div class="mini-card">
+            <span class="badge blue">Instanz</span>
+            <div class="mini-title">Stelle mit Leitungsbefugnis</div>
+            <div class="mini-text">Hat Weisungsrecht gegenüber untergeordneten Stellen</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge gray">Stabstelle</span>
+            <div class="mini-title">Beratungsfunktion</div>
+            <div class="mini-text">Berät Instanzen, hat aber KEINE Weisungsbefugnis</div>
+          </div>
+          <div class="mini-card">
+            <span class="badge amber">Leitungsspanne</span>
+            <div class="mini-title">Anzahl direkt unterstellter MA</div>
+            <div class="mini-text">Je größer die Spanne, desto mehr Mitarbeiter pro Führungskraft</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="term">Hierarchie</div>
+          <div class="def">Top-Management (strategisch) → Middle-Management (taktisch) → Lower-Management (operativ)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORGANISATIONSFORMEN -->
+    <div class="page" id="page-orgformen">
+      <div class="page-header">
+        <div class="page-eyebrow">Kap. 1.1 · Logistikstruktur</div>
+        <div class="page-title">Organisationsformen</div>
+        <div class="page-desc">6 verschiedene Arten, wie Unternehmen strukturiert sein können – mit Vor- und Nachteilen.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Überblick</div>
+        <div class="merksatz">Es gibt 6 Grundtypen der Aufbauorganisation: Einliniensystem · Mehrliniensystem · Stabliniensystem · Spartenorganisation · Matrixorganisation · Tensor-Organisation</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">1. Einliniensystem</div>
+        <div class="card">
+          <div class="term">Jede Stelle hat genau einen Vorgesetzten</div>
+          <div class="def">Top-Down-Ansatz. Jede Stelle ist nur mit einer Leitungsebene verbunden. Klassische Hierarchie.</div>
+        </div>
+        <div class="grid2">
+          <div class="mini-card"><span class="badge green">Vorteile</span><div class="mini-text">Eindeutige Dienstwege · Keine Kompetenzstreitigkeiten · Einfacher Aufbau</div></div>
+          <div class="mini-card"><span class="badge red">Nachteile</span><div class="mini-text">Schwerfällige Dienstwege · Überlastung Vorgesetzter · Belastung durch Routineaufgaben</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">2. Mehrliniensystem</div>
+        <div class="card">
+          <div class="term">Stelle bekommt von mehreren Leitungsebenen Anweisungen</div>
+          <div class="def">Funktionssystem mit spezialisierter Leitung. Abgegrenzte Aufgabenbereiche und Kompetenzen pro Führungskraft.</div>
+        </div>
+        <div class="grid2">
+          <div class="mini-card"><span class="badge green">Vorteile</span><div class="mini-text">Verkürzung der Dienstwege · Vorgesetzte als Spezialisten · Höhere funktionale Leistungsfähigkeit</div></div>
+          <div class="mini-card"><span class="badge red">Nachteile</span><div class="mini-text">Überschneidung von Anweisungen · Abstimmungsprobleme · Kompetenzschwierigkeiten · Mitarbeiter zwischen den "Fronten"</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">3. Stabliniensystem</div>
+        <div class="card">
+          <div class="term">Erweitertes Einliniensystem mit Stabstellen</div>
+          <div class="def">Instanzen werden durch Stabstellen (Berater) unterstützt. Stabstellen haben KEINE Weisungsrechte – nur Beratungsfunktion.</div>
+        </div>
+        <div class="grid2">
+          <div class="mini-card"><span class="badge green">Vorteile</span><div class="mini-text">Vorteile des Einliniensystems bleiben · Beratung durch Spezialisten · Bessere Entscheidungsqualität</div></div>
+          <div class="mini-card"><span class="badge red">Nachteile</span><div class="mini-text">Stabstellen üben oft trotzdem Einfluss auf Linie aus · Neigung zur "Spezialistenarroganz"</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">4. Spartenorganisation</div>
+        <div class="card">
+          <div class="term">Objektorientierter Aufbau – Einteilung in Divisionen/Sparten</div>
+          <div class="def">Jede Sparte ist ein selbstständiger Unternehmensbereich. Zentrale Organisationseinheiten bleiben erhalten (z.B. Controlling, HR).</div>
+        </div>
+        <div class="grid2">
+          <div class="mini-card"><span class="badge green">Vorteile</span><div class="mini-text">Kurze Informationswege · Schnelle Reaktionsmöglichkeit · Spartenspezialisierung</div></div>
+          <div class="mini-card"><span class="badge red">Nachteile</span><div class="mini-text">Mangelnde Unterordnung · Höhere Kosten durch Dezentralisierung · Gefahr der "Verselbstständigung"</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">5. Matrixorganisation</div>
+        <div class="card">
+          <div class="term">Zweidimensionale Organisationsform</div>
+          <div class="def">Langfristige Flexibilisierung der Strukturen. Hohes Problemlösungspotential. Direkte Kommunikationswege. Fördert Teamarbeit.</div>
+        </div>
+        <div class="grid2">
+          <div class="mini-card"><span class="badge green">Vorteile</span><div class="mini-text">Unkomplizierte Entscheidungswege · Weniger Sparten- und Abteilungskonkurrenz</div></div>
+          <div class="mini-card"><span class="badge red">Nachteile</span><div class="mini-text">Geschäftsleitung mehr gefordert · Großer Koordinationsaufwand · Mehr Kompromisse nötig</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">6. Tensor-Organisation</div>
+        <div class="card">
+          <div class="term">Weiterentwicklung der Matrixorganisation um eine 3. Dimension</div>
+          <div class="def">Erweiterung um Regionen als dritte Achse. Dreidimensionale, kubische Darstellung des Organigramms. Geeignet für global agierende Konzerne.</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Vergleich auf einen Blick</div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>System</th><th>Vorgesetzten pro Stelle</th><th>Besonders geeignet für</th></tr>
+            <tr><td><strong>Einlinie</strong></td><td>1</td><td>Kleine, übersichtliche Unternehmen</td></tr>
+            <tr><td><strong>Mehrlinie</strong></td><td>Mehrere (nach Funktion)</td><td>Spezialisierte Abteilungen</td></tr>
+            <tr><td><strong>Stablinie</strong></td><td>1 + Berater</td><td>Mittlere Unternehmen mit Beratungsbedarf</td></tr>
+            <tr><td><strong>Sparte</strong></td><td>1 (spartenbezogen)</td><td>Große Unternehmen mit verschiedenen Produktgruppen</td></tr>
+            <tr><td><strong>Matrix</strong></td><td>2 (Funktion + Objekt)</td><td>Projektbasierte Unternehmen</td></tr>
+            <tr><td><strong>Tensor</strong></td><td>3 (Funktion + Objekt + Region)</td><td>Globale Konzerne</td></tr>
+          </table>
+        </div>
+        <div class="pruefung">Prüfungstipp: Vor- und Nachteile der 6 Organisationsformen kennen, besonders Einlinie, Stablinie und Matrix werden häufig abgefragt!</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const FILE_KEY = 'notes_kap1_1';
+
+function show(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// Inject note toggle + box after every .card
+function initNotes(){
+  const notes = JSON.parse(localStorage.getItem(FILE_KEY)||'{}');
+
+  // TABLE ROWS: add a sticky "Notiz" column per row
+  document.querySelectorAll('.table-wrap table').forEach((table, ti)=>{
+    // Add header cell
+    const thead = table.querySelector('tr');
+    if(thead && !thead.querySelector('.note-th')){
+      const th = document.createElement('th');
+      th.className = 'note-th';
+      th.textContent = 'Meine Notiz';
+      th.style.cssText = 'width:180px;min-width:140px;color:var(--amber);background:var(--amber-bg)';
+      thead.appendChild(th);
+    }
+    // Add input cell to each data row
+    table.querySelectorAll('tr:not(:first-child)').forEach((row, ri)=>{
+      if(row.querySelector('.note-td')) return;
+      const key = FILE_KEY+'_table_'+ti+'_row_'+ri;
+      const saved = notes[key]||'';
+      const td = document.createElement('td');
+      td.className = 'note-td';
+      td.style.cssText = 'background:var(--amber-bg);vertical-align:top;padding:.4rem .6rem';
+      const ta = document.createElement('textarea');
+      ta.value = saved;
+      ta.placeholder = 'Notiz...';
+      ta.style.cssText = 'width:100%;background:transparent;border:none;outline:none;resize:none;font-family:var(--font);font-size:12px;color:var(--text);line-height:1.5;min-height:48px';
+      ta.addEventListener('input',()=>{
+        const allNotes = JSON.parse(localStorage.getItem(FILE_KEY)||'{}');
+        if(ta.value.trim()) allNotes[key]=ta.value;
+        else delete allNotes[key];
+        localStorage.setItem(FILE_KEY,JSON.stringify(allNotes));
+      });
+      td.appendChild(ta);
+      row.appendChild(td);
+    });
+  });
+
+  // ALL OTHER ELEMENTS: button + expandable box
+  const selector = '.card, .mini-card, .merksatz, .pruefung, .formula, .step-list';
+  document.querySelectorAll(selector).forEach((el,i)=>{
+    if(el.closest('.note-box')) return;
+    const key = FILE_KEY+'_el_'+i;
+    const saved = notes[key]||'';
+    const toggle = document.createElement('button');
+    toggle.className = 'note-toggle'+(saved?' has-note':'');
+    toggle.innerHTML = '📝 '+(saved?'Notiz anzeigen':'Notiz hinzufügen');
+    toggle.style.cssText = 'display:block;margin-top:.6rem';
+    const box = document.createElement('div');
+    box.className = 'note-box';
+    box.innerHTML = '<div class="note-label">Meine Notiz</div><textarea class="note-textarea" placeholder="Hier deine Notizen, Beispiele oder Ergänzungen..." rows="3">'+saved+'</textarea>';
+    const ta = box.querySelector('textarea');
+    ta.addEventListener('input',()=>{
+      const allNotes = JSON.parse(localStorage.getItem(FILE_KEY)||'{}');
+      if(ta.value.trim()){allNotes[key]=ta.value;toggle.classList.add('has-note');toggle.innerHTML='📝 Notiz anzeigen';}
+      else{delete allNotes[key];toggle.classList.remove('has-note');toggle.innerHTML='📝 Notiz hinzufügen';}
+      localStorage.setItem(FILE_KEY,JSON.stringify(allNotes));
+    });
+    toggle.addEventListener('click',()=>{box.classList.toggle('open');if(box.classList.contains('open'))ta.focus();});
+    if(saved) box.classList.add('open');
+    el.appendChild(toggle);
+    el.appendChild(box);
+  });
+}
+document.addEventListener('DOMContentLoaded', initNotes);
+</script>
+</body>
+</html>
