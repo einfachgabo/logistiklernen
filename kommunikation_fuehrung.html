@@ -801,69 +801,97 @@ function show(id){
   event.currentTarget.classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
 }
+
 function initNotes(){
-  const notes = JSON.parse(localStorage.getItem(FILE_KEY)||'{}');
+  try {
+    const notes = JSON.parse(localStorage.getItem(FILE_KEY)||'{}');
 
-  // TABLE ROWS: add a sticky "Notiz" column per row
-  document.querySelectorAll('.table-wrap table').forEach((table, ti)=>{
-    // Add header cell
-    const thead = table.querySelector('tr');
-    if(thead && !thead.querySelector('.note-th')){
-      const th = document.createElement('th');
-      th.className = 'note-th';
-      th.textContent = 'Meine Notiz';
-      th.style.cssText = 'width:180px;min-width:140px;color:var(--amber);background:var(--amber-bg)';
-      thead.appendChild(th);
-    }
-    // Add input cell to each data row
-    table.querySelectorAll('tr:not(:first-child)').forEach((row, ri)=>{
-      if(row.querySelector('.note-td')) return;
-      const key = FILE_KEY+'_table_'+ti+'_row_'+ri;
-      const saved = notes[key]||'';
-      const td = document.createElement('td');
-      td.className = 'note-td';
-      td.style.cssText = 'background:var(--amber-bg);vertical-align:top;padding:.4rem .6rem';
-      const ta = document.createElement('textarea');
-      ta.value = saved;
-      ta.placeholder = 'Notiz...';
-      ta.style.cssText = 'width:100%;background:transparent;border:none;outline:none;resize:none;font-family:var(--font);font-size:12px;color:var(--text);line-height:1.5;min-height:48px';
-      ta.addEventListener('input',()=>{
-        const allNotes = JSON.parse(localStorage.getItem(FILE_KEY)||'{}');
-        if(ta.value.trim()) allNotes[key]=ta.value;
-        else delete allNotes[key];
-        localStorage.setItem(FILE_KEY,JSON.stringify(allNotes));
+    // Tables: add Notiz column
+    document.querySelectorAll('.table-wrap table').forEach(function(table, ti){
+      var thead = table.querySelector('tr');
+      if(thead && !thead.querySelector('.note-th')){
+        var th = document.createElement('th');
+        th.className = 'note-th';
+        th.textContent = 'Meine Notiz';
+        th.style.cssText = 'width:160px;min-width:120px;color:var(--amber);background:var(--amber-bg)';
+        thead.appendChild(th);
+      }
+      table.querySelectorAll('tr:not(:first-child)').forEach(function(row, ri){
+        if(row.querySelector('.note-td')) return;
+        var key = FILE_KEY+'_t'+ti+'_r'+ri;
+        var saved = notes[key]||'';
+        var td = document.createElement('td');
+        td.className = 'note-td';
+        td.style.cssText = 'background:var(--amber-bg);vertical-align:top;padding:.4rem .6rem';
+        var ta = document.createElement('textarea');
+        ta.value = saved;
+        ta.placeholder = 'Notiz...';
+        ta.style.cssText = 'width:100%;background:transparent;border:none;outline:none;resize:none;font-family:var(--font);font-size:12px;color:var(--text);line-height:1.5;min-height:44px';
+        ta.addEventListener('input', function(){
+          var all = JSON.parse(localStorage.getItem(FILE_KEY)||'{}');
+          if(ta.value.trim()) all[key]=ta.value; else delete all[key];
+          localStorage.setItem(FILE_KEY,JSON.stringify(all));
+        });
+        td.appendChild(ta);
+        row.appendChild(td);
       });
-      td.appendChild(ta);
-      row.appendChild(td);
     });
-  });
 
-  // ALL OTHER ELEMENTS: button + expandable box
-  const selector = '.card, .mini-card, .merksatz, .pruefung, .formula, .step-list';
-  document.querySelectorAll(selector).forEach((el,i)=>{
-    if(el.closest('.note-box')) return;
-    const key = FILE_KEY+'_el_'+i;
-    const saved = notes[key]||'';
-    const toggle = document.createElement('button');
-    toggle.className = 'note-toggle'+(saved?' has-note':'');
-    toggle.innerHTML = '📝 '+(saved?'Notiz anzeigen':'Notiz hinzufügen');
-    toggle.style.cssText = 'display:block;margin-top:.6rem';
-    const box = document.createElement('div');
-    box.className = 'note-box';
-    box.innerHTML = '<div class="note-label">Meine Notiz</div><textarea class="note-textarea" placeholder="Hier deine Notizen, Beispiele oder Ergänzungen..." rows="3">'+saved+'</textarea>';
-    const ta = box.querySelector('textarea');
-    ta.addEventListener('input',()=>{
-      const allNotes = JSON.parse(localStorage.getItem(FILE_KEY)||'{}');
-      if(ta.value.trim()){allNotes[key]=ta.value;toggle.classList.add('has-note');toggle.innerHTML='📝 Notiz anzeigen';}
-      else{delete allNotes[key];toggle.classList.remove('has-note');toggle.innerHTML='📝 Notiz hinzufügen';}
-      localStorage.setItem(FILE_KEY,JSON.stringify(allNotes));
+    // Cards, mini-cards, merksatz, pruefung: add note button inside
+    document.querySelectorAll('.card, .mini-card, .merksatz, .pruefung, .formula, .step-list').forEach(function(el, i){
+      if(el.closest('.note-box')) return;
+      var key = FILE_KEY+'_e'+i;
+      var saved = notes[key]||'';
+
+      var toggle = document.createElement('button');
+      toggle.className = 'note-toggle' + (saved?' has-note':'');
+      toggle.textContent = saved ? 'Notiz anzeigen' : 'Notiz hinzufügen';
+      toggle.style.cssText = 'display:block;margin-top:.6rem';
+
+      var box = document.createElement('div');
+      box.className = 'note-box' + (saved?' open':'');
+
+      var label = document.createElement('div');
+      label.className = 'note-label';
+      label.textContent = 'Meine Notiz';
+
+      var ta = document.createElement('textarea');
+      ta.className = 'note-textarea';
+      ta.placeholder = 'Hier deine Notizen, Beispiele oder Ergänzungen...';
+      ta.rows = 3;
+      ta.value = saved;
+
+      box.appendChild(label);
+      box.appendChild(ta);
+
+      ta.addEventListener('input', function(){
+        var all = JSON.parse(localStorage.getItem(FILE_KEY)||'{}');
+        if(ta.value.trim()){
+          all[key]=ta.value;
+          toggle.classList.add('has-note');
+          toggle.textContent='Notiz anzeigen';
+        } else {
+          delete all[key];
+          toggle.classList.remove('has-note');
+          toggle.textContent='Notiz hinzufügen';
+        }
+        localStorage.setItem(FILE_KEY,JSON.stringify(all));
+      });
+
+      toggle.addEventListener('click', function(){
+        box.classList.toggle('open');
+        if(box.classList.contains('open')) ta.focus();
+      });
+
+      el.appendChild(toggle);
+      el.appendChild(box);
     });
-    toggle.addEventListener('click',()=>{box.classList.toggle('open');if(box.classList.contains('open'))ta.focus();});
-    if(saved) box.classList.add('open');
-    el.appendChild(toggle);
-    el.appendChild(box);
-  });
+
+  } catch(e) {
+    console.warn('Notiz-Fehler:', e);
+  }
 }
+
 document.addEventListener('DOMContentLoaded', initNotes);
 </script>
 </body>
