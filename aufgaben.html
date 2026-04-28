@@ -7,18 +7,16 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:#f5f4f0; --surface:#fff; --surface2:#eeecea; --border:#dddbd6;
-    --text:#1a1917; --text2:#5a5854; --text3:#8a8884;
-    --blue:#1a56db; --blue-bg:#eff4ff; --blue-border:#c3d3fd;
-    --green:#1a7a4a; --green-bg:#f0faf4; --green-border:#a7dfc0;
-    --amber:#92500a; --amber-bg:#fffbf0; --amber-border:#f5d48a;
-    --purple:#5522cc; --purple-bg:#f4f0ff; --purple-border:#c8b8f8;
-    --red:#9b1c1c; --red-bg:#fff5f5; --red-border:#f8b4b4;
-    --font:'IBM Plex Sans',sans-serif; --mono:'IBM Plex Mono',monospace;
-    --radius:8px; --radius-lg:12px;
+    --bg:#f5f4f0;--surface:#fff;--surface2:#eeecea;--border:#dddbd6;
+    --text:#1a1917;--text2:#5a5854;--text3:#8a8884;
+    --blue:#1a56db;--blue-bg:#eff4ff;--blue-border:#c3d3fd;
+    --green:#1a7a4a;--green-bg:#f0faf4;--green-border:#a7dfc0;
+    --amber:#92500a;--amber-bg:#fffbf0;--amber-border:#f5d48a;
+    --font:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;
+    --radius:8px;--radius-lg:12px;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;}
+  body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;}
 
   .site-header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.5rem;display:flex;align-items:center;gap:1rem;height:56px;position:sticky;top:0;z-index:100;}
   .site-header a{font-size:13px;color:var(--text3);text-decoration:none;}
@@ -35,61 +33,73 @@
   .chip{font-size:12px;font-weight:500;padding:.3rem .85rem;border-radius:20px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);text-decoration:none;}
   .chip:hover{background:var(--blue-bg);color:var(--blue);border-color:var(--blue-border);}
 
-  .content{max-width:760px;margin:0 auto;padding:1.5rem;display:flex;flex-direction:column;gap:1.5rem;}
+  .content{max-width:760px;margin:0 auto;padding:1.5rem;display:flex;flex-direction:column;gap:2rem;}
 
-  /* Themen-Trenner */
-  .thema-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);padding:.25rem 0 .5rem;}
+  .thema-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);padding-bottom:.5rem;border-bottom:1px solid var(--border);}
 
-  /* Aufgabe */
+  /* ── Aufgaben-Karte ── */
   .aufgabe{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;}
-  .aufgabe-header{background:var(--surface2);border-bottom:1px solid var(--border);padding:.75rem 1.25rem;display:flex;align-items:center;gap:.75rem;}
-  .a-badge{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:2px 10px;border-radius:20px;}
-  .b-blue{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border);}
-  .b-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);}
-  .b-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border);}
-  .b-purple{background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-border);}
-  .b-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);}
-  .a-title{font-size:15px;font-weight:600;color:var(--text);}
-  .a-source{font-size:11px;color:var(--text3);margin-left:auto;flex-shrink:0;}
 
-  .a-text{padding:1rem 1.25rem;font-size:14px;color:var(--text2);line-height:1.7;border-bottom:1px solid var(--border);}
-  .a-text strong{color:var(--text);}
+  .aufgabe-meta{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1.25rem;background:var(--surface2);border-bottom:1px solid var(--border);font-size:12px;color:var(--text3);}
+  .aufgabe-meta strong{color:var(--text2);font-weight:600;}
+  .punkte-badge{font-size:11px;font-weight:600;background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border);padding:2px 10px;border-radius:20px;white-space:nowrap;}
 
-  .data-grid{padding:.75rem 1.25rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.35rem .75rem;border-bottom:1px solid var(--border);}
-  .d-item{font-size:13px;display:flex;gap:.4rem;}
-  .d-key{color:var(--text3);min-width:140px;flex-shrink:0;}
-  .d-val{font-weight:600;color:var(--text);font-family:var(--mono);}
+  /* ── IHK-Stil Aufgabentext ── */
+  .aufgabe-body{padding:1.5rem 1.75rem;}
 
-  .teil{padding:1rem 1.25rem;border-bottom:1px solid var(--border);}
-  .teil:last-child{border-bottom:none;}
-  .teil-q{display:flex;align-items:flex-start;gap:.75rem;margin-bottom:.85rem;}
-  .t-lbl{min-width:28px;height:28px;border-radius:6px;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-  .l-blue{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border);}
-  .l-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);}
-  .l-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border);}
-  .l-purple{background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-border);}
-  .l-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);}
-  .t-qtext{font-size:14px;font-weight:600;color:var(--text);padding-top:4px;}
-  .punkte{font-size:11px;font-weight:500;color:var(--text3);margin-left:.4rem;}
+  .ihk-title{font-size:18px;font-weight:700;color:#1e3a6e;margin-bottom:1rem;padding-bottom:.6rem;border-bottom:3px solid #1e3a6e;}
 
-  .toggle-btn{display:inline-flex;align-items:center;gap:.5rem;font-size:13px;font-weight:500;color:var(--blue);background:var(--blue-bg);border:1px solid var(--blue-border);border-radius:var(--radius);padding:.4rem .85rem;cursor:pointer;user-select:none;}
-  .toggle-btn:hover{background:#dbe8fd;}
-  .loesung{display:none;margin-top:.75rem;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+  .ihk-text{font-size:14px;color:var(--text);line-height:1.8;margin-bottom:1rem;}
+
+  .ihk-stueckliste{font-size:14px;background:#f4f6fb;border:1px solid #c5d0e8;border-radius:var(--radius);padding:.85rem 1rem;margin-bottom:1rem;line-height:2;}
+  .ihk-stueckliste .l1{margin-left:0;}
+  .ihk-stueckliste .l2{margin-left:1.5rem;color:var(--text2);}
+  .ihk-stueckliste .l3{margin-left:3rem;color:var(--text3);}
+
+  .ihk-daten{border:1px solid #c5d0e8;border-radius:var(--radius);overflow:hidden;margin-bottom:1rem;}
+  .ihk-daten-head{background:#dce6f7;color:#1e3a6e;font-size:12px;font-weight:600;padding:.4rem .9rem;border-bottom:1px solid #c5d0e8;}
+  .ihk-daten-grid{padding:.65rem .9rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.35rem .75rem;}
+  .ihk-daten-row{font-size:13px;display:flex;gap:.5rem;}
+  .ihk-daten-key{color:var(--text2);min-width:150px;flex-shrink:0;}
+  .ihk-daten-val{font-weight:600;color:var(--text);}
+
+  .ihk-ermitteln{font-size:14px;font-weight:700;color:var(--text);margin:.75rem 0 .5rem;}
+
+  .ihk-aufgaben{display:flex;flex-direction:column;gap:.55rem;margin-bottom:.5rem;}
+  .ihk-teil{display:flex;align-items:baseline;gap:.75rem;font-size:14px;}
+  .ihk-teil-badge{min-width:26px;height:26px;background:#1e3a6e;color:#fff;font-size:12px;font-weight:700;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+  .ihk-teil-text{color:var(--text);flex:1;line-height:1.55;}
+  .ihk-teil-punkte{font-size:12px;color:var(--text3);flex-shrink:0;white-space:nowrap;}
+
+  /* ── Lösung ── */
+  .loesung-wrapper{border-top:1px solid var(--border);}
+  .toggle-btn{width:100%;padding:.75rem 1.25rem;display:flex;align-items:center;justify-content:center;gap:.6rem;font-size:13px;font-weight:500;color:var(--text2);background:var(--surface2);border:none;cursor:pointer;}
+  .toggle-btn:hover{background:#e4e2dd;}
+  .toggle-icon{font-size:11px;display:inline-block;transition:transform .2s;}
+
+  .loesung{display:none;}
   .loesung.visible{display:block;}
-  .l-step{padding:.5rem .85rem;font-size:13px;border-bottom:1px solid var(--border);line-height:1.6;color:var(--text2);}
-  .l-step:last-child{border-bottom:none;}
+  .loesung-inner{padding:1.25rem 1.75rem 1.5rem;border-top:1px solid var(--border);background:#fafaf8;}
+  .loesung-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--green);margin-bottom:.85rem;}
+
+  .l-teil{margin-bottom:1.1rem;}
+  .l-teil:last-child{margin-bottom:0;}
+  .l-teil-label{font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem;}
+  .l-teil-badge{width:20px;height:20px;border-radius:4px;background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+  .l-step{font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:.2rem;}
   .l-step strong{color:var(--text);}
-  .f-line{font-family:var(--mono);font-size:12px;background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border);border-radius:5px;padding:.3rem .6rem;margin:.3rem 0;display:block;line-height:1.5;}
+  .f-line{font-family:var(--mono);font-size:12px;background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border);border-radius:5px;padding:.3rem .65rem;margin:.25rem 0;display:block;line-height:1.5;}
   .f-line.g{color:var(--green);background:var(--green-bg);border-color:var(--green-border);}
   .f-line.a{color:var(--amber);background:var(--amber-bg);border-color:var(--amber-border);}
-  .result{font-size:16px;font-weight:600;color:var(--green);padding:.4rem .85rem;background:var(--green-bg);border-top:1px solid var(--green-border);}
-  .result-warn{font-size:13px;font-weight:500;color:var(--amber);padding:.4rem .85rem;background:var(--amber-bg);border-top:1px solid var(--amber-border);}
+  .result{font-size:15px;font-weight:600;color:var(--green);padding:.4rem .75rem;background:var(--green-bg);border:1px solid var(--green-border);border-radius:var(--radius);margin-top:.35rem;display:inline-block;}
+  .result-warn{font-size:13px;font-weight:500;color:var(--amber);padding:.4rem .75rem;background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:var(--radius);margin-top:.35rem;display:block;}
 
-  .bestand-table{width:100%;border-collapse:collapse;font-size:13px;}
-  .bestand-table th{background:var(--surface2);color:var(--text2);font-weight:600;padding:5px 8px;text-align:left;border-bottom:1px solid var(--border);}
-  .bestand-table td{padding:4px 8px;border-bottom:1px solid var(--border);}
-  .bestand-table tr:last-child td{border-bottom:none;}
-  .bestand-table tr:nth-child(even) td{background:#fafaf8;}
+  .loesung-table{width:100%;border-collapse:collapse;font-size:13px;margin:.5rem 0;}
+  .loesung-table th{background:var(--surface2);color:var(--text2);font-weight:600;padding:5px 8px;text-align:left;border-bottom:1px solid var(--border);}
+  .loesung-table td{padding:4px 8px;border-bottom:1px solid var(--border);color:var(--text2);}
+  .loesung-table tr:last-child td{border-bottom:none;}
+  .loesung-table tr:nth-child(even) td{background:#f5f4f0;}
 
   footer{text-align:center;padding:2rem 1rem;font-size:12px;color:var(--text3);border-top:1px solid var(--border);margin-top:1rem;}
 </style>
@@ -104,8 +114,8 @@
 
 <div class="hero">
   <div class="hero-tag">IHK Prüfungsaufgaben · Logistik</div>
-  <div class="hero-title">Aufgaben & Lösungen</div>
-  <div class="hero-sub">Alle Aufgaben mit vollständigem Lösungsweg – Lösung per Klick einblenden · laufend ergänzt</div>
+  <div class="hero-title">Aufgaben &amp; Lösungen</div>
+  <div class="hero-sub">Löse die Aufgabe zuerst selbst – dann Lösung per Klick einblenden</div>
 </div>
 
 <nav class="nav-chips">
@@ -115,410 +125,362 @@
 
 <div class="content">
 
-  <!-- ═══════════════════════════════════════════════
-       THEMA: PRIMÄR-/SEKUNDÄR-/NETTOBEDARF
-  ═══════════════════════════════════════════════ -->
+  <!-- ══ THEMA 1 ══ -->
   <div id="bedarf" class="thema-label">Primär-, Sekundär- und Nettobedarf</div>
 
-  <!-- IHK Industriefachwirt Okt 2015 -->
+  <!-- Aufgabe 1: Elektromotor -->
   <div class="aufgabe">
-    <div class="aufgabe-header">
-      <span class="a-badge b-purple">IHK-Prüfung</span>
-      <span class="a-title">Elektromotor E 10 – Stückliste</span>
-      <span class="a-source">Industriefachwirt Okt. 2015</span>
+    <div class="aufgabe-meta">
+      <span><strong>Geprüfte/-r Industriefachwirt/-in</strong> · Betriebliche Situationsbeschreibung · Aufgabenstellung 1</span>
+      <span class="punkte-badge">10 Punkte</span>
     </div>
-    <div class="a-text">
-      Die Gießereigruppe Alles GmbH verwendet Baukastenstücklisten. Der Elektromotor E 10 besteht aus:<br><br>
-      · Baugruppe Gehäuse (Nr. 101, Menge: 1) → Gehäusedeckel (Nr. 1010, Menge: 2) + Sechskantschraube M4x200 (Menge: 4)<br>
-      · Baugruppe Welle komplett (Nr. 102, Menge: 1)<br>
-      · Baugruppe Festkupplung (Nr. 103, Menge: 1) → Fußplatte 30×40 cm (Nr. 1030, Menge: 1) + Sechskantschraube M4x200 (Menge: 2)<br><br>
-      Kundenauftrag: <strong>200 Fleischschneidemaschinen F5</strong> + angekündigter Folgeauftrag <strong>50 Stück</strong> (= 250 Stück gesamt).
-    </div>
-    <div class="data-grid">
-      <div class="d-item"><span class="d-key">Baugruppe Welle (102)</span><span class="d-val">25 Stück Lager</span></div>
-      <div class="d-item"><span class="d-key">Gehäusedeckel (1010)</span><span class="d-val">200 Stück Lager</span></div>
-      <div class="d-item"><span class="d-key">Fußplatte (1030)</span><span class="d-val">250 Stück Lager</span></div>
-      <div class="d-item"><span class="d-key">Sechskantschraube</span><span class="d-val">1.580 Stück Lager</span></div>
-    </div>
-
-    <div class="teil">
-      <div class="teil-q">
-        <span class="t-lbl l-purple">a</span>
-        <span class="t-qtext">Ermitteln Sie Primärbedarfe, Sekundärbedarfe und Nettobedarfe. <span class="punkte">(10 Punkte)</span></span>
+    <div class="aufgabe-body">
+      <div class="ihk-title">Aufgabe 6</div>
+      <div class="ihk-text">
+        In der Produktionsplanung für Fleischereimaschinen verwendet die Gießereigruppe Alles GmbH Baukastenstücklisten.<br><br>
+        Für den Elektromotor E 10 beinhaltet eine solche Stückliste z. B. folgende Informationen:
       </div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
+      <div class="ihk-stueckliste">
+        <div class="l1">■ Baugruppe Gehäuse, Baugruppen-Nr. 101, Menge: 1</div>
+        <div class="l2">■ bestehend aus Gehäusedeckel, Teile-Nr. 1010, Menge: 2</div>
+        <div class="l2">■ bestehend aus Sechskantschraube M4x200, verchromt, Menge: 4</div>
+        <div class="l1">■ Baugruppe Welle komplett, Baugruppen-Nr. 102, Menge: 1</div>
+        <div class="l1">■ Baugruppe Festkupplung, Baugruppen-Nr. 103, Menge: 1</div>
+        <div class="l2">■ bestehend aus Fußplatte 30 x 40 cm, Teile-Nr. 1030, Menge: 1</div>
+        <div class="l2">■ bestehend aus Sechskantschraube M4x200, verchromt, Menge: 2</div>
+      </div>
+      <div class="ihk-text">
+        Für die Fleischschneidemaschine F 5, in der dieser Elektromotor eingebaut wird, liegt Ihnen ein Kundenauftrag über 200 Einheiten vor.<br><br>
+        Der Kunde kündigt zudem einen Folgeauftrag über 50 Einheiten an. Dieser Bedarf ist in die Berechnung einzubeziehen.
+      </div>
+      <div class="ihk-ermitteln">Ermitteln Sie anhand der Tabelle in Anlage 2</div>
+      <div class="ihk-aufgaben">
+        <div class="ihk-teil"><span class="ihk-teil-badge">■</span><span class="ihk-teil-text">die Primärbedarfe,</span></div>
+        <div class="ihk-teil"><span class="ihk-teil-badge">■</span><span class="ihk-teil-text">die Sekundärbedarfe und</span></div>
+        <div class="ihk-teil"><span class="ihk-teil-badge">■</span><span class="ihk-teil-text">die Nettobedarfe</span></div>
+      </div>
+      <div class="ihk-text" style="margin-top:1rem;">unter Berücksichtigung folgender Lagerbestände:</div>
+      <div class="ihk-daten">
+        <div class="ihk-daten-head">Lagerbestände</div>
+        <div class="ihk-daten-grid">
+          <div class="ihk-daten-row"><span class="ihk-daten-key">Baugruppen-Nr. 102, Welle komplett</span><span class="ihk-daten-val">25 Stück</span></div>
+          <div class="ihk-daten-row"><span class="ihk-daten-key">Teile-Nr. 1010, Gehäusedeckel</span><span class="ihk-daten-val">200 Stück</span></div>
+          <div class="ihk-daten-row"><span class="ihk-daten-key">Teile-Nr. 1030, Fußplatte 30 x 40 cm</span><span class="ihk-daten-val">250 Stück</span></div>
+          <div class="ihk-daten-row"><span class="ihk-daten-key">Sechskantschraube M4x200, verchromt</span><span class="ihk-daten-val">1.580 Stück</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="loesung-wrapper">
+      <button class="toggle-btn" onclick="toggle(this)"><span class="toggle-icon">▶</span>&nbsp;Lösung einblenden</button>
       <div class="loesung">
-        <div class="l-step"><strong>Primärbedarf:</strong> Fleischschneidemaschine F5 = 200 + 50 = <strong>250 Stück</strong></div>
-        <div class="l-step"><strong>Sekundärbedarfe:</strong> (Primärbedarf × Stücklistenmenge)
-          <span class="f-line">Elektromotor E10: 250 × 1 = 250</span>
-          <span class="f-line">Baugruppe Gehäuse (101): 250 × 1 = 250</span>
-          <span class="f-line">Baugruppe Welle (102): 250 × 1 = 250</span>
-          <span class="f-line">Baugruppe Festkupplung (103): 250 × 1 = 250</span>
-          <span class="f-line">Gehäusedeckel (1010): 250 × 2 = 500</span>
-          <span class="f-line">Fußplatte (1030): 250 × 1 = 250</span>
-          <span class="f-line">Sechskantschraube: (250 × 4) + (250 × 2) = 1.000 + 500 = 1.500</span>
+        <div class="loesung-inner">
+          <div class="loesung-title">Musterlösung</div>
+          <div class="l-teil">
+            <div class="l-teil-label"><span class="l-teil-badge">1</span>Primärbedarf</div>
+            <div class="l-step">Fleischschneidemaschine F5: 200 + 50 = <strong>250 Stück</strong></div>
+          </div>
+          <div class="l-teil">
+            <div class="l-teil-label"><span class="l-teil-badge">2</span>Sekundärbedarfe (Primärbedarf × Stücklistenmenge)</div>
+            <span class="f-line">Elektromotor E10 (×1): 250 × 1 = 250</span>
+            <span class="f-line">Baugruppe Gehäuse Nr. 101 (×1): 250 × 1 = 250</span>
+            <span class="f-line">Baugruppe Welle Nr. 102 (×1): 250 × 1 = 250</span>
+            <span class="f-line">Baugruppe Festkupplung Nr. 103 (×1): 250 × 1 = 250</span>
+            <span class="f-line">Gehäusedeckel Nr. 1010 (×2): 250 × 2 = 500</span>
+            <span class="f-line">Fußplatte Nr. 1030 (×1): 250 × 1 = 250</span>
+            <span class="f-line">Sechskantschraube (×4 + ×2): 250×4 + 250×2 = 1.000 + 500 = 1.500</span>
+          </div>
+          <div class="l-teil">
+            <div class="l-teil-label"><span class="l-teil-badge">3</span>Nettobedarfe (Sekundärbedarf − Lagerbestand, mind. 0)</div>
+            <span class="f-line g">Welle Nr. 102: 250 − 25 = 225 Stück</span>
+            <span class="f-line g">Gehäusedeckel Nr. 1010: 500 − 200 = 300 Stück</span>
+            <span class="f-line g">Fußplatte Nr. 1030: 250 − 250 = 0 Stück (Lager reicht)</span>
+            <span class="f-line g">Sechskantschraube: 1.500 − 1.580 = 0 Stück (Lager reicht)</span>
+          </div>
         </div>
-        <div class="l-step"><strong>Nettobedarfe:</strong> (Sekundärbedarf − Lagerbestand; mind. 0)
-          <span class="f-line g">Welle (102): 250 − 25 = 225</span>
-          <span class="f-line g">Gehäusedeckel (1010): 500 − 200 = 300</span>
-          <span class="f-line g">Fußplatte (1030): 250 − 250 = 0 (kein Nettobedarf)</span>
-          <span class="f-line g">Sechskantschraube: 1.500 − 1.580 = 0 (kein Nettobedarf, Lager reicht)</span>
-        </div>
-        <div class="result">Nettobedarf = Sekundärbedarf − verfügbarer Lagerbestand (nie negativ)</div>
       </div>
     </div>
   </div>
 
-  <!-- IHK Wirtschaftsfachwirt – Gozintograph -->
+  <!-- Aufgabe 2: Gozintograph -->
   <div class="aufgabe">
-    <div class="aufgabe-header">
-      <span class="a-badge b-purple">IHK-Prüfung</span>
-      <span class="a-title">Schaltschrank EX 734 – Gozintograph</span>
-      <span class="a-source">Wirtschaftsfachwirt</span>
+    <div class="aufgabe-meta">
+      <span><strong>Geprüfte/-r Wirtschaftsfachwirt/-in</strong> · Betriebliche Situationsbeschreibung · abgeleitete Aufgabenstellung 2</span>
+      <span class="punkte-badge">10 Punkte</span>
     </div>
-    <div class="a-text">
-      Primärbedarf Schaltschrank EX 734: <strong>500 Stück</strong>. Der Gozintograph zeigt die Stücklistenstruktur mit den Mengenangaben an den Verbindungspfeilen. Sicherheitsbestände werden nicht gehalten.
-    </div>
-    <div class="data-grid">
-      <div class="d-item"><span class="d-key">Teil 4</span><span class="d-val">750 Stück</span></div>
-      <div class="d-item"><span class="d-key">Teil 5</span><span class="d-val">1.300 Stück</span></div>
-      <div class="d-item"><span class="d-key">Teil 6</span><span class="d-val">800 Stück</span></div>
-      <div class="d-item"><span class="d-key">Teil 7</span><span class="d-val">400 Stück</span></div>
-      <div class="d-item"><span class="d-key">Teil 8</span><span class="d-val">1.700 Stück</span></div>
-    </div>
-
-    <div class="teil">
-      <div class="teil-q">
-        <span class="t-lbl l-purple">a</span>
-        <span class="t-qtext">Berechnen Sie Sekundär- und Nettobedarfe für alle Teile. <span class="punkte">(10 Punkte)</span></span>
+    <div class="aufgabe-body">
+      <div class="ihk-title">Aufgabe 6</div>
+      <div class="ihk-text">
+        Einem Mitarbeiter der Materialdisposition der Ventisys Kältetechnik GmbH liegt für einen Schaltschrank EX 734 folgender Gozintograph vor:
       </div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
-      <div class="loesung">
-        <div class="l-step"><strong>Vorgehen:</strong> Sekundärbedarf = Primärbedarf des übergeordneten Teils × Mengenpfeil im Gozintograph. Nettobedarf = Sekundärbedarf − Lagerbestand.</div>
-        <div class="l-step">Aus dem Gozintograph (Baugruppe 2 braucht: Teil 4 ×4, Teil 5 ×2, Teil 6 ×2 | Baugruppe 3 braucht: Teil 7 ×2, Teil 8 ×8 | Ebene 1: BG 2 ×1, BG 3 ×2):
-          <span class="f-line">Baugruppe 2 (×1): Sekundärbedarf = 500 × 1 = 500 | Lager: 0 | Netto: 500</span>
-          <span class="f-line">Baugruppe 3 (×2): Sekundärbedarf = 500 × 2 = 1.000 | Lager: 0 | Netto: 1.000</span>
-          <span class="f-line">Teil 4 (×4 von BG2): 500 × 4 = 2.000 | Lager: 750 | Netto: 1.250</span>
-          <span class="f-line">Teil 5 (×2 von BG2): 500 × 2 = 1.000 | Lager: 1.300 | Netto: 0</span>
-          <span class="f-line">Teil 6 (×2 von BG2): 500 × 2 = 1.000 | Lager: 800 | Netto: 200</span>
-          <span class="f-line">Teil 7 (×2 von BG3): 1.000 × 2 = 2.000 | Lager: 400 | Netto: 1.600</span>
-          <span class="f-line">Teil 8 (×8 von BG3): 1.000 × 8 = 8.000 | Lager: 1.700 | Netto: 6.300</span>
+      <div style="background:#f4f6fb;border:1px solid #c5d0e8;border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem;overflow-x:auto;">
+        <svg viewBox="0 0 560 270" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:540px;display:block;margin:0 auto;font-family:'IBM Plex Sans',sans-serif;">
+          <line x1="280" y1="46" x2="160" y2="116" stroke="#7a8fbb" stroke-width="1.5"/>
+          <line x1="280" y1="46" x2="400" y2="116" stroke="#7a8fbb" stroke-width="1.5"/>
+          <line x1="160" y1="138" x2="80"  y2="208" stroke="#7a8fbb" stroke-width="1.5"/>
+          <line x1="160" y1="138" x2="200" y2="208" stroke="#7a8fbb" stroke-width="1.5"/>
+          <line x1="160" y1="138" x2="290" y2="208" stroke="#7a8fbb" stroke-width="1.5"/>
+          <line x1="400" y1="138" x2="370" y2="208" stroke="#7a8fbb" stroke-width="1.5"/>
+          <line x1="400" y1="138" x2="480" y2="208" stroke="#7a8fbb" stroke-width="1.5"/>
+          <text x="208" y="84"  font-size="12" fill="#1e3a6e" font-weight="600" text-anchor="middle">×1</text>
+          <text x="350" y="84"  font-size="12" fill="#1e3a6e" font-weight="600" text-anchor="middle">×2</text>
+          <text x="102" y="180" font-size="12" fill="#1e3a6e" font-weight="600" text-anchor="middle">×4</text>
+          <text x="165" y="180" font-size="12" fill="#1e3a6e" font-weight="600" text-anchor="middle">×2</text>
+          <text x="240" y="180" font-size="12" fill="#1e3a6e" font-weight="600" text-anchor="middle">×2</text>
+          <text x="372" y="180" font-size="12" fill="#1e3a6e" font-weight="600" text-anchor="middle">×2</text>
+          <text x="450" y="180" font-size="12" fill="#1e3a6e" font-weight="600" text-anchor="middle">×8</text>
+          <!-- Knoten -->
+          <circle cx="280" cy="30" r="22" fill="#dce6f7" stroke="#1e3a6e" stroke-width="1.5"/>
+          <text x="280" y="26" font-size="11" fill="#1e3a6e" font-weight="700" text-anchor="middle">1</text>
+          <text x="280" y="39" font-size="10" fill="#1e3a6e" text-anchor="middle">500</text>
+          <circle cx="160" cy="127" r="22" fill="#dce6f7" stroke="#1e3a6e" stroke-width="1.5"/>
+          <text x="160" y="123" font-size="11" fill="#1e3a6e" font-weight="700" text-anchor="middle">2</text>
+          <text x="160" y="136" font-size="10" fill="#1e3a6e" text-anchor="middle">500</text>
+          <circle cx="400" cy="127" r="22" fill="#dce6f7" stroke="#1e3a6e" stroke-width="1.5"/>
+          <text x="400" y="123" font-size="11" fill="#1e3a6e" font-weight="700" text-anchor="middle">3</text>
+          <text x="400" y="136" font-size="10" fill="#888" text-anchor="middle">0</text>
+          <circle cx="80"  cy="222" r="22" fill="#eef1f8" stroke="#1e3a6e" stroke-width="1.5"/>
+          <text x="80"  y="218" font-size="11" fill="#1e3a6e" font-weight="700" text-anchor="middle">4</text>
+          <text x="80"  y="231" font-size="10" fill="#888" text-anchor="middle">0</text>
+          <circle cx="200" cy="222" r="22" fill="#eef1f8" stroke="#1e3a6e" stroke-width="1.5"/>
+          <text x="200" y="218" font-size="11" fill="#1e3a6e" font-weight="700" text-anchor="middle">5</text>
+          <text x="200" y="231" font-size="10" fill="#888" text-anchor="middle">0</text>
+          <circle cx="290" cy="222" r="22" fill="#eef1f8" stroke="#1e3a6e" stroke-width="1.5"/>
+          <text x="290" y="218" font-size="11" fill="#1e3a6e" font-weight="700" text-anchor="middle">6</text>
+          <text x="290" y="231" font-size="10" fill="#888" text-anchor="middle">0</text>
+          <circle cx="370" cy="222" r="22" fill="#eef1f8" stroke="#1e3a6e" stroke-width="1.5"/>
+          <text x="370" y="218" font-size="11" fill="#1e3a6e" font-weight="700" text-anchor="middle">7</text>
+          <text x="370" y="231" font-size="10" fill="#888" text-anchor="middle">0</text>
+          <circle cx="480" cy="222" r="22" fill="#eef1f8" stroke="#1e3a6e" stroke-width="1.5"/>
+          <text x="480" y="218" font-size="11" fill="#1e3a6e" font-weight="700" text-anchor="middle">8</text>
+          <text x="480" y="231" font-size="10" fill="#888" text-anchor="middle">0</text>
+          <text x="8" y="262" font-size="10" fill="#aaa">Oben = Teil-Nr. · Unten = Lagerbestand</text>
+        </svg>
+      </div>
+      <div class="ihk-text">
+        Der Primärbedarf des Schaltschranks EX 734 beträgt 500 Stück.<br><br>
+        Sie sind beauftragt, den Mitarbeiter bei der Bedarfsanalyse zu unterstützen.<br><br>
+        <strong>Berechnen Sie hierzu die jeweiligen Sekundär- und Nettobedarfe und tragen Sie Ihre Ergebnisse in die Tabelle in Anlage 2 ein.</strong><br><br>
+        Berücksichtigen Sie bei Ihren Berechnungen folgende Lagerbestände:
+      </div>
+      <div class="ihk-daten">
+        <div class="ihk-daten-head">Lagerbestände</div>
+        <div class="ihk-daten-grid">
+          <div class="ihk-daten-row"><span class="ihk-daten-key">Teil 4</span><span class="ihk-daten-val">750 Stück</span></div>
+          <div class="ihk-daten-row"><span class="ihk-daten-key">Teil 5</span><span class="ihk-daten-val">1.300 Stück</span></div>
+          <div class="ihk-daten-row"><span class="ihk-daten-key">Teil 6</span><span class="ihk-daten-val">800 Stück</span></div>
+          <div class="ihk-daten-row"><span class="ihk-daten-key">Teil 7</span><span class="ihk-daten-val">400 Stück</span></div>
+          <div class="ihk-daten-row"><span class="ihk-daten-key">Teil 8</span><span class="ihk-daten-val">1.700 Stück</span></div>
         </div>
-        <div class="result">Nettobedarf = Sekundärbedarf − Lagerbestand (niemals negativ — min. 0)</div>
+      </div>
+      <div class="ihk-text">Sicherheitsbestände werden nicht gehalten.</div>
+    </div>
+    <div class="loesung-wrapper">
+      <button class="toggle-btn" onclick="toggle(this)"><span class="toggle-icon">▶</span>&nbsp;Lösung einblenden</button>
+      <div class="loesung">
+        <div class="loesung-inner">
+          <div class="loesung-title">Musterlösung</div>
+          <div class="l-teil">
+            <div class="l-teil-label"><span class="l-teil-badge">1</span>Sekundärbedarfe</div>
+            <span class="f-line">BG 2 (×1 von Teil 1): 500 × 1 = 500 Stück</span>
+            <span class="f-line">BG 3 (×2 von Teil 1): 500 × 2 = 1.000 Stück</span>
+            <span class="f-line">Teil 4 (×4 von BG 2): 500 × 4 = 2.000 Stück</span>
+            <span class="f-line">Teil 5 (×2 von BG 2): 500 × 2 = 1.000 Stück</span>
+            <span class="f-line">Teil 6 (×2 von BG 2): 500 × 2 = 1.000 Stück</span>
+            <span class="f-line">Teil 7 (×2 von BG 3): 1.000 × 2 = 2.000 Stück</span>
+            <span class="f-line">Teil 8 (×8 von BG 3): 1.000 × 8 = 8.000 Stück</span>
+          </div>
+          <div class="l-teil">
+            <div class="l-teil-label"><span class="l-teil-badge">2</span>Nettobedarfe (Sekundärbedarf − Lagerbestand, mind. 0)</div>
+            <span class="f-line g">BG 2: 500 − 500 = 0 Stück (Lagerbestand reicht aus)</span>
+            <span class="f-line g">BG 3: 1.000 − 0 = 1.000 Stück</span>
+            <div class="l-step" style="margin:.3rem 0 .2rem;"><strong>Da BG 2 Nettobedarf = 0, werden Teile 4, 5, 6 nicht benötigt:</strong></div>
+            <span class="f-line g">Teil 4: 0 × 4 = 0 Stück (kein Bedarf da BG 2 gedeckt)</span>
+            <span class="f-line g">Teil 5: 0 × 2 = 0 Stück (kein Bedarf da BG 2 gedeckt)</span>
+            <span class="f-line g">Teil 6: 0 × 2 = 0 Stück (kein Bedarf da BG 2 gedeckt)</span>
+            <span class="f-line g">Teil 7: 2.000 − 400 = 1.600 Stück</span>
+            <span class="f-line g">Teil 8: 8.000 − 1.700 = 6.300 Stück</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════
-       THEMA: LAGERHALTUNGSKENNZAHLEN
-  ═══════════════════════════════════════════════ -->
+  <!-- ══ THEMA 2 ══ -->
   <div id="lagerhaltung" class="thema-label">Lagerhaltungskennzahlen</div>
 
-  <!-- Aufgabe 1: Industrie GmbH -->
+  <!-- Aufgabe 3 -->
   <div class="aufgabe">
-    <div class="aufgabe-header">
-      <span class="a-badge b-blue">Aufgabe</span>
-      <span class="a-title">Fremdbezugsteil – Industrie GmbH (+20 %)</span>
+    <div class="aufgabe-meta">
+      <span><strong>Lagerhaltungskennzahlen</strong> · Fremdbezugsteil Industrie GmbH</span>
+      <span class="punkte-badge">14 Punkte</span>
     </div>
-    <div class="a-text">Für ein Fremdbezugsteil wurde ein konstanter Bedarf von jährlich <strong>150.000 Stück</strong> festgestellt. Für das neue Jahr wird ein Zuwachs von <strong>20 %</strong> erwartet. Lieferzeit: <strong>8 Tage</strong>, Prüfzeit: <strong>1 Tag</strong>, Sicherheitsbestand für <strong>5 Tage</strong>.</div>
-    <div class="data-grid">
-      <div class="d-item"><span class="d-key">Bisheriger Bedarf</span><span class="d-val">150.000 Stück/J</span></div>
-      <div class="d-item"><span class="d-key">Zuwachs</span><span class="d-val">20 %</span></div>
-      <div class="d-item"><span class="d-key">Lieferzeit</span><span class="d-val">8 Tage</span></div>
-      <div class="d-item"><span class="d-key">Prüfzeit</span><span class="d-val">1 Tag</span></div>
-      <div class="d-item"><span class="d-key">Sicherheitsbestand</span><span class="d-val">5 Tage</span></div>
-      <div class="d-item"><span class="d-key">Bestellmenge (fest)</span><span class="d-val">15.000 Stück</span></div>
-      <div class="d-item"><span class="d-key">Einstandspreis</span><span class="d-val">1,50 €/Stück</span></div>
-      <div class="d-item"><span class="d-key">Bestellkosten</span><span class="d-val">50 €</span></div>
-      <div class="d-item"><span class="d-key">Lagerhaltungskostensatz</span><span class="d-val">12 % p.a.</span></div>
-    </div>
-    <div class="teil">
-      <div class="teil-q"><span class="t-lbl l-blue">a</span><span class="t-qtext">Meldebestand <span class="punkte">(4 P)</span></span></div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
-      <div class="loesung">
-        <div class="l-step">Neuer Bedarf: 150.000 × 1,20 = <strong>180.000 Stück</strong></div>
-        <div class="l-step">Tagesverbrauch: 180.000 ÷ 360 = <strong>500 Stück/Tag</strong></div>
-        <div class="l-step">Sicherheitsbestand: 5 × 500 = <strong>2.500 Stück</strong></div>
-        <div class="l-step"><span class="f-line">(8 + 1) × 500 + 2.500 = 4.500 + 2.500</span></div>
-        <div class="result">= 7.000 Stück</div>
+    <div class="aufgabe-body">
+      <div class="ihk-title">Aufgabe 3</div>
+      <div class="ihk-text">
+        Für ein Fremdbezugsteil wurde in den vergangenen zwei Jahren ein annähernd konstanter Bedarf von jährlich 150.000 Stück festgestellt.<br><br>
+        Für das neue Geschäftsjahr ist die Geschäftsführung der Industrie GmbH wesentlich optimistischer und erwartet aufgrund des gestiegenen Auftragsvolumens einen Zuwachs von 20 %.<br><br>
+        Die übliche Lieferzeit des Fremdbezugsteils beträgt acht Tage, die interne Prüfzeit wird mit einem Tag veranschlagt. Zur Vermeidung von Unterbrechungen der Produktion wird ein Sicherheitsbestand gehalten, der die Produktionsbereitschaft für fünf Tage sichert.
+      </div>
+      <div class="ihk-ermitteln">Ermitteln Sie</div>
+      <div class="ihk-aufgaben">
+        <div class="ihk-teil"><span class="ihk-teil-badge">a</span><span class="ihk-teil-text">den Meldebestand,</span><span class="ihk-teil-punkte">(4 Punkte)</span></div>
+        <div class="ihk-teil"><span class="ihk-teil-badge">b</span><span class="ihk-teil-text">die Lagerumschlagshäufigkeit bei einer festen Bestellmenge von 15.000 Stück,</span><span class="ihk-teil-punkte">(4 Punkte)</span></div>
+        <div class="ihk-teil"><span class="ihk-teil-badge">c</span><span class="ihk-teil-text">die durchschnittliche Lagerdauer in Tagen.</span><span class="ihk-teil-punkte">(2 Punkte)</span></div>
+        <div class="ihk-teil"><span class="ihk-teil-badge">d</span><span class="ihk-teil-text">Überprüfen Sie, ob die gewählte Bestellmenge von 15.000 Stück optimal ist.</span><span class="ihk-teil-punkte">(4 Punkte)</span></div>
+      </div>
+      <div class="ihk-daten" style="margin-top:1rem;">
+        <div class="ihk-daten-head">Zusatzinformationen für Teilaufgabe d</div>
+        <div class="ihk-daten-grid">
+          <div class="ihk-daten-row"><span class="ihk-daten-key">Einstandspreis</span><span class="ihk-daten-val">1.500 € pro 1000er Verpackungseinheit</span></div>
+          <div class="ihk-daten-row"><span class="ihk-daten-key">Kosten eines Bestellvorgangs</span><span class="ihk-daten-val">50 €</span></div>
+          <div class="ihk-daten-row"><span class="ihk-daten-key">Lagerhaltungskostensatz</span><span class="ihk-daten-val">12 % p. a.</span></div>
+        </div>
       </div>
     </div>
-    <div class="teil">
-      <div class="teil-q"><span class="t-lbl l-blue">b</span><span class="t-qtext">Lagerumschlagshäufigkeit bei 15.000 Stück <span class="punkte">(4 P)</span></span></div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
+    <div class="loesung-wrapper">
+      <button class="toggle-btn" onclick="toggle(this)"><span class="toggle-icon">▶</span>&nbsp;Lösung einblenden</button>
       <div class="loesung">
-        <div class="l-step"><span class="f-line">Ø Lagerbestand = 15.000 ÷ 2 + 2.500 = 10.000 Stück</span></div>
-        <div class="l-step"><span class="f-line g">Umschlagshäufigkeit = 180.000 ÷ 10.000</span></div>
-        <div class="result">= 18-mal pro Jahr</div>
-      </div>
-    </div>
-    <div class="teil">
-      <div class="teil-q"><span class="t-lbl l-blue">c</span><span class="t-qtext">Durchschnittliche Lagerdauer <span class="punkte">(2 P)</span></span></div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
-      <div class="loesung">
-        <div class="l-step"><span class="f-line g">Lagerdauer = 360 ÷ 18</span></div>
-        <div class="result">= 20 Tage</div>
-      </div>
-    </div>
-    <div class="teil">
-      <div class="teil-q"><span class="t-lbl l-blue">d</span><span class="t-qtext">Ist die Bestellmenge von 15.000 Stück optimal? <span class="punkte">(4 P)</span></span></div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
-      <div class="loesung">
-        <div class="l-step"><span class="f-line a">x_opt = √( 2 × 180.000 × 50 / (1,50 × 0,12) ) = √(18.000.000 / 0,18) = √100.000.000</span></div>
-        <div class="result">= 10.000 Stück (optimale Bestellmenge)</div>
-        <div class="result-warn">⚠ 15.000 Stück ist nicht optimal. Das Optimum liegt bei 10.000 Stück → unnötige Mehrkosten.</div>
+        <div class="loesung-inner">
+          <div class="loesung-title">Musterlösung</div>
+          <div class="l-teil">
+            <div class="l-teil-label"><span class="l-teil-badge">a</span>Meldebestand</div>
+            <div class="l-step">Neuer Bedarf: 150.000 × 1,20 = <strong>180.000 Stück</strong> | Tagesverbrauch: 180.000 ÷ 360 = <strong>500 Stück/Tag</strong></div>
+            <div class="l-step">Sicherheitsbestand: 5 × 500 = <strong>2.500 Stück</strong></div>
+            <span class="f-line">Meldebestand = (8 + 1) × 500 + 2.500 = 4.500 + 2.500</span>
+            <span class="result">= 7.000 Stück</span>
+          </div>
+          <div class="l-teil">
+            <div class="l-teil-label"><span class="l-teil-badge">b</span>Lagerumschlagshäufigkeit</div>
+            <span class="f-line">Ø Lagerbestand = 15.000 ÷ 2 + 2.500 = 10.000 Stück</span>
+            <span class="f-line g">180.000 ÷ 10.000</span>
+            <span class="result">= 18-mal pro Jahr</span>
+          </div>
+          <div class="l-teil">
+            <div class="l-teil-label"><span class="l-teil-badge">c</span>Lagerdauer</div>
+            <span class="f-line g">360 ÷ 18</span>
+            <span class="result">= 20 Tage</span>
+          </div>
+          <div class="l-teil">
+            <div class="l-teil-label"><span class="l-teil-badge">d</span>Optimale Bestellmenge</div>
+            <div class="l-step">Einstandspreis: 1.500 € ÷ 1.000 Stück = <strong>1,50 €/Stück</strong></div>
+            <span class="f-line a">x_opt = √( 2 × 180.000 × 50 / (1,50 × 0,12) ) = √100.000.000</span>
+            <span class="result">= 10.000 Stück</span>
+            <span class="result-warn">⚠ 15.000 Stück ist nicht optimal – das Kostenminimum liegt bei 10.000 Stück.</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Aufgabe 2: Gartenfräsen -->
+  <!-- Aufgabe 4: Gartenfräsen -->
   <div class="aufgabe">
-    <div class="aufgabe-header">
-      <span class="a-badge b-green">Aufgabe</span>
-      <span class="a-title">Gartenfräsen – Lagerdauer & Umschlag</span>
+    <div class="aufgabe-meta">
+      <span><strong>Lagerhaltungskennzahlen</strong> · Gartenfräsen</span>
+      <span class="punkte-badge">16 Punkte</span>
     </div>
-    <div class="a-text">Anfangsbestand: <strong>410 Stück</strong>, Endbestand: <strong>290 Stück</strong>. Jan–Jun: monatlich 355 Stück bestellt, Jul–Okt: 313 Stück, Nov–Dez: keine Bestellung. Sicherheitsbestand: <strong>150 Stück</strong>.</div>
-    <div class="data-grid">
-      <div class="d-item"><span class="d-key">Anfangsbestand</span><span class="d-val">410 Stück</span></div>
-      <div class="d-item"><span class="d-key">Endbestand</span><span class="d-val">290 Stück</span></div>
-      <div class="d-item"><span class="d-key">Jan–Jun (6 Mon.)</span><span class="d-val">6 × 355 = 2.130</span></div>
-      <div class="d-item"><span class="d-key">Jul–Okt (4 Mon.)</span><span class="d-val">4 × 313 = 1.252</span></div>
-      <div class="d-item"><span class="d-key">Sicherheitsbestand</span><span class="d-val">150 Stück</span></div>
-    </div>
-    <div class="teil">
-      <div class="teil-q"><span class="t-lbl l-green">a</span><span class="t-qtext">Durchschnittliche Lagerdauer <span class="punkte">(8 P)</span></span></div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
-      <div class="loesung">
-        <div class="l-step"><span class="f-line">Jahresverbrauch = 410 + (2.130 + 1.252) − 290 = 3.502 Stück</span></div>
-        <div class="l-step"><span class="f-line">Ø Lagerbestand = (410 + 290) ÷ 2 + 150 = 500 Stück</span></div>
-        <div class="l-step"><span class="f-line g">Umschlagshäufigkeit = 3.502 ÷ 500 ≈ 7,0 | Lagerdauer = 360 ÷ 7,0</span></div>
-        <div class="result">≈ 51 Tage</div>
+    <div class="aufgabe-body">
+      <div class="ihk-title">Aufgabe 4</div>
+      <div class="ihk-text">
+        Der Lagerbestand an Gartenfräsen betrug zu Beginn des Geschäftsjahres 410 Stück, am Ende des Geschäftsjahres waren noch 290 Stück auf Lager.<br><br>
+        Im ersten Halbjahr wurden monatlich jeweils 355 Stück über den Lieferanten geordert, von Juli bis Oktober jeweils 313 Stück. Im November und Dezember erfolgte keine Bestellung.<br><br>
+        Der Sicherheitsbestand wurde mit 150 Stück festgelegt.
+      </div>
+      <div class="ihk-aufgaben">
+        <div class="ihk-teil"><span class="ihk-teil-badge">a</span><span class="ihk-teil-text">Ermitteln Sie rechnerisch nachvollziehbar die durchschnittliche Lagerdauer in Tagen.</span><span class="ihk-teil-punkte">(8 Punkte)</span></div>
+        <div class="ihk-teil"><span class="ihk-teil-badge">b</span><span class="ihk-teil-text">Beschreiben Sie zwei Auswirkungen einer Erhöhung der Lagerumschlagshäufigkeit.</span><span class="ihk-teil-punkte">(4 Punkte)</span></div>
+        <div class="ihk-teil"><span class="ihk-teil-badge">c</span><span class="ihk-teil-text">Unterbreiten Sie dem Lagerleiter zwei Vorschläge, die zu einer Erhöhung der Lagerumschlagshäufigkeit führen.</span><span class="ihk-teil-punkte">(4 Punkte)</span></div>
       </div>
     </div>
-    <div class="teil">
-      <div class="teil-q"><span class="t-lbl l-green">b</span><span class="t-qtext">Zwei Auswirkungen einer höheren Umschlagshäufigkeit <span class="punkte">(4 P)</span></span></div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
+    <div class="loesung-wrapper">
+      <button class="toggle-btn" onclick="toggle(this)"><span class="toggle-icon">▶</span>&nbsp;Lösung einblenden</button>
       <div class="loesung">
-        <div class="l-step">1. Geringere Kapitalbindungskosten durch niedrigere Lagerbestände.</div>
-        <div class="l-step">2. Geringeres Risiko von Wertminderungen (Verderb, Veralterung, Beschädigung).</div>
-      </div>
-    </div>
-    <div class="teil">
-      <div class="teil-q"><span class="t-lbl l-green">c</span><span class="t-qtext">Zwei Vorschläge zur Erhöhung der Umschlagshäufigkeit <span class="punkte">(4 P)</span></span></div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
-      <div class="loesung">
-        <div class="l-step">1. Bestellmengen reduzieren bei häufigerer Bestellung → Lagerbestand sinkt.</div>
-        <div class="l-step">2. Just-in-time-Beschaffung einführen → Ware erst bei konkretem Bedarf bestellen.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Aufgabe 3: Kaufteil -->
-  <div class="aufgabe">
-    <div class="aufgabe-header">
-      <span class="a-badge b-blue">Aufgabe</span>
-      <span class="a-title">Kaufteil – Umschlag & Lagerdauer</span>
-    </div>
-    <div class="a-text">Anfangsbestand: <strong>520 Stück</strong>, Endbestand: <strong>280 Stück</strong>. 1. Halbjahr: 6 × 410 Stück, 2. Halbjahr: 6 × 350 Stück. Sicherheitsbestand: <strong>100 Stück</strong>.</div>
-    <div class="data-grid">
-      <div class="d-item"><span class="d-key">Anfangsbestand</span><span class="d-val">520 Stück</span></div>
-      <div class="d-item"><span class="d-key">Endbestand</span><span class="d-val">280 Stück</span></div>
-      <div class="d-item"><span class="d-key">1. HJ (6 Mon.)</span><span class="d-val">6 × 410 = 2.460</span></div>
-      <div class="d-item"><span class="d-key">2. HJ (6 Mon.)</span><span class="d-val">6 × 350 = 2.100</span></div>
-      <div class="d-item"><span class="d-key">Sicherheitsbestand</span><span class="d-val">100 Stück</span></div>
-    </div>
-    <div class="teil">
-      <div class="teil-q"><span class="t-lbl l-blue">a</span><span class="t-qtext">Lagerumschlagshäufigkeit <span class="punkte">(6 P)</span></span></div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
-      <div class="loesung">
-        <div class="l-step"><span class="f-line">Verbrauch = 520 + (2.460 + 2.100) − 280 = 4.800 Stück</span></div>
-        <div class="l-step"><span class="f-line">Ø Lagerbestand = (520 + 280) ÷ 2 + 100 = 500 Stück</span></div>
-        <div class="l-step"><span class="f-line g">4.800 ÷ 500</span></div>
-        <div class="result">= 9,6-mal pro Jahr</div>
-      </div>
-    </div>
-    <div class="teil">
-      <div class="teil-q"><span class="t-lbl l-blue">b</span><span class="t-qtext">Lagerdauer <span class="punkte">(1 P)</span></span></div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
-      <div class="loesung">
-        <div class="l-step"><span class="f-line g">360 ÷ 9,6</span></div>
-        <div class="result">= 37,5 Tage</div>
-      </div>
-    </div>
-    <div class="teil">
-      <div class="teil-q"><span class="t-lbl l-blue">c</span><span class="t-qtext">Auswirkung höherer Umschlagshäufigkeit <span class="punkte">(3 P)</span></span></div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
-      <div class="loesung">
-        <div class="l-step">Höhere Umschlagshäufigkeit → geringerer Ø Lagerbestand → weniger gebundenes Kapital → niedrigere Lager- und Finanzierungskosten → geringeres Verlustrisiko durch Verderb/Veralterung.</div>
-      </div>
-    </div>
-    <div class="teil">
-      <div class="teil-q"><span class="t-lbl l-blue">d</span><span class="t-qtext">Zwei Maßnahmen zur Erhöhung <span class="punkte">(2 P)</span></span></div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
-      <div class="loesung">
-        <div class="l-step">1. Bestellmengen reduzieren bei häufigerer Bestellung.</div>
-        <div class="l-step">2. Just-in-time-Beschaffung einführen.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Aufgabe 4: 576.000 Stück -->
-  <div class="aufgabe">
-    <div class="aufgabe-header">
-      <span class="a-badge b-amber">Aufgabe</span>
-      <span class="a-title">Fremdbezugsteil – 576.000 Stück / +25 %</span>
-    </div>
-    <div class="a-text">Durchschnittlicher Bedarf: <strong>576.000 Stück/Jahr</strong>, Zuwachs: <strong>+25 %</strong>. Sicherheitsbestand: <strong>18.000 Stück</strong>. Lieferzeit: <strong>20 Tage</strong>, Prüfzeit: <strong>2 Tage</strong>.</div>
-    <div class="data-grid">
-      <div class="d-item"><span class="d-key">Bisheriger Bedarf</span><span class="d-val">576.000 Stück/J</span></div>
-      <div class="d-item"><span class="d-key">Zuwachs</span><span class="d-val">+25 %</span></div>
-      <div class="d-item"><span class="d-key">Sicherheitsbestand</span><span class="d-val">18.000 Stück</span></div>
-      <div class="d-item"><span class="d-key">Lieferzeit</span><span class="d-val">20 Tage</span></div>
-      <div class="d-item"><span class="d-key">Prüfzeit</span><span class="d-val">2 Tage</span></div>
-      <div class="d-item"><span class="d-key">Bestellmenge</span><span class="d-val">54.000 Stück</span></div>
-      <div class="d-item"><span class="d-key">Einstandspreis</span><span class="d-val">1,50 €/Stück</span></div>
-      <div class="d-item"><span class="d-key">Bestellkosten</span><span class="d-val">70 €</span></div>
-      <div class="d-item"><span class="d-key">Lagerhaltungskosten</span><span class="d-val">20 % p.a.</span></div>
-      <div class="d-item"><span class="d-key">Verpackungseinheit</span><span class="d-val">1.000 Stück</span></div>
-    </div>
-    <div class="teil">
-      <div class="teil-q"><span class="t-lbl l-amber">a</span><span class="t-qtext">Meldebestand <span class="punkte">(4 P)</span></span></div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
-      <div class="loesung">
-        <div class="l-step">Neuer Bedarf: 576.000 × 1,25 = <strong>720.000 Stück</strong> | Tagesverbrauch: 720.000 ÷ 360 = <strong>2.000</strong></div>
-        <div class="l-step"><span class="f-line a">(20 + 2) × 2.000 + 18.000 = 44.000 + 18.000</span></div>
-        <div class="result">= 62.000 Stück</div>
-      </div>
-    </div>
-    <div class="teil">
-      <div class="teil-q"><span class="t-lbl l-amber">b</span><span class="t-qtext">Lagerumschlagshäufigkeit bei 54.000 Stück <span class="punkte">(4 P)</span></span></div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
-      <div class="loesung">
-        <div class="l-step"><span class="f-line">Ø Lagerbestand = 54.000 ÷ 2 + 18.000 = 45.000 Stück</span></div>
-        <div class="l-step"><span class="f-line g">720.000 ÷ 45.000</span></div>
-        <div class="result">= 16-mal pro Jahr</div>
-      </div>
-    </div>
-    <div class="teil">
-      <div class="teil-q"><span class="t-lbl l-amber">c</span><span class="t-qtext">Lagerdauer <span class="punkte">(2 P)</span></span></div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
-      <div class="loesung">
-        <div class="l-step"><span class="f-line g">360 ÷ 16</span></div>
-        <div class="result">= 22,5 Tage</div>
-      </div>
-    </div>
-    <div class="teil">
-      <div class="teil-q"><span class="t-lbl l-amber">d</span><span class="t-qtext">Optimale Bestellmenge <span class="punkte">(6 P)</span></span></div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
-      <div class="loesung">
-        <div class="l-step"><span class="f-line a">x_opt = √( 2 × 720.000 × 70 / (1,50 × 0,20) ) = √(100.800.000 / 0,30) = √336.000.000 ≈ 18.330</span></div>
-        <div class="l-step">Aufrunden auf Verpackungseinheit (1.000 Stück):</div>
-        <div class="result">≈ 18.000 Stück</div>
-      </div>
-    </div>
-    <div class="teil">
-      <div class="teil-q"><span class="t-lbl l-amber">e</span><span class="t-qtext">Zwei Aufgaben des Sicherheitsbestands <span class="punkte">(4 P)</span></span></div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
-      <div class="loesung">
-        <div class="l-step">1. Puffer bei Lieferverzögerungen → Produktionsunterbrechungen vermeiden.</div>
-        <div class="l-step">2. Ausgleich unerwarteter Bedarfsschwankungen wenn tatsächlicher Verbrauch den geplanten übersteigt.</div>
+        <div class="loesung-inner">
+          <div class="loesung-title">Musterlösung</div>
+          <div class="l-teil">
+            <div class="l-teil-label"><span class="l-teil-badge">a</span>Lagerdauer</div>
+            <span class="f-line">Jahresverbrauch = 410 + (6×355 + 4×313) − 290 = 410 + 3.382 − 290 = 3.502 Stück</span>
+            <span class="f-line">Ø Lagerbestand = (410 + 290) ÷ 2 + 150 = 500 Stück</span>
+            <span class="f-line">Umschlagshäufigkeit = 3.502 ÷ 500 ≈ 7,0-mal</span>
+            <span class="f-line g">Lagerdauer = 360 ÷ 7,0</span>
+            <span class="result">≈ 51 Tage</span>
+          </div>
+          <div class="l-teil">
+            <div class="l-teil-label"><span class="l-teil-badge">b</span>Zwei Auswirkungen</div>
+            <div class="l-step">1. Geringere Kapitalbindungskosten durch niedrigere durchschnittliche Lagerbestände.</div>
+            <div class="l-step">2. Geringeres Risiko von Wertminderungen durch Verderb, Veralterung oder Beschädigung.</div>
+          </div>
+          <div class="l-teil">
+            <div class="l-teil-label"><span class="l-teil-badge">c</span>Zwei Maßnahmen</div>
+            <div class="l-step">1. Bestellmengen reduzieren bei häufigerer Bestellung → Lagerbestand sinkt.</div>
+            <div class="l-step">2. Just-in-time-Beschaffung einführen → Ware erst bei konkretem Bedarf bestellen.</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Aufgabe 5: Industrie AG -->
   <div class="aufgabe">
-    <div class="aufgabe-header">
-      <span class="a-badge b-blue">Aufgabe</span>
-      <span class="a-title">Industrie AG – Kosteneinsparpotenzial</span>
+    <div class="aufgabe-meta">
+      <span><strong>Lagerhaltungskennzahlen</strong> · Industrie AG</span>
+      <span class="punkte-badge">20 Punkte</span>
     </div>
-    <div class="a-text">Kontinuierlicher Bedarf. Bisherige Bestellmenge: <strong>1.500 Stück</strong>.</div>
-    <div class="data-grid">
-      <div class="d-item"><span class="d-key">Jahresbedarf</span><span class="d-val">80.000 Stück</span></div>
-      <div class="d-item"><span class="d-key">Einstandspreis</span><span class="d-val">12 €/Stück</span></div>
-      <div class="d-item"><span class="d-key">Bestellkosten</span><span class="d-val">180 €</span></div>
-      <div class="d-item"><span class="d-key">Lagerhaltungskostensatz</span><span class="d-val">15 %</span></div>
-    </div>
-    <div class="teil">
-      <div class="teil-q"><span class="t-lbl l-blue">a</span><span class="t-qtext">Optimale Bestellmenge <span class="punkte">(5 P)</span></span></div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
-      <div class="loesung">
-        <div class="l-step"><span class="f-line a">x_opt = √( 2 × 80.000 × 180 / (12 × 0,15) ) = √(28.800.000 / 1,80) = √16.000.000</span></div>
-        <div class="result">= 4.000 Stück</div>
+    <div class="aufgabe-body">
+      <div class="ihk-title">Aufgabe 2</div>
+      <div class="ihk-text">
+        Die Beschaffungsprozesse der Industrie AG sollen unter Kostengesichtspunkten analysiert werden. Exemplarisch soll das Kosteneinsparpotenzial anhand eines Kaufteils aufgezeigt werden. Es wird ein kontinuierlicher Bedarf angenommen.<br><br>
+        Folgende Daten liegen Ihnen zur Entscheidungsfindung vor:
       </div>
-    </div>
-    <div class="teil">
-      <div class="teil-q"><span class="t-lbl l-blue">b</span><span class="t-qtext">Lagerumschlagshäufigkeit <span class="punkte">(3 P)</span></span></div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
-      <div class="loesung">
-        <div class="l-step"><span class="f-line">Ø Lagerbestand = 4.000 ÷ 2 = 2.000 Stück</span></div>
-        <div class="l-step"><span class="f-line g">80.000 ÷ 2.000</span></div>
-        <div class="result">= 20-mal pro Jahr</div>
-      </div>
-    </div>
-    <div class="teil">
-      <div class="teil-q"><span class="t-lbl l-blue">c</span><span class="t-qtext">Lagerdauer <span class="punkte">(2 P)</span></span></div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
-      <div class="loesung">
-        <div class="l-step"><span class="f-line g">360 ÷ 20</span></div>
-        <div class="result">= 18 Tage</div>
-      </div>
-    </div>
-    <div class="teil">
-      <div class="teil-q"><span class="t-lbl l-blue">d</span><span class="t-qtext">Kosteneinsparpotenzial vs. 1.500 Stück <span class="punkte">(10 P)</span></span></div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
-      <div class="loesung">
-        <div class="l-step"><strong>Bei 1.500 Stück:</strong>
-          <span class="f-line">Bestellkosten = (80.000 ÷ 1.500) × 180 = 9.600 €</span>
-          <span class="f-line">Lagerkosten = (1.500 ÷ 2) × 12 × 0,15 = 1.350 €</span>
-          <span class="f-line">Gesamt = 10.950 €</span>
+      <div class="ihk-daten">
+        <div class="ihk-daten-head">Gegebene Daten</div>
+        <div class="ihk-daten-grid">
+          <div class="ihk-daten-row"><span class="ihk-daten-key">Jahresbedarf</span><span class="ihk-daten-val">80.000 Stück</span></div>
+          <div class="ihk-daten-row"><span class="ihk-daten-key">Einstandspreis</span><span class="ihk-daten-val">12 €/Stück</span></div>
+          <div class="ihk-daten-row"><span class="ihk-daten-key">Bestellkosten je Bestellvorgang</span><span class="ihk-daten-val">180 €</span></div>
+          <div class="ihk-daten-row"><span class="ihk-daten-key">Lagerhaltungskostensatz</span><span class="ihk-daten-val">15 %</span></div>
         </div>
-        <div class="l-step"><strong>Bei 4.000 Stück (optimal):</strong>
-          <span class="f-line">Bestellkosten = (80.000 ÷ 4.000) × 180 = 3.600 €</span>
-          <span class="f-line">Lagerkosten = (4.000 ÷ 2) × 12 × 0,15 = 3.600 €</span>
-          <span class="f-line">Gesamt = 7.200 €</span>
-        </div>
-        <div class="result">Einsparpotenzial = 10.950 − 7.200 = 3.750 € pro Jahr</div>
+      </div>
+      <div class="ihk-aufgaben" style="margin-top:1rem;">
+        <div class="ihk-teil"><span class="ihk-teil-badge">a</span><span class="ihk-teil-text">Berechnen Sie die optimale Bestellmenge.</span><span class="ihk-teil-punkte">(5 Punkte)</span></div>
+        <div class="ihk-teil"><span class="ihk-teil-badge">b</span><span class="ihk-teil-text">Berechnen Sie die Lagerumschlagshäufigkeit.</span><span class="ihk-teil-punkte">(3 Punkte)</span></div>
+        <div class="ihk-teil"><span class="ihk-teil-badge">c</span><span class="ihk-teil-text">Ermitteln Sie die durchschnittliche Lagerdauer in Tagen.</span><span class="ihk-teil-punkte">(2 Punkte)</span></div>
+        <div class="ihk-teil"><span class="ihk-teil-badge">d</span><span class="ihk-teil-text">Bestimmen Sie rechnerisch das Kosteneinsparpotenzial, wenn im Unternehmen bisher mit einer Bestellmenge von 1.500 Stück disponiert wurde.</span><span class="ihk-teil-punkte">(10 Punkte)</span></div>
       </div>
     </div>
-  </div>
-
-  <!-- Aufgabe 6: Feinbleche -->
-  <div class="aufgabe">
-    <div class="aufgabe-header">
-      <span class="a-badge b-green">Aufgabe</span>
-      <span class="a-title">Feinbleche Edelstahl – 12 Monatsbestände</span>
-    </div>
-    <div class="a-text">13 Stichtagswerte bekannt. Monatlicher Bezug vom Stammlieferanten: <strong>8 Tonnen</strong>.</div>
-    <div class="teil">
-      <div class="teil-q"><span class="t-lbl l-green">a</span><span class="t-qtext">Ø Lagerbestand, Umschlagshäufigkeit, Lagerdauer <span class="punkte">(7 P)</span></span></div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
+    <div class="loesung-wrapper">
+      <button class="toggle-btn" onclick="toggle(this)"><span class="toggle-icon">▶</span>&nbsp;Lösung einblenden</button>
       <div class="loesung">
-        <div class="l-step">
-          <table class="bestand-table">
-            <tr><th>Datum</th><th>t</th><th>Datum</th><th>t</th></tr>
-            <tr><td>01.11.2019</td><td>25,0</td><td>31.05.2020</td><td>20,0</td></tr>
-            <tr><td>30.11.2019</td><td>24,0</td><td>30.06.2020</td><td>16,0</td></tr>
-            <tr><td>31.12.2019</td><td>28,0</td><td>31.07.2020</td><td>18,0</td></tr>
-            <tr><td>31.01.2020</td><td>22,0</td><td>31.08.2020</td><td>25,0</td></tr>
-            <tr><td>29.02.2020</td><td>18,0</td><td>30.09.2020</td><td>16,0</td></tr>
-            <tr><td>31.03.2020</td><td>14,0</td><td>31.10.2020</td><td>21,0</td></tr>
-            <tr><td>30.04.2020</td><td>13,0</td><td><strong>Summe</strong></td><td><strong>260,0</strong></td></tr>
-          </table>
+        <div class="loesung-inner">
+          <div class="loesung-title">Musterlösung</div>
+          <div class="l-teil">
+            <div class="l-teil-label"><span class="l-teil-badge">a</span>Optimale Bestellmenge</div>
+            <span class="f-line a">x_opt = √( 2 × 80.000 × 180 / (12 × 0,15) ) = √(28.800.000 / 1,80) = √16.000.000</span>
+            <span class="result">= 4.000 Stück</span>
+          </div>
+          <div class="l-teil">
+            <div class="l-teil-label"><span class="l-teil-badge">b</span>Lagerumschlagshäufigkeit</div>
+            <span class="f-line">Ø Lagerbestand = 4.000 ÷ 2 = 2.000 Stück</span>
+            <span class="f-line g">80.000 ÷ 2.000</span>
+            <span class="result">= 20-mal pro Jahr</span>
+          </div>
+          <div class="l-teil">
+            <div class="l-teil-label"><span class="l-teil-badge">c</span>Lagerdauer</div>
+            <span class="f-line g">360 ÷ 20</span>
+            <span class="result">= 18 Tage</span>
+          </div>
+          <div class="l-teil">
+            <div class="l-teil-label"><span class="l-teil-badge">d</span>Kosteneinsparpotenzial</div>
+            <div class="l-step"><strong>Bei 1.500 Stück:</strong></div>
+            <span class="f-line">Bestellkosten = (80.000 ÷ 1.500) × 180 = 9.600 €</span>
+            <span class="f-line">Lagerhaltungskosten = (1.500 ÷ 2) × 12 × 0,15 = 1.350 €</span>
+            <span class="f-line">Gesamtkosten = 10.950 €</span>
+            <div class="l-step" style="margin-top:.4rem;"><strong>Bei 4.000 Stück (optimal):</strong></div>
+            <span class="f-line">Bestellkosten = (80.000 ÷ 4.000) × 180 = 3.600 €</span>
+            <span class="f-line">Lagerhaltungskosten = (4.000 ÷ 2) × 12 × 0,15 = 3.600 €</span>
+            <span class="f-line">Gesamtkosten = 7.200 €</span>
+            <span class="result">Einsparpotenzial = 10.950 − 7.200 = 3.750 € pro Jahr</span>
+          </div>
         </div>
-        <div class="l-step"><span class="f-line">Ø Lagerbestand = 260 ÷ 13 = 20 Tonnen</span></div>
-        <div class="l-step"><span class="f-line">Jahresverbrauch = 12 × 8 = 96 Tonnen</span></div>
-        <div class="l-step"><span class="f-line g">Umschlagshäufigkeit = 96 ÷ 20 = 4,8 | Lagerdauer = 360 ÷ 4,8</span></div>
-        <div class="result">= 75 Tage</div>
-      </div>
-    </div>
-    <div class="teil">
-      <div class="teil-q"><span class="t-lbl l-green">b</span><span class="t-qtext">Drei Maßnahmen zur Verbesserung <span class="punkte">(6 P)</span></span></div>
-      <button class="toggle-btn" onclick="toggle(this)">▶ Lösung einblenden</button>
-      <div class="loesung">
-        <div class="l-step">1. EDV-gestütztes Lagerverwaltungssystem statt Sichtprüfung → genauere Bestands- und Bedarfsermittlung.</div>
-        <div class="l-step">2. ABC-Analyse → Steuerung nach Wichtigkeit der Artikel (A-Teile = viel Aufmerksamkeit).</div>
-        <div class="l-step">3. Standardisierung der Formate/Stärken → weniger verschiedene Lagerartikel, einfachere Planung.</div>
       </div>
     </div>
   </div>
@@ -528,11 +490,13 @@
 <footer>Persönliches Lernportal · IHK Fachwirt Logistiksysteme · Nur zur privaten Nutzung · laufend ergänzt</footer>
 
 <script>
-function toggle(btn){
-  const l=btn.nextElementSibling;
-  const open=l.classList.contains('visible');
-  l.classList.toggle('visible',!open);
-  btn.textContent=open?'▶ Lösung einblenden':'▼ Lösung ausblenden';
+function toggle(btn) {
+  const l = btn.nextElementSibling;
+  const open = l.classList.contains('visible');
+  l.classList.toggle('visible', !open);
+  const icon = btn.querySelector('.toggle-icon');
+  icon.style.transform = open ? '' : 'rotate(90deg)';
+  btn.childNodes[2].textContent = '\u00a0' + (open ? 'Lösung einblenden' : 'Lösung ausblenden');
 }
 </script>
 </body>
