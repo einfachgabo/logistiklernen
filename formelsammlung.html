@@ -3,289 +3,517 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Formelsammlung · Logistik</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Formelsammlung – Lagerhaltung & Logistik</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#f5f4f0;--surface:#fff;--surface2:#f0efe9;
-  --border:#d8d6ce;--border-strong:#b8b5aa;
-  --text:#1a1916;--text2:#5c5a52;--text3:#9c9a90;
-  --blue:#1a56db;--blue-bg:#eff4ff;--blue-dark:#0f3a8a;--blue-border:#c3d3fd;
-  --blue-header:#1e3a6e;
-  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;
-  --r:6px;--rl:10px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6}
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --surface2: #eeecea;
+    --border: #dddbd6;
+    --text: #1a1917;
+    --text2: #5a5854;
+    --text3: #8a8884;
+    --blue: #1a56db;
+    --blue-bg: #eff4ff;
+    --blue-border: #c3d3fd;
+    --green: #1a7a4a;
+    --green-bg: #f0faf4;
+    --green-border: #a7dfc0;
+    --amber: #92500a;
+    --amber-bg: #fffbf0;
+    --amber-border: #f5d48a;
+    --purple: #5522cc;
+    --purple-bg: #f4f0ff;
+    --purple-border: #c8b8f8;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; line-height: 1.6; }
 
-.header{background:#1a1916;border-bottom:3px solid var(--blue);padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.header-logo{font-size:14px;font-weight:500;color:#f5f4f0;display:flex;align-items:center;gap:.5rem;text-decoration:none}
-.header-logo-dot{width:7px;height:7px;background:var(--blue);border-radius:50%}
-.header-back{font-family:var(--mono);font-size:11px;color:#9c9a90;text-decoration:none;letter-spacing:.04em}
-.header-back:hover{color:#f5f4f0}
+  .site-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .site-header a { font-size: 13px; color: var(--text3); text-decoration: none; display: flex; align-items: center; gap: .4rem; }
+  .site-header a:hover { color: var(--blue); }
+  .header-sep { color: var(--border); }
+  .header-title { font-size: 14px; font-weight: 600; color: var(--text); }
 
-.hero{background:#1a1916;padding:2rem 2rem 1.75rem;border-bottom:1px solid #2a2926}
-.hero-inner{max-width:860px;margin:0 auto}
-.hero-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#9c9a90;margin-bottom:.4rem}
-.hero-title{font-size:24px;font-weight:300;color:#f5f4f0}
-.hero-title span{font-weight:500}
-.hero-sub{font-size:13px;color:#9c9a90;margin-top:.4rem;font-family:var(--mono)}
+  .hero {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 2rem 1.5rem 1.5rem;
+  }
+  .hero-tag { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--blue); margin-bottom: .5rem; }
+  .hero-title { font-size: 22px; font-weight: 600; color: var(--text); margin-bottom: .4rem; }
+  .hero-sub { font-size: 14px; color: var(--text2); }
 
-.layout{max-width:860px;margin:0 auto;padding:2rem 1.5rem;display:grid;grid-template-columns:190px 1fr;gap:2rem}
-@media(max-width:700px){.layout{grid-template-columns:1fr}.sidenav{display:none}}
+  .content { max-width: 760px; margin: 0 auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; }
 
-.sidenav{position:sticky;top:72px;height:fit-content}
-.sidenav-title{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:.75rem}
-.sidenav a{display:block;font-size:13px;color:var(--text2);text-decoration:none;padding:4px 8px;border-radius:var(--r);border-left:2px solid transparent;transition:all .15s;margin-bottom:2px}
-.sidenav a:hover{color:var(--blue);background:var(--blue-bg);border-left-color:var(--blue)}
-.sidenav a.sub{padding-left:16px;font-size:12px;color:var(--text3)}
-.sidenav a.sub:hover{color:var(--blue)}
+  .section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .section-header {
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    padding: .75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+  }
+  .section-num {
+    width: 24px; height: 24px;
+    border-radius: 6px;
+    background: var(--blue);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-num.green { background: #1a7a4a; }
+  .section-num.amber { background: #92500a; }
+  .section-num.purple { background: #5522cc; }
+  .section-num.red { background: #9b1c1c; }
+  .section-title { font-size: 15px; font-weight: 600; color: var(--text); }
 
-.content{min-width:0}
+  .formula-grid { padding: 1rem 1.25rem; display: flex; flex-direction: column; gap: .85rem; }
 
-.kap-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;margin-top:2.5rem;padding-bottom:.75rem;border-bottom:2px solid var(--blue)}
-.kap-header:first-child{margin-top:0}
-.kap-badge{background:var(--blue-header);color:#fff;font-family:var(--mono);font-size:13px;font-weight:500;padding:4px 12px;border-radius:var(--r);min-width:44px;text-align:center}
-.kap-title{font-size:19px;font-weight:500;color:var(--text)}
+  .formula-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .formula-name {
+    padding: .5rem .85rem;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text2);
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+  .formula-body { padding: .6rem .85rem; }
+  .formula-eq {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--blue);
+    background: var(--blue-bg);
+    border: 1px solid var(--blue-border);
+    border-radius: 6px;
+    padding: .45rem .75rem;
+    margin-bottom: .4rem;
+    line-height: 1.5;
+  }
+  .formula-eq.green { color: var(--green); background: var(--green-bg); border-color: var(--green-border); }
+  .formula-eq.amber { color: var(--amber); background: var(--amber-bg); border-color: var(--amber-border); }
+  .formula-eq.purple { color: var(--purple); background: var(--purple-bg); border-color: var(--purple-border); }
+  .formula-hint { font-size: 12px; color: var(--text3); margin-top: .3rem; line-height: 1.5; }
 
-.abschnitt{margin-bottom:1.75rem}
-.abschnitt-title{font-size:15px;font-weight:500;color:var(--text);margin-bottom:.9rem;padding-bottom:.35rem;border-bottom:1px solid var(--border)}
-.sub-label{font-size:11px;font-weight:500;color:var(--text3);font-family:var(--mono);letter-spacing:.07em;text-transform:uppercase;margin-bottom:.35rem;margin-top:.9rem}
-.sub-label:first-child{margin-top:0}
+  .legend-grid {
+    padding: .75rem 1.25rem 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: .4rem .75rem;
+  }
+  .legend-item { font-size: 13px; color: var(--text2); display: flex; gap: .4rem; }
+  .legend-key { font-family: var(--mono); font-weight: 500; color: var(--text); min-width: 48px; flex-shrink: 0; }
 
-.fbox{background:var(--blue-bg);border:1px solid var(--blue-border);border-radius:var(--r);padding:.85rem 1.1rem;margin-bottom:.5rem}
-.fbox .f{font-size:13px;color:var(--blue-dark);font-family:var(--mono);line-height:1.85}
-.fbox .hint{font-size:12px;color:var(--text2);margin-top:.35rem;font-style:italic}
+  .netto-block {
+    padding: .75rem 1.25rem 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .5rem 1.5rem;
+    font-size: 13px;
+  }
+  .netto-col { display: flex; flex-direction: column; gap: .3rem; }
+  .netto-row { display: flex; align-items: center; gap: .5rem; color: var(--text2); }
+  .netto-op { font-weight: 600; color: var(--text3); min-width: 12px; }
+  .netto-val { font-weight: 500; color: var(--text); }
+  .netto-result { border-top: 2px solid var(--border); padding-top: .4rem; margin-top: .2rem; font-weight: 600; color: var(--text); }
 
-.schema{background:var(--blue-bg);border:1px solid var(--blue-border);border-radius:var(--r);padding:.85rem 1.1rem;margin-bottom:.5rem}
-.sline{font-size:13px;color:var(--blue-dark);font-family:var(--mono);line-height:2.1;display:flex;gap:.6rem}
-.op{min-width:14px;color:#1a7a4a;font-weight:500}
-.op.m{color:#7a1a1a}
-.op.e{color:var(--blue-dark);font-weight:500}
-.sresult{font-weight:500}
-.sdiv{border:none;border-top:1px solid var(--blue-border);margin:.15rem 0}
+  .tip-box {
+    margin: 0 1.25rem 1rem;
+    background: var(--amber-bg);
+    border: 1px solid var(--amber-border);
+    border-radius: var(--radius);
+    padding: .6rem .85rem;
+    font-size: 13px;
+    color: var(--amber);
+  }
+  .tip-box strong { font-weight: 600; }
 
-.legende{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:.85rem 1.1rem;margin-bottom:1.25rem}
-.leg-title{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:.6rem}
-.leg-grid{display:grid;grid-template-columns:auto 1fr;gap:2px 14px}
-.lk{font-family:var(--mono);font-size:12px;color:var(--blue-dark);font-weight:500;white-space:nowrap;padding:1px 0}
-.lv{font-size:12px;color:var(--text2);padding:1px 0;line-height:1.5}
+  .divider { height: 1px; background: var(--border); margin: .25rem 0; }
 
-.variants{display:flex;flex-direction:column;gap:.4rem;margin-bottom:.5rem}
-.variant{background:var(--blue-bg);border:1px solid var(--blue-border);border-radius:var(--r);padding:.7rem 1.1rem}
-.variant .vlabel{font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:.25rem}
-.variant .f{font-size:13px;color:var(--blue-dark);font-family:var(--mono)}
-
-@media print{
-  .header,.sidenav{display:none!important}
-  .layout{grid-template-columns:1fr}
-  .kap-header{break-before:page}
-  .kap-header:first-child{break-before:avoid}
-}
-@media(max-width:600px){
-  .hero{padding:1.5rem 1.25rem}
-  .layout{padding:1.25rem 1rem 3rem}
-}
+  footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    font-size: 12px;
+    color: var(--text3);
+    border-top: 1px solid var(--border);
+    margin-top: 1rem;
+  }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <a class="header-logo" href="index.html">
-    <div class="header-logo-dot"></div>
-    Logistik Lernportal
-  </a>
-  <a class="header-back" href="index.html">← Zurück</a>
-</div>
+<header class="site-header">
+  <a href="index.html">← Übersicht</a>
+  <span class="header-sep">|</span>
+  <span class="header-title">Formelsammlung Lagerhaltung</span>
+</header>
 
 <div class="hero">
-  <div class="hero-inner">
-    <div class="hero-eyebrow">IHK · Kapitel 4</div>
-    <div class="hero-title"><span>Formel</span>sammlung</div>
-    <div class="hero-sub">Material-, Produktionswirtschaft und Logistik</div>
-  </div>
+  <div class="hero-tag">IHK Formelsammlung · Kapitel 4</div>
+  <div class="hero-title">Lagerhaltung & Logistikkennzahlen</div>
+  <div class="hero-sub">Material-, Produktionswirtschaft und Logistik – alle relevanten Formeln auf einen Blick</div>
 </div>
 
-<div class="layout">
+<div class="content">
 
-  <nav class="sidenav">
-    <div class="sidenav-title">Inhalt</div>
-    <a href="#k41">4.1 Materialbedarfsermittlung</a>
-    <a href="#k411" class="sub">4.1.1 Deterministisch</a>
-    <a href="#k412" class="sub">4.1.2 Nettobedarfsermittlung</a>
-    <a href="#k413" class="sub">4.1.3 Stochastisch</a>
-    <a href="#k414" class="sub">4.1.4 Fehlerberechnung</a>
-    <a href="#k42">4.2 Bestandsrechnung</a>
-    <a href="#k43">4.3 Bestell- & Lagerhaltungskosten</a>
-    <a href="#k431" class="sub">4.3.1 Lagerhaltungskosten</a>
-  </nav>
-
-  <div class="content">
-
-    <!-- ===== 4.1 ===== -->
-    <div class="kap-header" id="k41">
-      <div class="kap-badge">4.1</div>
-      <div class="kap-title">Materialbedarfsermittlung</div>
+  <!-- 4.1 Materialbedarfsermittlung -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4.1</div>
+      <div class="section-title">Materialbedarfsermittlung</div>
     </div>
+    <div class="formula-grid">
 
-    <div class="legende">
-      <div class="leg-title">Legende zu Kapitel 4.1</div>
-      <div class="leg-grid">
-        <span class="lk">α</span><span class="lv">Glättungsfaktor</span>
-        <span class="lk">σ</span><span class="lv">Standardabweichung</span>
-        <span class="lk">G₁ bis Gₙ</span><span class="lv">Gewichtungsfaktoren bei konstanter Periodenzahl</span>
-        <span class="lk">i</span><span class="lv">laufende Periode</span>
-        <span class="lk">n</span><span class="lv">Anzahl der Perioden / konstante Periodenzahl bei gleitendem Mittelwert</span>
-        <span class="lk">X₁ bis Xₙ</span><span class="lv">tatsächlicher Verbrauch in der Periode 1 bis n</span>
-        <span class="lk">Xᵢ</span><span class="lv">tatsächlicher Verbrauch in der Periode i</span>
-        <span class="lk">Vᵢ</span><span class="lv">Vorhersagewert der Periode i</span>
-        <span class="lk">X̄</span><span class="lv">arithmetisches Mittel der Verbrauchswerte</span>
-      </div>
-    </div>
-
-    <div class="abschnitt" id="k411">
-      <div class="abschnitt-title">4.1.1 Materialbedarfsermittlung (deterministisch)</div>
-      <div class="fbox">
-        <div class="f">Sekundärbedarf der Komponente = Primärbedarf des Erzeugnisses · Stücklistenmenge der Komponente</div>
-      </div>
-    </div>
-
-    <div class="abschnitt" id="k412">
-      <div class="abschnitt-title">4.1.2 Nettobedarfsermittlung</div>
-      <div class="schema">
-        <div class="sline"><span class="op">&nbsp;</span><span>Sekundärbedarf</span></div>
-        <div class="sline"><span class="op">+</span><span>Zusatzbedarf (Ausschuss, Schwund)</span></div>
-        <hr class="sdiv">
-        <div class="sline"><span class="op e">=</span><span class="sresult">Bruttobedarf</span></div>
-        <div class="sline"><span class="op m">−</span><span>Lagerbestand</span></div>
-        <div class="sline"><span class="op m">−</span><span>Bestellbestand</span></div>
-        <div class="sline"><span class="op m">−</span><span>Werkstattbestand</span></div>
-        <div class="sline"><span class="op">+</span><span>Reservierungsbestand</span></div>
-        <div class="sline"><span class="op">+</span><span>Sicherheitsbestand</span></div>
-        <hr class="sdiv">
-        <div class="sline"><span class="op e">=</span><span class="sresult">Nettobedarf</span></div>
-      </div>
-    </div>
-
-    <div class="abschnitt" id="k413">
-      <div class="abschnitt-title">4.1.3 Materialbedarfsermittlung (stochastisch)</div>
-
-      <div class="sub-label">Arithmetischer Mittelwert</div>
-      <div class="fbox">
-        <div class="f">V(i+1) = (X₁ + X₂ + X₃ + … + Xₙ) / n</div>
-      </div>
-
-      <div class="sub-label">Gleitender Mittelwert</div>
-      <div class="fbox">
-        <div class="f">V(i+1) = (X₁ + X₂ + X₃ + X₄ + X₅ + X₆) / n</div>
-        <div class="hint">n = konstante Periodenzahl (hier: n = 6)</div>
-      </div>
-
-      <div class="sub-label">Gewogener gleitender Wert</div>
-      <div class="fbox">
-        <div class="f">V(i+1) = [(X₁·G₁) + (X₂·G₂) + (X₃·G₃) + … + (Xₙ·Gₙ)] / 100</div>
-        <div class="hint">Die Summe der Gewichtungsfaktoren muss 100 betragen.</div>
-      </div>
-
-      <div class="sub-label">Exponentielle Glättung 1. Ordnung</div>
-      <div class="fbox">
-        <div class="f">V(i+1) = Vᵢ + α · (Xᵢ − Vᵢ)</div>
-      </div>
-    </div>
-
-    <div class="abschnitt" id="k414">
-      <div class="abschnitt-title">4.1.4 Fehlerberechnung</div>
-
-      <div class="sub-label">Standardabweichung</div>
-      <div class="fbox">
-        <div class="f">σ = √[ (1/n) · Σ (Xᵢ − X̄)² ]</div>
-      </div>
-
-      <div class="sub-label">Mittlere absolute Abweichung (MAD)</div>
-      <div class="fbox">
-        <div class="f">MAD = (1/n) · Σ |Xᵢ − Vᵢ|</div>
-      </div>
-    </div>
-
-    <!-- ===== 4.2 ===== -->
-    <div class="kap-header" id="k42">
-      <div class="kap-badge">4.2</div>
-      <div class="kap-title">Bestandsrechnung</div>
-    </div>
-
-    <div class="abschnitt">
-      <div class="sub-label">Bestellpunkt (Meldebestand)</div>
-      <div class="fbox">
-        <div class="f">Meldebestand = Verbrauch pro Zeiteinheit · Wiederbeschaffungszeit + Sicherheitsbestand</div>
-      </div>
-    </div>
-
-    <!-- ===== 4.3 ===== -->
-    <div class="kap-header" id="k43">
-      <div class="kap-badge">4.3</div>
-      <div class="kap-title">Bestell- und Lagerhaltungskosten</div>
-    </div>
-
-    <div class="legende">
-      <div class="leg-title">Legende zu Kapitel 4.3</div>
-      <div class="leg-grid">
-        <span class="lk">EP</span><span class="lv">Einstandspreis</span>
-        <span class="lk">i</span><span class="lv">Kapitalmarktzinssatz in Dezimalform</span>
-        <span class="lk">i_L</span><span class="lv">Zinssatz für Lagerhaltung in Dezimalform (Lagerhaltungskostensatz)</span>
-        <span class="lk">i_L1</span><span class="lv">Zinssatz für Kapitalbindung in Dezimalform (Lagerzinssatz)</span>
-        <span class="lk">i_L2</span><span class="lv">Zinssatz für Lagerkosten in Dezimalform</span>
-        <span class="lk">k_B</span><span class="lv">fixe Bestellkosten pro Bestellung</span>
-        <span class="lk">K_f</span><span class="lv">fixe Gesamtkosten</span>
-        <span class="lk">k_h</span><span class="lv">Herstellkosten</span>
-        <span class="lk">k_R</span><span class="lv">Kosten für Rüsten und Arbeitspapiererstellung pro Los</span>
-        <span class="lk">k_v</span><span class="lv">variable Stückkosten</span>
-        <span class="lk">n_opt</span><span class="lv">optimale Anzahl der Bestellungen pro Lose in der Periode</span>
-        <span class="lk">x</span><span class="lv">Bestellmenge bzw. Losgröße</span>
-        <span class="lk">x_ges</span><span class="lv">Jahresbedarfsmenge</span>
-        <span class="lk">x_krit</span><span class="lv">kritische Menge</span>
-        <span class="lk">x_opt</span><span class="lv">optimale Bestellmenge bzw. optimale Losgröße</span>
-      </div>
-    </div>
-
-    <div class="abschnitt" id="k431">
-      <div class="abschnitt-title">4.3.1 Lagerhaltungskosten</div>
-
-      <div class="fbox">
-        <div class="f">Lagerhaltungskosten = Ø Lagerbestand* · Einstandspreis · i_L</div>
-        <div class="f" style="margin-top:.3rem">i_L = i_L1 + i_L2</div>
-        <div class="hint">* inklusive Sicherheitsbestand</div>
-      </div>
-
-      <div class="sub-label">Ø Lagerbestand</div>
-      <div class="variants">
-        <div class="variant">
-          <div class="vlabel">Variante 1</div>
-          <div class="f">Ø Lagerbestand = (Anfangsbestand + Endbestand) / 2</div>
-        </div>
-        <div class="variant">
-          <div class="vlabel">Variante 2</div>
-          <div class="f">Ø Lagerbestand = (Anfangsbestand + 12 Monatsendbestände) / 13</div>
-        </div>
-        <div class="variant">
-          <div class="vlabel">Variante 3</div>
-          <div class="f">Ø Lagerbestand = x/2 + Sicherheitsbestand</div>
+      <div class="formula-card">
+        <div class="formula-name">Sekundärbedarf (deterministisch)</div>
+        <div class="formula-body">
+          <div class="formula-eq">Sekundärbedarf = Primärbedarf des Erzeugnisses × Stücklistenmenge der Komponente</div>
         </div>
       </div>
 
-      <div class="sub-label">Lagerkosten</div>
-      <div class="fbox">
-        <div class="f">Lagerkostensatz in % (i_L2) = (gesamte Lagerkosten / Ø Lagerbestandswert) · 100</div>
+      <div class="formula-card">
+        <div class="formula-name">4.1.2 Nettobedarfsermittlung</div>
+        <div class="formula-body">
+          <div class="netto-block" style="grid-template-columns:1fr;">
+            <div class="netto-col">
+              <div class="netto-row"><span class="netto-op"></span><span class="netto-val">Sekundärbedarf</span></div>
+              <div class="netto-row"><span class="netto-op">+</span><span class="netto-val">Zusatzbedarf (Ausschuss, Schwund)</span></div>
+              <div class="netto-row" style="font-weight:600; color:var(--text3)"><span class="netto-op">=</span><span>Bruttobedarf</span></div>
+              <div class="netto-row"><span class="netto-op">−</span><span class="netto-val">Lagerbestand</span></div>
+              <div class="netto-row"><span class="netto-op">−</span><span class="netto-val">Bestellbestand</span></div>
+              <div class="netto-row"><span class="netto-op">−</span><span class="netto-val">Werkstattbestand</span></div>
+              <div class="netto-row"><span class="netto-op">+</span><span class="netto-val">Reservierungsbestand</span></div>
+              <div class="netto-row"><span class="netto-op">+</span><span class="netto-val">Sicherheitsbestand</span></div>
+              <div class="netto-row netto-result"><span class="netto-op">=</span><span>Nettobedarf</span></div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="fbox">
-        <div class="f">Lagerzinssatz in % (i_L1) = (i · Ø Lagerdauer (Tage) / 360) · 100</div>
-      </div>
-      <div class="fbox">
-        <div class="f">Lagerzinsen in € = i_L1 · Ø Lagerbestand (Stück) · Einstandspreis</div>
-      </div>
-    </div>
 
+      <div class="formula-card">
+        <div class="formula-name">4.1.3 Arithmetischer Mittelwert (stochastisch)</div>
+        <div class="formula-body">
+          <div class="formula-eq">V̄ₙ₊₁ = (x₁ + x₂ + x₃ + ... + xₙ) / n</div>
+          <div class="formula-hint">n = konstante Periodenzahl</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">Gleitender Mittelwert</div>
+        <div class="formula-body">
+          <div class="formula-eq">V̄ₙ₊₁ = (x₁ + x₂ + x₃ + x₄ + x₅ + x₆) / n</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">Gewogener gleitender Mittelwert</div>
+        <div class="formula-body">
+          <div class="formula-eq">Vₙ₊₁ = (x₁·G₁ + x₂·G₂ + ... + xₙ·Gₙ) / 100</div>
+          <div class="formula-hint">Die Summe der Gewichtungsfaktoren G muss 100 betragen.</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">Exponentielle Glättung 1. Ordnung</div>
+        <div class="formula-body">
+          <div class="formula-eq">Vₙ₊₁ = Vₙ + α · (xₙ − Vₙ)</div>
+          <div class="formula-hint">α = Glättungsfaktor | σ = Standardabweichung</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">4.1.4 Standardabweichung</div>
+        <div class="formula-body">
+          <div class="formula-eq">σ = √( 1/n · Σᵢ₌₁ⁿ (xᵢ − x̄)² )</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">Mittlere absolute Abweichung (MAD)</div>
+        <div class="formula-body">
+          <div class="formula-eq">MAD = 1/n · Σᵢ₌₁ⁿ |xᵢ − Vᵢ|</div>
+        </div>
+      </div>
+
+    </div>
   </div>
+
+  <!-- 4.2 Bestandsrechnung -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num green">4.2</div>
+      <div class="section-title">Bestandsrechnung & Meldebestand</div>
+    </div>
+    <div class="formula-grid">
+
+      <div class="formula-card">
+        <div class="formula-name">Meldebestand (Bestellpunkt)</div>
+        <div class="formula-body">
+          <div class="formula-eq green">Meldebestand = Verbrauch pro Zeiteinheit × Wiederbeschaffungszeit + Sicherheitsbestand</div>
+          <div class="formula-hint">Wiederbeschaffungszeit = Lieferzeit + Prüfzeit</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">Tagesverbrauch</div>
+        <div class="formula-body">
+          <div class="formula-eq green">Tagesverbrauch = Jahresbedarf ÷ 360</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">Fortschreibungsmethode (Endbestand)</div>
+        <div class="formula-body">
+          <div class="formula-eq green">Endbestand = Anfangsbestand + Zugänge − Abgänge</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">Inventurmethode (Verbrauch)</div>
+        <div class="formula-body">
+          <div class="formula-eq green">Verbrauch = Anfangsbestand + Zugänge − Endbestand</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 4.3 Bestell- und Lagerhaltungskosten -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num amber">4.3</div>
+      <div class="section-title">Bestell- und Lagerhaltungskosten</div>
+    </div>
+    <div class="formula-grid">
+
+      <div class="formula-card">
+        <div class="formula-name">Durchschnittlicher Lagerbestand</div>
+        <div class="formula-body">
+          <div class="formula-eq amber">Ø Lagerbestand = (Anfangsbestand + Endbestand) ÷ 2</div>
+          <div class="formula-hint">oder bei 12 Monatsendbeständen:</div>
+          <div class="formula-eq amber">Ø Lagerbestand = (AB + 12 Monatsendbestände) ÷ 13</div>
+          <div class="formula-hint">oder mit Sicherheitsbestand:</div>
+          <div class="formula-eq amber">Ø Lagerbestand = Bestellmenge ÷ 2 + Sicherheitsbestand</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">Lagerhaltungskosten (Lagerkostensatz)</div>
+        <div class="formula-body">
+          <div class="formula-eq amber">Lagerkostensatz (i_L2) in % = gesamte Lagerkosten / Ø Lagerbestandswert · 100</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">Lagerhaltungskosten (Lagerzinssatz)</div>
+        <div class="formula-body">
+          <div class="formula-eq amber">Lagerzinssatz (i_L1) in % = i · Ø Lagerdauer (Tage) / 360 · 100</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">Lagerzinsen in €</div>
+        <div class="formula-body">
+          <div class="formula-eq amber">Lagerzinsen = i_L1 · Ø Lagerbestand (Stück) · Einstandspreis</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">4.3.2 Optimale Bestellmenge (Andler-Formel)</div>
+        <div class="formula-body">
+          <div class="formula-eq amber">x_opt = √( 2 · k_B · x_ges / EP · i_L )</div>
+          <div class="formula-hint">k_B = Bestellkosten pro Bestellung | x_ges = Jahresbedarf | EP = Einstandspreis | i_L = Lagerhaltungskostensatz (Dezimal)</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">Bestellhäufigkeit</div>
+        <div class="formula-body">
+          <div class="formula-eq amber">n_opt = x_ges / x_opt</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">Gesamtkosten bei Bestellmengenoptimierung</div>
+        <div class="formula-body">
+          <div class="formula-eq amber">Gesamtkosten = Bestellkosten + Lagerhaltungskosten</div>
+          <div class="formula-eq amber">= (x_ges/x) · k_B + (x/2) · k_B · i_L</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">Lagerkosten bei Eigenproduktion (i = i_L1 + i_L2)</div>
+        <div class="formula-body">
+          <div class="formula-eq amber">Lagerkosten = Ø Lagerbestand (Stück) · Einstandspreis · i</div>
+          <div class="formula-hint">i = i_L1 + i_L2 (Kapitalmarktzinssatz + Lagerhaltungszinssatz)</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 4.4 Sicherheitsbestand -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num purple">4.4</div>
+      <div class="section-title">Sicherheitsbestand & Sicherheitszeit</div>
+    </div>
+    <div class="formula-grid">
+
+      <div class="formula-card">
+        <div class="formula-name">Sicherheitsbestand (nach Verbrauchswerten)</div>
+        <div class="formula-body">
+          <div class="formula-eq purple">Sicherheitsbestand = Ø Verbrauch pro Tag · Sicherheitszeit in Tagen</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">Sicherheitsbestand (Fehlerfortpflanzungsgesetz)</div>
+        <div class="formula-body">
+          <div class="formula-eq purple">Sicherheitsbestand = √( V² + L² + M² + B² )</div>
+          <div class="formula-hint">V = Verbrauchsabweichung | L = Lieferzeitabweichung | M = Minderlieferung | B = Bestandsabweichung</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">Sicherheitskoeffizient in %</div>
+        <div class="formula-body">
+          <div class="formula-eq purple">Sicherheitskoeffizient = Sicherheitsbestand / Ø Lagerbestand · 100</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">Sicherheitsbestand (statistisch, über MAD)</div>
+        <div class="formula-body">
+          <div class="formula-eq purple">Sicherheitsbestand = SF · MAD</div>
+          <div class="formula-hint">SF = Sicherheitsfaktor (abhängig vom gewünschten Servicegrad)</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">Sicherheitszeit in Tagen</div>
+        <div class="formula-body">
+          <div class="formula-eq purple">Sicherheitszeit = √( TV² + TL² + TM² + TB² )</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 4.6 / 4.7 Bestandskontrolle -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num red">4.7</div>
+      <div class="section-title">Bestandskontrolle – Umschlag & Lagerdauer</div>
+    </div>
+    <div class="formula-grid">
+
+      <div class="formula-card">
+        <div class="formula-name">Lagerumschlagshäufigkeit</div>
+        <div class="formula-body">
+          <div class="formula-eq" style="color:#9b1c1c; background:#fff5f5; border-color:#f8b4b4;">Lagerumschlagshäufigkeit = Verbrauch pro Jahr ÷ Ø Lagerbestand</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">Lagerdauer in Tagen</div>
+        <div class="formula-body">
+          <div class="formula-eq" style="color:#9b1c1c; background:#fff5f5; border-color:#f8b4b4;">Lagerdauer = 360 × Ø Lagerbestand / Verbrauch pro Jahr</div>
+          <div class="formula-hint">oder: Lagerdauer = 360 ÷ Lagerumschlagshäufigkeit</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">Lagerreichweite in Tagen (Produktion)</div>
+        <div class="formula-body">
+          <div class="formula-eq" style="color:#9b1c1c; background:#fff5f5; border-color:#f8b4b4;">Lagerreichweite = Ø Lagerbestand / Ø Verbrauch pro Tag</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">Lagerreichweite in Tagen (Handel)</div>
+        <div class="formula-body">
+          <div class="formula-eq" style="color:#9b1c1c; background:#fff5f5; border-color:#f8b4b4;">Lagerreichweite = (Ø Lagerbestand + offene Bestellungen) / Ø Verbrauch pro Tag</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">Lieferbereitschaftsgrad / Servicegrad</div>
+        <div class="formula-body">
+          <div class="formula-eq" style="color:#9b1c1c; background:#fff5f5; border-color:#f8b4b4;">Lieferbereitschaftsgrad = Menge sofort bedienter Bedarfssituationen / Anzahl aller Bedarfssituationen · 100</div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-name">Termintreue</div>
+        <div class="formula-body">
+          <div class="formula-eq" style="color:#9b1c1c; background:#fff5f5; border-color:#f8b4b4;">Termintreue = Anzahl termingerecht ausgelieferter Aufträge / Anzahl aller Aufträge · 100</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Legende -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num" style="background:#5a5854;">?</div>
+      <div class="section-title">Legende – Formelzeichen</div>
+    </div>
+    <div class="legend-grid">
+      <div class="legend-item"><span class="legend-key">EP</span>Einstandspreis in €/Stück</div>
+      <div class="legend-item"><span class="legend-key">i_L</span>Lagerhaltungskostensatz (Dezimal)</div>
+      <div class="legend-item"><span class="legend-key">i_L1</span>Lagerzinssatz in %</div>
+      <div class="legend-item"><span class="legend-key">i_L2</span>Lagerkostensatz in %</div>
+      <div class="legend-item"><span class="legend-key">k_B</span>Bestellkosten (fix) pro Bestellung</div>
+      <div class="legend-item"><span class="legend-key">k_n</span>fixe Bestellkosten</div>
+      <div class="legend-item"><span class="legend-key">k_v</span>variable Stückkosten</div>
+      <div class="legend-item"><span class="legend-key">n_opt</span>optimale Bestellhäufigkeit</div>
+      <div class="legend-item"><span class="legend-key">x</span>Bestellmenge</div>
+      <div class="legend-item"><span class="legend-key">x_ges</span>Jahresbedarfsmenge</div>
+      <div class="legend-item"><span class="legend-key">x_opt</span>optimale Bestellmenge</div>
+      <div class="legend-item"><span class="legend-key">AB</span>Anfangsbestand</div>
+      <div class="legend-item"><span class="legend-key">EB</span>Endbestand</div>
+      <div class="legend-item"><span class="legend-key">SF</span>Sicherheitsfaktor</div>
+      <div class="legend-item"><span class="legend-key">MAD</span>mittlere absolute Abweichung</div>
+      <div class="legend-item"><span class="legend-key">α</span>Glättungsfaktor</div>
+      <div class="legend-item"><span class="legend-key">σ</span>Standardabweichung</div>
+      <div class="legend-item"><span class="legend-key">V, L, M, B</span>Abweichungen (Verbrauch, Lieferzeit, Minderlieferung, Bestand)</div>
+    </div>
+  </div>
+
 </div>
+
+<footer>Persönliches Lernportal · IHK Fachwirt Logistiksysteme · Nur zur privaten Nutzung</footer>
 
 </body>
 </html>
