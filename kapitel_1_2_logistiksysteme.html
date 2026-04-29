@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kapitel 1.2 – Logistiksysteme</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --surface2: #eeecea;
+    --border: #dddbd6;
+    --text: #1a1917;
+    --text2: #5a5854;
+    --text3: #8a8884;
+    --blue: #1a56db;
+    --blue-bg: #eff4ff;
+    --blue-border: #c3d3fd;
+    --green: #1a7a4a;
+    --green-bg: #f0faf4;
+    --green-border: #a7dfc0;
+    --amber: #92500a;
+    --amber-bg: #fffbf0;
+    --amber-border: #f5d48a;
+    --purple: #5522cc;
+    --purple-bg: #f4f0ff;
+    --purple-border: #c8b8f8;
+    --red: #9b1c1c;
+    --red-bg: #fff5f5;
+    --red-border: #f8b4b4;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+  /* ── Header ── */
+  .site-header {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 0 1.5rem; display: flex; align-items: center; gap: 1rem;
+    height: 56px; position: sticky; top: 0; z-index: 100;
+  }
+  .site-header a { font-size: 13px; color: var(--text3); text-decoration: none; }
+  .site-header a:hover { color: var(--blue); }
+  .header-sep { color: var(--border); }
+  .header-title { font-size: 14px; font-weight: 600; color: var(--text); }
+
+  /* ── Hero ── */
+  .hero { background: var(--surface); border-bottom: 1px solid var(--border); padding: 2rem 1.5rem 1.5rem; }
+  .hero-tag { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--blue); margin-bottom: .5rem; }
+  .hero-title { font-size: 22px; font-weight: 600; margin-bottom: .4rem; }
+  .hero-sub { font-size: 14px; color: var(--text2); }
+
+  /* ── Nav-Chips ── */
+  .nav-chips { background: var(--surface); border-bottom: 1px solid var(--border); padding: .75rem 1.5rem; display: flex; flex-wrap: wrap; gap: .5rem; }
+  .chip {
+    font-size: 12px; font-weight: 500; padding: .3rem .85rem;
+    border-radius: 20px; border: 1px solid var(--border);
+    background: var(--surface2); color: var(--text2);
+    text-decoration: none; cursor: pointer; transition: background .12s;
+  }
+  .chip:hover { background: var(--blue-bg); color: var(--blue); border-color: var(--blue-border); }
+
+  /* ── Layout ── */
+  .content { max-width: 760px; margin: 0 auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
+
+  /* ── Kapitel-Block ── */
+  .chapter {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); overflow: hidden;
+  }
+  .chapter-header {
+    padding: .85rem 1.25rem; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: .85rem;
+  }
+  .ch-num {
+    min-width: 36px; height: 36px; border-radius: var(--radius);
+    font-size: 12px; font-weight: 700; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0; letter-spacing: -.02em;
+  }
+  .ch-blue  { background: var(--blue-bg);   color: var(--blue);   border: 1px solid var(--blue-border); }
+  .ch-green { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
+  .ch-amber { background: var(--amber-bg);  color: var(--amber);  border: 1px solid var(--amber-border); }
+  .ch-purple{ background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
+  .ch-red   { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-border); }
+
+  .chapter-header-text { display: flex; flex-direction: column; gap: 1px; }
+  .ch-label { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text3); }
+  .ch-title { font-size: 15px; font-weight: 600; color: var(--text); }
+
+  /* ── Abschnitte ── */
+  .section { border-bottom: 1px solid var(--border); padding: 1rem 1.25rem; }
+  .section:last-child { border-bottom: none; }
+  .section-title {
+    font-size: 13px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .05em; color: var(--text3); margin-bottom: .6rem;
+  }
+
+  /* ── Erklärungs-Box ── */
+  .explain {
+    font-size: 14px; color: var(--text2); line-height: 1.7;
+    margin-bottom: .75rem;
+  }
+  .explain strong { color: var(--text); font-weight: 600; }
+
+  /* ── Karten-Liste (für Begriffe mit Erklärung) ── */
+  .card-list { display: flex; flex-direction: column; gap: .5rem; }
+  .card-item {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .card-term {
+    padding: .45rem .85rem; font-size: 13px; font-weight: 600;
+    background: var(--surface2); color: var(--text);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: .5rem;
+  }
+  .card-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .dot-blue   { background: var(--blue); }
+  .dot-green  { background: var(--green); }
+  .dot-amber  { background: var(--amber); }
+  .dot-purple { background: var(--purple); }
+  .dot-red    { background: var(--red); }
+  .dot-gray   { background: var(--text3); }
+
+  .card-desc { padding: .45rem .85rem; font-size: 13px; color: var(--text2); line-height: 1.6; }
+  .card-desc strong { color: var(--text); }
+
+  /* ── Einfache Aufzählung ── */
+  .simple-list { list-style: none; display: flex; flex-direction: column; gap: .35rem; }
+  .simple-list li { font-size: 14px; color: var(--text2); padding-left: 1.1rem; position: relative; line-height: 1.6; }
+  .simple-list li::before { content: "–"; position: absolute; left: 0; color: var(--text3); }
+  .simple-list li strong { color: var(--text); }
+
+  /* ── Vergleichs-Grid (2 Spalten) ── */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+  .compare-card {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: .75rem .85rem;
+  }
+  .compare-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: .4rem; }
+  .compare-sub   { font-size: 12px; color: var(--text3); font-weight: 500; margin-bottom: .3rem; }
+  .compare-list  { font-size: 13px; color: var(--text2); list-style: none; display: flex; flex-direction: column; gap: .25rem; }
+  .compare-list li::before { content: "·  "; color: var(--text3); }
+  .compare-list li strong { color: var(--text); }
+
+  /* ── Hinweis-Box ── */
+  .hint-box {
+    margin: .25rem 0 0;
+    border-radius: var(--radius);
+    padding: .55rem .85rem;
+    font-size: 13px; line-height: 1.6;
+  }
+  .hint-blue   { background: var(--blue-bg);   color: var(--blue);   border: 1px solid var(--blue-border); }
+  .hint-green  { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
+  .hint-amber  { background: var(--amber-bg);  color: var(--amber);  border: 1px solid var(--amber-border); }
+  .hint-purple { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
+  .hint-box strong { font-weight: 600; }
+
+  /* ── Strategie-Tabelle ── */
+  .strat-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .strat-table th { background: var(--surface2); color: var(--text2); font-weight: 600; padding: 5px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+  .strat-table td { padding: 5px 10px; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: top; }
+  .strat-table tr:last-child td { border-bottom: none; }
+  .strat-table tr:nth-child(even) td { background: #fafaf8; }
+  .strat-table td strong { color: var(--text); }
+
+  /* ── Fortschritts-Kette (nummerierten Schritte) ── */
+  .step-chain { display: flex; flex-direction: column; gap: 0; }
+  .step-item { display: flex; gap: .75rem; }
+  .step-left { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+  .step-circle {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--blue-bg); border: 1px solid var(--blue-border);
+    color: var(--blue); font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-line { width: 1px; flex: 1; background: var(--border); margin: 2px 0; min-height: 12px; }
+  .step-item:last-child .step-line { display: none; }
+  .step-content { padding: .1rem 0 .75rem; }
+  .step-label { font-size: 13px; font-weight: 600; color: var(--text); }
+  .step-text  { font-size: 13px; color: var(--text2); margin-top: .15rem; line-height: 1.55; }
+
+  /* ── INCOTERM-Tabelle ── */
+  .inco-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .inco-table th { background: var(--surface2); color: var(--text2); font-weight: 600; padding: 5px 8px; text-align: left; border-bottom: 1px solid var(--border); }
+  .inco-table td { padding: 5px 8px; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: top; }
+  .inco-table tr:last-child td { border-bottom: none; }
+  .code { font-family: var(--mono); font-weight: 500; color: var(--text); }
+  .seller-low  { background: #f0faf4; color: #1a7a4a; font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 10px; display: inline-block; }
+  .seller-mid  { background: var(--amber-bg); color: var(--amber); font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 10px; display: inline-block; }
+  .seller-high { background: var(--red-bg); color: var(--red); font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 10px; display: inline-block; }
+
+  /* ── Abfall-Hierarchie ── */
+  .hierarchy { display: flex; flex-direction: column; gap: .3rem; }
+  .hier-item {
+    border-radius: var(--radius); padding: .45rem .85rem;
+    font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: .6rem;
+  }
+  .hier-1 { background: #f0faf4; color: #1a7a4a; border: 1px solid #a7dfc0; }
+  .hier-2 { background: #eff4ff; color: #1a56db; border: 1px solid #c3d3fd; }
+  .hier-3 { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+  .hier-4 { background: #fff5f5; color: #c05621; border: 1px solid #f8b4b4; }
+  .hier-5 { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+  .hier-num { min-width: 20px; height: 20px; border-radius: 50%; background: rgba(0,0,0,.07); display: flex; align-items: center; justify-content: center; font-size: 11px; }
+
+  footer { text-align: center; padding: 2rem 1rem; font-size: 12px; color: var(--text3); border-top: 1px solid var(--border); margin-top: 1rem; }
+
+  @media (max-width: 520px) {
+    .compare-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="index.html">← Übersicht</a>
+  <span class="header-sep">|</span>
+  <span class="header-title">Kapitel 1.2 – Logistiksysteme</span>
+</header>
+
+<div class="hero">
+  <div class="hero-tag">IHK Fachwirt Logistiksysteme · Kapitel 1.2</div>
+  <div class="hero-title">Logistische Abläufe und Logistiksystemanalyse</div>
+  <div class="hero-sub">Grundlagen · Transport & Umschlag · Lager & Kommissionierung · Beschaffungs-, Produktions- und Distributionslogistik · Entsorgung · Folie 111–266</div>
+</div>
+
+<nav class="nav-chips">
+  <a class="chip" href="#grundlagen">1.2.1 Grundlagen</a>
+  <a class="chip" href="#ik">1.2.2 I&K-Systeme</a>
+  <a class="chip" href="#transport">1.2.3 Transport</a>
+  <a class="chip" href="#lager">1.2.4 Lager & Kommissionierung</a>
+  <a class="chip" href="#subsysteme">1.2.5 Subsysteme</a>
+  <a class="chip" href="#materialfluss">1.2.6 Materialflussanalyse</a>
+</nav>
+
+<div class="content">
+
+  <!-- ══════════════════════════════════════════════════════════
+       1.2.1 GRUNDLAGEN
+  ══════════════════════════════════════════════════════════ -->
+  <div id="grundlagen" class="chapter">
+    <div class="chapter-header">
+      <div class="ch-num ch-blue">1.2.1</div>
+      <div class="chapter-header-text">
+        <span class="ch-label">Grundlagen</span>
+        <span class="ch-title">Grundlagen von Logistiksystemen</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Was ist ein Logistiksystem?</div>
+      <div class="explain">
+        Ein Logistiksystem besteht aus <strong>festen Elementen</strong> (dauerhafte Bestandteile) und <strong>Objekten</strong> (Güter, Personen, Informationen), die durch das System fließen. Die festen Elemente sind alle technischen und organisatorischen Einrichtungen, die nötig sind um die logistische Leistung zu erbringen – z.B. IT-Systeme, Maschinen, Transportwege.
+      </div>
+      <div class="card-list">
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-blue"></span>Transport</div>
+          <div class="card-desc">Das Gut wird <strong>räumlich bewegt</strong> – von A nach B. Beispiel: LKW bringt Ware vom Lager zum Kunden.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-green"></span>Umschlag</div>
+          <div class="card-desc"><strong>Quantitative Veränderung</strong> – Ware wird umgeladen, zusammengefasst oder aufgeteilt. Beispiel: Pakete werden im Paketzentrum auf verschiedene LKW verteilt.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-amber"></span>Lagerung</div>
+          <div class="card-desc"><strong>Zeitliche (und ggf. qualitative) Veränderung</strong> – Ware wartet auf den nächsten Schritt. Beispiel: Rohstoffe warten im Lager auf die Produktion.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-purple"></span>Kommissionierung</div>
+          <div class="card-desc"><strong>Quantitative + qualitative Veränderung</strong> – aus einem Lager werden die richtigen Artikel in der richtigen Menge für einen Auftrag zusammengestellt. Beispiel: Online-Bestellung wird im Lager zusammengepackt.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Steuerung durch Informationen</div>
+      <div class="explain">
+        Jeder Materialfluss (Ware bewegt sich) hat immer auch einen <strong>Informationsfluss</strong> (Daten laufen parallel mit). Informationen starten, steuern, kontrollieren und schließen Prozesse ab.
+      </div>
+      <div class="card-list">
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-blue"></span>Kurzes S – Make to Stock</div>
+          <div class="card-desc">Ware wird auf Vorrat produziert, der Kundenauftrag kommt erst danach. <strong>Beispiel: Lebensmittel, Haushaltsgeräte</strong> – du kaufst sie aus dem Regal, nicht auf Bestellung.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-amber"></span>Mittleres S – Make to Order</div>
+          <div class="card-desc">Produktion startet erst nach Auftragseingang, aber mit Standardteilen. <strong>Beispiel: Auto</strong> – du bestellst Farbe und Ausstattung, das Fahrzeug wird dann gebaut.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-red"></span>Langes S – Engineer to Order</div>
+          <div class="card-desc">Erst Konstruktion, dann Fertigung. <strong>Beispiel: Sondermaschinenbau</strong> – eine Spezialmaschine wird komplett individuell geplant und gebaut.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       1.2.2 I&K-SYSTEME
+  ══════════════════════════════════════════════════════════ -->
+  <div id="ik" class="chapter">
+    <div class="chapter-header">
+      <div class="ch-num ch-green">1.2.2</div>
+      <div class="chapter-header-text">
+        <span class="ch-label">Informationssysteme</span>
+        <span class="ch-title">Informations- und Kommunikationssysteme</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Das Ziel von I&K-Systemen</div>
+      <div class="explain">
+        Informationssysteme in der Logistik sorgen dafür, dass immer die richtigen Informationen zur richtigen Zeit am richtigen Ort verfügbar sind – zu möglichst niedrigen Kosten. Ohne funktionierende I&K-Systeme läuft in modernen Logistikbetrieben nichts.
+      </div>
+      <div class="hint-box hint-green">
+        <strong>Merksatz:</strong> Richtige Information · richtige Zeit · richtige Menge · richtige Qualität · richtiger Ort · richtige Kosten
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Informationsarten im logistischen System</div>
+      <div class="card-list">
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-blue"></span>Vorbereitende Informationen</div>
+          <div class="card-desc">Kommen vor dem eigentlichen Prozess. Beispiel: Bestellauftrag, Produktionsplan.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-green"></span>Vorauseilende Informationen</div>
+          <div class="card-desc">Laufen dem Gut voraus. Beispiel: Lieferavis – der Empfänger weiß schon, dass eine Lieferung kommt, bevor sie da ist.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-amber"></span>Begleitende Informationen</div>
+          <div class="card-desc">Reisen mit dem Gut mit. Beispiel: Lieferschein, Frachtbrief, Barcode auf dem Paket.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-purple"></span>Abschließende Informationen</div>
+          <div class="card-desc">Bestätigen den Abschluss des Prozesses. Beispiel: Eingangsbestätigung, Rechnung.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Datenerfassung & Übertragungsstandards</div>
+      <div class="explain">Wie werden Daten erfasst und ausgetauscht?</div>
+      <div class="compare-grid">
+        <div class="compare-card">
+          <div class="compare-title">Datenerfassungsmethoden</div>
+          <ul class="compare-list">
+            <li><strong>Optisch:</strong> Barcode, QR-Code Scanner</li>
+            <li><strong>Funk:</strong> RFID – Chips im Gut werden per Funk ausgelesen (kein Sichtkontakt nötig)</li>
+            <li><strong>Analog/Digital:</strong> manuelle Eingabe, Sensoren</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <div class="compare-title">EDI-Übertragungsstandards</div>
+          <ul class="compare-list">
+            <li><strong>EDIFACT:</strong> international, branchenübergreifend</li>
+            <li><strong>SEDAS:</strong> Handel & Konsumgüter</li>
+            <li><strong>VDA:</strong> Automobilindustrie</li>
+            <li><strong>SWIFT:</strong> Finanzwesen</li>
+          </ul>
+        </div>
+      </div>
+      <div class="hint-box hint-blue" style="margin-top:.75rem;">
+        <strong>EDI</strong> (Electronic Data Interchange) = standardisierter elektronischer Datenaustausch zwischen Unternehmen. Statt Fax oder Post werden Bestellungen, Lieferscheine usw. automatisch zwischen IT-Systemen übertragen.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       1.2.3 TRANSPORT- UND UMSCHLAGSYSTEME
+  ══════════════════════════════════════════════════════════ -->
+  <div id="transport" class="chapter">
+    <div class="chapter-header">
+      <div class="ch-num ch-amber">1.2.3</div>
+      <div class="chapter-header-text">
+        <span class="ch-label">Transport & Umschlag</span>
+        <span class="ch-title">Transport- und Umschlagsysteme</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Was ist Transport?</div>
+      <div class="explain">
+        Transport = Überwindung räumlicher Distanzen von Personen, Gütern und Informationen mit manuellen oder technischen Mitteln (DIN 30781). Eine <strong>Transportkette</strong> ist die Folge mehrerer miteinander verknüpfter Transportvorgänge von einer Quelle zu einem Ziel.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Fördermittel – innerbetrieblicher Transport</div>
+      <div class="explain">
+        Fördermittel sind alle Geräte, die Güter <strong>innerhalb eines Betriebs</strong> bewegen. Man unterscheidet zwei grundlegende Arten:
+      </div>
+      <div class="compare-grid">
+        <div class="compare-card">
+          <div class="compare-title">Stetigförderer</div>
+          <div class="compare-sub">Dauerhafter, gleichmäßiger Materialfluss</div>
+          <ul class="compare-list">
+            <li>Gurtförderer, Rollenbahn, Kettenförderer</li>
+            <li><strong>Vorteil:</strong> hohe Förderleistung, niedrige Betriebskosten, einfach automatisierbar</li>
+            <li><strong>Nachteil:</strong> hohe Investition, starre Strecke, ortsgebunden</li>
+            <li><strong>Einsatz:</strong> gleiche Güter, gleiche Strecke, kontinuierlich</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <div class="compare-title">Unstetigförderer</div>
+          <div class="compare-sub">Bedarfsweiser, unterbrochener Transport</div>
+          <ul class="compare-list">
+            <li>Stapler, Kräne, Aufzüge</li>
+            <li><strong>Vorteil:</strong> flexibel, vielseitig einsetzbar</li>
+            <li><strong>Nachteil:</strong> weniger Dauerbetrieb möglich</li>
+            <li><strong>Einsatz:</strong> kein kontinuierlicher Güterstrom notwendig</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Stapler – die wichtigsten Merkmale</div>
+      <div class="explain">Stapler sind die häufigsten Unstetigförderer im Lager. Wichtig zu wissen:</div>
+      <ul class="simple-list">
+        <li><strong>Bauarten:</strong> Frontstapler (Standard), Schubmaststapler (enge Gänge), Gabelhubwagen (flache Lasten), Seitenstapler, Schmalgangstapler (Hochregal)</li>
+        <li><strong>Tragkraft beachten</strong> – jeder Stapler hat eine Traglastkurve, die angibt wie viel bei welchem Schwerpunktsabstand gehoben werden darf</li>
+        <li>Bedienung <strong>nur durch ausgebildetes Personal</strong></li>
+        <li>Keine Personen unter schwebenden Lasten</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Außerbetriebliche Transportsysteme – Vor- und Nachteile</div>
+      <div class="explain">Für Transporte zwischen Standorten gibt es verschiedene Verkehrsträger. Jeder hat Stärken und Schwächen:</div>
+      <table class="strat-table">
+        <tr>
+          <th>Verkehrsträger</th>
+          <th>Vorteile</th>
+          <th>Nachteile</th>
+        </tr>
+        <tr>
+          <td><strong>Straße (LKW)</strong></td>
+          <td>Günstig, flexibel, flächendeckend verfügbar</td>
+          <td>Witterungsabhängig, Ladegewicht begrenzt, nicht alle Güter erlaubt</td>
+        </tr>
+        <tr>
+          <td><strong>Schiene</strong></td>
+          <td>Hohes Ladegewicht, wetterunabhängiger, Gefahrguttransport möglich</td>
+          <td>Gleisanschluss nötig, weniger flexibel, Zusatzkosten bei Umschlag</td>
+        </tr>
+        <tr>
+          <td><strong>Binnenschiff</strong></td>
+          <td>Extrem hohes Ladegewicht, sehr günstig (v.a. Schüttgut)</td>
+          <td>Anlegestelle nötig, langsam, begrenztes Wasserstraßennetz</td>
+        </tr>
+        <tr>
+          <td><strong>Seeschiff</strong></td>
+          <td>Riesige Laderäume, Spezialschiffe für alle Güterarten</td>
+          <td>Hafen nötig, langsam, an Schifffahrtsrouten gebunden</td>
+        </tr>
+        <tr>
+          <td><strong>Luftfracht</strong></td>
+          <td>Sehr schnell, zuverlässig, termintreu</td>
+          <td>Teuerste Option, oft Spezialverpackung nötig, sehr aufwändig</td>
+        </tr>
+        <tr>
+          <td><strong>Kombinierter Verkehr</strong></td>
+          <td>Nutzt Vorteile verschiedener Träger</td>
+          <td>Zeitverlust an Umschlagpunkten, hoher Koordinationsaufwand</td>
+        </tr>
+      </table>
+      <div class="hint-box hint-amber" style="margin-top:.75rem;">
+        <strong>Werkverkehr:</strong> Ein Unternehmen transportiert mit eigenem Fahrzeug, eigenem Personal und für den eigenen Bedarf. Kein gewerblicher Transport.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Speditionskonzepte – wie Güter gebündelt werden</div>
+      <div class="card-list">
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-blue"></span>Komplettladung (FTL / Full Truck Load)</div>
+          <div class="card-desc">Ein LKW fährt nur für einen Kunden. <strong>Günstig bei großen Mengen.</strong></div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-green"></span>Teilladung (LTL)</div>
+          <div class="card-desc">Mehrere Kunden teilen sich einen LKW. Günstig bei kleinen Mengen, aber etwas langsamer.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-amber"></span>Milk-Run</div>
+          <div class="card-desc">Ein Fahrzeug fährt eine <strong>feste Rundtour</strong> und beliefert oder sammelt dabei mehrere Stationen. Bekannt aus der Automobilindustrie – Zulieferer werden in einer Runde abgefahren.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-purple"></span>Cross-Docking</div>
+          <div class="card-desc">Ware kommt an einem zentralen Punkt an, wird <strong>sofort umgeladen</strong> (kein Einlagern) und direkt weitergeschickt. Spart Lagerzeit und -kosten.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-red"></span>Hub-and-Spoke</div>
+          <div class="card-desc">Güter werden von Regionaldepots (Spokes) zu einem Zentraldepot (Hub) gebracht, dort gebündelt und weiterverteilt. So wie Flughäfen funktionieren – viele kleine Zubringerflieger zu einem großen Knotenpunkt.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">INCOTERMS 2020 – wer zahlt was?</div>
+      <div class="explain">
+        INCOTERMS sind <strong>international anerkannte Handelsklauseln</strong>, die festlegen: Wer trägt die Transportkosten? Wer trägt das Risiko (Gefahrenübergang)? Wer schließt die Versicherung ab? Sie müssen <strong>ausdrücklich vereinbart</strong> werden und immer mit einem konkreten Ort ergänzt werden (z.B. „FOB Hamburg").
+      </div>
+      <table class="inco-table">
+        <tr>
+          <th>Gruppe</th>
+          <th>Klauseln</th>
+          <th>Kosten für Verkäufer</th>
+          <th>Kurzbeschreibung</th>
+        </tr>
+        <tr>
+          <td><strong>E</strong></td>
+          <td class="code">EXW</td>
+          <td><span class="seller-low">minimal</span></td>
+          <td>Käufer holt ab. Verkäufer stellt Ware am eigenen Werk bereit – mehr macht er nicht.</td>
+        </tr>
+        <tr>
+          <td rowspan="3"><strong>F</strong></td>
+          <td class="code">FCA</td>
+          <td rowspan="3"><span class="seller-low">gering</span></td>
+          <td>Verkäufer liefert an benannten Frachtführer (z.B. Spediteur des Käufers).</td>
+        </tr>
+        <tr>
+          <td class="code">FAS</td>
+          <td>Ware wird längsseits des Schiffs bereitgestellt. Ab da Risiko beim Käufer.</td>
+        </tr>
+        <tr>
+          <td class="code">FOB</td>
+          <td>Ware wird an Bord des Schiffs gebracht. Danach Käufer.</td>
+        </tr>
+        <tr>
+          <td rowspan="4"><strong>C</strong></td>
+          <td class="code">CFR</td>
+          <td rowspan="4"><span class="seller-mid">mittel</span></td>
+          <td>Verkäufer zahlt Fracht bis Zielhafen, Risiko geht aber früher über.</td>
+        </tr>
+        <tr>
+          <td class="code">CIF</td>
+          <td>Wie CFR, aber Verkäufer schließt zusätzlich Versicherung ab.</td>
+        </tr>
+        <tr>
+          <td class="code">CPT</td>
+          <td>Verkäufer zahlt Fracht bis benannten Zielort.</td>
+        </tr>
+        <tr>
+          <td class="code">CIP</td>
+          <td>Wie CPT, aber mit Versicherung durch Verkäufer.</td>
+        </tr>
+        <tr>
+          <td rowspan="3"><strong>D</strong></td>
+          <td class="code">DAP</td>
+          <td rowspan="3"><span class="seller-high">hoch</span></td>
+          <td>Verkäufer liefert bis zum benannten Zielort (nicht entladen).</td>
+        </tr>
+        <tr>
+          <td class="code">DAT / DPU</td>
+          <td>Verkäufer liefert und entlädt am Terminal.</td>
+        </tr>
+        <tr>
+          <td class="code">DDP</td>
+          <td>Maximale Pflicht für Verkäufer: geliefert, verzollt, alles bezahlt.</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Transportdokumente & Verträge</div>
+      <div class="compare-grid">
+        <div class="compare-card">
+          <div class="compare-title">Frachtdokumente nach Verkehrsträger</div>
+          <ul class="compare-list">
+            <li><strong>CMR:</strong> Straße (internationaler Frachtbrief)</li>
+            <li><strong>COTIF:</strong> Bahn</li>
+            <li><strong>Warschauer Abkommen:</strong> Luftfracht</li>
+            <li><strong>UNCLOS:</strong> Seeverkehr</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <div class="compare-title">Vertragsarten (BGB/HGB)</div>
+          <ul class="compare-list">
+            <li><strong>Kaufvertrag (§ 433 BGB):</strong> Übergabe mangelfreier Sache gegen Bezahlung</li>
+            <li><strong>Werkvertrag (§ 631 BGB):</strong> Herstellung eines versprochenen Werkes</li>
+            <li><strong>Frachtvertrag (§ 407 HGB):</strong> Transport gegen Bezahlung</li>
+            <li><strong>Speditionsvertrag (§ 453 HGB):</strong> Organisation des Transports</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       1.2.4 LAGER- UND KOMMISSIONIERSYSTEME
+  ══════════════════════════════════════════════════════════ -->
+  <div id="lager" class="chapter">
+    <div class="chapter-header">
+      <div class="ch-num ch-purple">1.2.4</div>
+      <div class="chapter-header-text">
+        <span class="ch-label">Lager & Kommissionierung</span>
+        <span class="ch-title">Lager- und Kommissioniersysteme</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Die 3 Säulen eines Lagersystems</div>
+      <div class="explain">
+        Jedes Lager hängt von drei Kernbereichen ab. Verändert man einen davon, wirkt sich das auf die anderen aus.
+      </div>
+      <div class="card-list">
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-blue"></span>1. Lagergestaltung – wie das Lager gebaut ist</div>
+          <div class="card-desc">Abhängig von: Art des Lagergutes · geplanter Lagermenge · gewünschter Zugriffszeit · Transportwegen · Ziel der Lagerhaltung.<br><br>
+          <strong>Lagerbauarten:</strong> Offenes Lager (Schüttgut, im Freien) · Halboffenes Lager (überdacht) · Geschlossenes Lager (Halle) · Speziallager (Silo, Tank, Gaslager).<br><br>
+          <strong>Lagereinrichtung statisch vs. dynamisch:</strong> Bei statischer Lagerung bleibt das Gut am festen Platz (Palettenregal). Bei dynamischer Lagerung bewegt sich das Gut selbst durch das Lager (Durchlaufregal – Ware fällt durch Schwerkraft nach vorne).</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-amber"></span>2. Lagerorganisation – wie das Lager organisiert ist</div>
+          <div class="card-desc">
+          <strong>Festplatzsystem (Magazinprinzip):</strong> Jedes Gut hat immer denselben festen Platz. Kein EDV-System nötig, aber die Fläche wird nicht optimal genutzt (leere Plätze bleiben reserviert).<br><br>
+          <strong>Freiplatzsystem (chaotische Lagerung):</strong> Jedes Gut bekommt einen freien Platz zugewiesen – EDV verwaltet wo was liegt. Optimale Flächennutzung, aber bei IT-Ausfall ist nichts mehr auffindbar.<br><br>
+          <strong>Ein-/Auslagerungsstrategien:</strong><br>
+          · FIFO (first in, first out) → Ware die zuerst kam, kommt zuerst raus → Durchlaufregal<br>
+          · LIFO (last in, first out) → zuletzt eingelagert, zuerst entnommen → Einschubregal<br>
+          · HIFO (highest in, first out) → teuerste Ware zuerst<br>
+          · LOFO (lowest in, first out) → günstigste Ware zuerst<br>
+          · FEFO (first expired, first out) → was zuerst abläuft, kommt zuerst raus → Lebensmittel, Pharma</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-green"></span>3. Arbeitsabläufe im Lager – was im Lager passiert</div>
+          <div class="card-desc">Wareneingang · Kommissionierung · Warenausgang · Lagerpflege · Lagerkontrolle · Lagerbestandsführung · Entsorgung</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Wareneingangsablauf – Schritt für Schritt</div>
+      <div class="explain">Was passiert, wenn eine Lieferung ankommt?</div>
+      <div class="step-chain">
+        <div class="step-item">
+          <div class="step-left"><div class="step-circle">1</div><div class="step-line"></div></div>
+          <div class="step-content"><div class="step-label">Prüfung Bestelldaten mit Lieferschein</div><div class="step-text">Stimmt die gelieferte Ware mit der Bestellung überein?</div></div>
+        </div>
+        <div class="step-item">
+          <div class="step-left"><div class="step-circle">2</div><div class="step-line"></div></div>
+          <div class="step-content"><div class="step-label">Transportschadenkontrolle</div><div class="step-text">Ist die Verpackung beschädigt? Gibt es äußere Schäden?</div></div>
+        </div>
+        <div class="step-item">
+          <div class="step-left"><div class="step-circle">3</div><div class="step-line"></div></div>
+          <div class="step-content"><div class="step-label">Freigabe zur Entladung</div><div class="step-text">Erst nach OK darf der LKW entladen werden.</div></div>
+        </div>
+        <div class="step-item">
+          <div class="step-left"><div class="step-circle">4</div><div class="step-line"></div></div>
+          <div class="step-content"><div class="step-label">Annahme & erste Sichtkontrolle</div><div class="step-text">Ware wird angenommen und grob geprüft.</div></div>
+        </div>
+        <div class="step-item">
+          <div class="step-left"><div class="step-circle">5</div><div class="step-line"></div></div>
+          <div class="step-content"><div class="step-label">Eingangskontrolle</div><div class="step-text">Bestellmenge, Lieferschein und Liefermenge werden abgeglichen.</div></div>
+        </div>
+        <div class="step-item">
+          <div class="step-left"><div class="step-circle">6</div><div class="step-line"></div></div>
+          <div class="step-content"><div class="step-label">Qualitätskontrolle & Mängelprüfung</div><div class="step-text">Stichprobenentnahme, technische Prüfung.</div></div>
+        </div>
+        <div class="step-item">
+          <div class="step-left"><div class="step-circle">7</div><div class="step-line"></div></div>
+          <div class="step-content"><div class="step-label">ggf. Zwischenlagerung gesperrter Bereich</div><div class="step-text">Bei Mängeln wird die Ware separiert bis zur Klärung.</div></div>
+        </div>
+        <div class="step-item">
+          <div class="step-left"><div class="step-circle">8</div><div class="step-line"></div></div>
+          <div class="step-content"><div class="step-label">Erfassung im Warenwirtschaftssystem</div><div class="step-text">Die Ware wird digital erfasst und ein Lagerplatz vergeben.</div></div>
+        </div>
+        <div class="step-item">
+          <div class="step-left"><div class="step-circle">9</div></div>
+          <div class="step-content"><div class="step-label">Einlagerung</div><div class="step-text">Ware geht auf den zugewiesenen Lagerplatz.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Kommissionierung – Auftragsbearbeitung im Lager</div>
+      <div class="explain">
+        Kommissionierung = aus dem Lager die <strong>richtigen Artikel</strong> in der <strong>richtigen Menge</strong> für einen konkreten Auftrag zusammenstellen. Grundlegende Fragen:
+      </div>
+      <div class="card-list">
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-blue"></span>Person zur Ware vs. Ware zur Person</div>
+          <div class="card-desc"><strong>Person zur Ware:</strong> Der Kommissionierer geht durchs Lager und sucht die Artikel. Klassisch, günstig aber zeitaufwändig.<br><strong>Ware zur Person:</strong> Automatisiertes System bringt die Ware zum Kommissionierer. Schneller, teurer, weniger Fehler.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-green"></span>Einstufig vs. Mehrstufig</div>
+          <div class="card-desc"><strong>Einstufig:</strong> Ein Auftrag wird vollständig abgearbeitet, bevor der nächste beginnt.<br><strong>Mehrstufig:</strong> Mehrere Aufträge werden gleichzeitig oder nacheinander bearbeitet (effizienter bei vielen kleinen Aufträgen).</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-amber"></span>Roll-Cage-Sequencing</div>
+          <div class="card-desc">Rollcontainer werden so beladen, dass die Artikel in der <strong>Reihenfolge der späteren Entladung</strong> liegen. Besonders im Lebensmittelhandel – der Markt muss die Ware nicht mehr sortieren.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Kommissioniertechniken</div>
+      <div class="card-list">
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-gray"></span>Pick-by-List</div>
+          <div class="card-desc">Klassische Pickliste auf Papier. Günstig, aber fehleranfällig und langsam.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-blue"></span>Pick-by-Voice</div>
+          <div class="card-desc">Das System sagt dem Kommissionierer per Kopfhörer, was er wo entnehmen soll. Er bestätigt per Sprachbefehl. Hände und Augen frei.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-green"></span>Pick-by-Light</div>
+          <div class="card-desc">Leuchtanzeigen am Regalfach zeigen an, welche Menge entnommen werden soll. Sehr schnell bei wenigen, festen Artikeln.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-amber"></span>Pick-by-Vision</div>
+          <div class="card-desc">Datenbrille zeigt dem Kommissionierer direkt im Sichtfeld wo er hin muss und was er nehmen soll. Modernste Technologie.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Inventur – Lagerbestandskontrolle</div>
+      <div class="explain">Inventur = Bestandsaufnahme aller Güter im Lager. Rechtlich vorgeschrieben (§ 240 / § 241 HGB).</div>
+      <div class="card-list">
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-blue"></span>Stichtagsinventur (§ 240 HGB)</div>
+          <div class="card-desc">Alles wird <strong>an einem bestimmten Tag</strong> gezählt – typischerweise zum Jahresende. Das Lager steht dabei oft still.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-green"></span>Permanente Inventur (§ 241 HGB)</div>
+          <div class="card-desc">Bestände werden laufend über das Jahr verteilt aufgenommen. Am Stichtag braucht man nur die aktuellen Buchbestände. Lager muss nicht stillstehen.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-amber"></span>Stichprobeninventur (§ 241 HGB)</div>
+          <div class="card-desc">Nur ein statistisch repräsentativer Teil der Bestände wird gezählt. Schnell, aber nicht für alle Artikel geeignet.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-purple"></span>Verlegte Inventur (§ 241 HGB)</div>
+          <div class="card-desc">Zählung erfolgt <strong>vor oder nach</strong> dem Bilanzstichtag (bis zu 3 Monate vorher oder 2 Monate nachher) – der Bestand wird dann rechnerisch auf den Stichtag fortgeschrieben.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       1.2.5 SUBSYSTEME
+  ══════════════════════════════════════════════════════════ -->
+  <div id="subsysteme" class="chapter">
+    <div class="chapter-header">
+      <div class="ch-num ch-red">1.2.5</div>
+      <div class="chapter-header-text">
+        <span class="ch-label">Subsysteme</span>
+        <span class="ch-title">Beschaffungs-, Produktions-, Distributions- und Entsorgungslogistik</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Die 4 Bereiche der Logistik</div>
+      <div class="compare-grid">
+        <div class="compare-card">
+          <div class="compare-title">1. Beschaffungslogistik</div>
+          <ul class="compare-list">
+            <li>Bedarfsplanung, Wareneingang, Lagerung, Transport, Bereitstellung für die Produktion</li>
+            <li>Ziel: richtiges Material zur richtigen Zeit am richtigen Ort</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <div class="compare-title">2. Produktionslogistik</div>
+          <ul class="compare-list">
+            <li>Material innerhalb der Produktion bereitstellen und transportieren</li>
+            <li>Ziel: kurze Durchlaufzeiten, geringe Bestände, hohe Auslastung</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <div class="compare-title">3. Distributionslogistik</div>
+          <ul class="compare-list">
+            <li>Fertigprodukte vom Unternehmen zum Kunden bringen</li>
+            <li>Ziel: hoher Lieferservice, pünktliche Lieferung, geringe Kosten</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <div class="compare-title">4. Entsorgungslogistik (Reverse)</div>
+          <ul class="compare-list">
+            <li>Retouren, Reperatur, Recycling, Abfallbeseitigung</li>
+            <li>Ziel: Ressourcen schonen, Kosten senken, Gesetze einhalten</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Beschaffungsstrategien im Detail</div>
+
+      <div class="explain"><strong>Bereitstellungsmethoden – wie wird Material verfügbar gemacht?</strong></div>
+      <div class="card-list">
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-blue"></span>Bestandsoptimiert (Vorratshaltung)</div>
+          <div class="card-desc">Material wird auf Vorrat bestellt und gelagert. Vorteil: immer verfügbar. Nachteil: Kapitalbindung, Lagerkosten.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-green"></span>Just-in-time (JIT)</div>
+          <div class="card-desc">Material wird <strong>genau dann</strong> geliefert, wenn es gebraucht wird – kein Lager nötig. Vorteil: keine Lagerkosten. Nachteil: hohe Abhängigkeit vom Lieferanten.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-amber"></span>Just-in-Sequence (JIS)</div>
+          <div class="card-desc">Noch präziser als JIT – Material wird nicht nur rechtzeitig, sondern <strong>in der richtigen Reihenfolge</strong> angeliefert. Standard in der Automobilindustrie (Sitze kommen in der Reihenfolge der Fahrzeuge am Band an).</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-purple"></span>KANBAN</div>
+          <div class="card-desc">Selbststeuerndes System: Ein Behälter mit Material hat eine Karte (Kanban). Wenn der Behälter leer ist, wird die Karte als Bestellsignal verwendet. Neues Material kommt automatisch nach. <strong>Voraussetzungen:</strong> hohe Prozesskontinuität, harmonisierte Kapazitäten, geringe Variantenvielfalt, kurze Rüstzeiten, räumliche Nähe.</div>
+        </div>
+      </div>
+
+      <div class="explain" style="margin-top:1rem;"><strong>Sourcing-Strategien – von wie vielen Lieferanten kauft man?</strong></div>
+      <table class="strat-table">
+        <tr><th>Strategie</th><th>Erklärung</th><th>Vorteil</th><th>Risiko</th></tr>
+        <tr>
+          <td><strong>Single Sourcing</strong></td>
+          <td>Nur ein Lieferant für ein Material</td>
+          <td>Enge Partnerschaft, günstiger</td>
+          <td>Totalabhängigkeit – fällt der Lieferant aus, steht die Produktion</td>
+        </tr>
+        <tr>
+          <td><strong>Dual Sourcing</strong></td>
+          <td>Zwei Lieferanten für ein Material</td>
+          <td>Sicherheit durch Zweitslieferant</td>
+          <td>Etwas höherer Koordinationsaufwand</td>
+        </tr>
+        <tr>
+          <td><strong>Multiple Sourcing</strong></td>
+          <td>Viele Lieferanten für ein Material</td>
+          <td>Maximale Versorgungssicherheit, Wettbewerb</td>
+          <td>Kein Mengenrabatt, hoher Verwaltungsaufwand</td>
+        </tr>
+      </table>
+
+      <div class="explain" style="margin-top:1rem;"><strong>Sourcing geografisch:</strong></div>
+      <ul class="simple-list">
+        <li><strong>Local Sourcing:</strong> Lieferanten in der Nähe (kurze Wege, schnell, aber ggf. teurer)</li>
+        <li><strong>Global Sourcing:</strong> Lieferanten weltweit (günstiger, aber lange Transportwege, höheres Risiko)</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Produktionslogistik</div>
+      <div class="explain">Die Produktionslogistik stellt sicher, dass Material <strong>innerhalb des Betriebs</strong> zur richtigen Zeit am richtigen Ort ist.</div>
+      <div class="card-list">
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-blue"></span>Durchlaufzeitenplanung</div>
+          <div class="card-desc">
+          Die Durchlaufzeit setzt sich zusammen aus: <strong>Bearbeitungszeit + Transportzeit + Kontrollzeit + Liegezeit/Wartezeit</strong>.<br><br>
+          Die Liegezeit ist oft der größte Anteil – hier liegt das größte Einsparpotenzial!<br><br>
+          <strong>Auswirkungen einer langen Durchlaufzeit:</strong> höhere Kosten · mehr gebundenes Kapital · weniger Flexibilität · geringere Liefertreue · unzufriedene Kunden.
+          </div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-green"></span>Push vs. Pull</div>
+          <div class="card-desc"><strong>Push (Bringsystem):</strong> Die vorgelagerte Stufe produziert und „schiebt" das Material zur nächsten Stufe – unabhängig davon ob es dort gerade gebraucht wird. Kann zu Überbeständen führen.<br><br><strong>Pull (Holsystem):</strong> Die nachgelagerte Stufe „zieht" sich Material nur wenn sie es tatsächlich braucht. Verhindert Überproduktion. KANBAN ist ein Pull-System.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-amber"></span>Vorwärts- vs. Rückwärtsterminierung</div>
+          <div class="card-desc"><strong>Vorwärtsterminierung:</strong> Startet vom frühestmöglichen Starttermin und berechnet, wann die Ware fertig sein kann.<br><strong>Rückwärtsterminierung:</strong> Startet vom gewünschten Liefertermin und berechnet rückwärts, wann mit der Produktion begonnen werden muss. In der Praxis die häufigere Methode.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Distributionslogistik</div>
+      <div class="explain">Die Distributionslogistik bringt Fertigprodukte vom Unternehmen zum Kunden. Der wichtigste Erfolgsfaktor: der <strong>Lieferservice</strong>.</div>
+      <div class="card-list">
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-blue"></span>Lieferservice – die 3 Kerndimensionen</div>
+          <div class="card-desc">
+          · <strong>Lieferzeit:</strong> Wie lange dauert es vom Auftrag bis zur Anlieferung?<br>
+          · <strong>Termintreue:</strong> Wird der angekündigte Termin eingehalten?<br>
+          · <strong>Lieferbereitschaft:</strong> Ist die Ware sofort verfügbar wenn bestellt wird?<br><br>
+          <strong>Kano-Modell beachten:</strong> Mehr Lieferservice = mehr Kundenzufriedenheit ist <em>nicht</em> immer linear. Ab einem bestimmten Punkt bringt mehr Lieferservice keinen Mehrwert mehr, kostet aber weiter Geld.
+          </div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-amber"></span>Ersatzteillogistik</div>
+          <div class="card-desc">Ersatzteile sind eine Besonderheit: Sie müssen oft sehr lange verfügbar sein, haben aber niedrigen Umschlag. Die Bewirtschaftung richtet sich nach Ausfallhäufigkeit, Ausfallfolgen, Wiederbeschaffungszeit und Lagerkosten. Ein guter Ersatzteilservice ist ein echter Wettbewerbsvorteil.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Entsorgungslogistik (Reverse Logistik)</div>
+      <div class="explain">
+        Reverse Logistik = alles was rückwärts durch die Supply Chain fließt. Das ist heute ein wachsendes Thema, weil Gesetze strenger werden und Kunden mehr Nachhaltigkeit erwarten.
+      </div>
+      <div class="card-list">
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-green"></span>Bereiche der Reverse Logistik</div>
+          <div class="card-desc">
+          · <strong>Retourenlogistik:</strong> Rückgaben und Reklamationen von Kunden<br>
+          · <strong>Rücknahmelogistik:</strong> Reparaturware, Garantiefälle<br>
+          · <strong>Behälter-/Pfandlogistik:</strong> Mehrwegbehälter, Paletten, Euroboxen zurückführen<br>
+          · <strong>Entsorgungslogistik:</strong> Abfälle, Gefahrstoffe, Altgeräte
+          </div>
+        </div>
+      </div>
+
+      <div class="explain" style="margin-top:.85rem;"><strong>Abfallhierarchie – Prioritäten bei der Entsorgung (KrWG):</strong></div>
+      <div class="hierarchy">
+        <div class="hier-item hier-1"><span class="hier-num">1</span>Abfallvermeidung — Abfall gar nicht erst entstehen lassen</div>
+        <div class="hier-item hier-2"><span class="hier-num">2</span>Wiederverwendung — Produkt wird nochmal für denselben Zweck genutzt</div>
+        <div class="hier-item hier-3"><span class="hier-num">3</span>Recycling — Material wird wieder nutzbar gemacht (Papier, Glas, Metall)</div>
+        <div class="hier-item hier-4"><span class="hier-num">4</span>Energetische Verwertung — Verbrennung zur Energiegewinnung</div>
+        <div class="hier-item hier-5"><span class="hier-num">5</span>Abfallbeseitigung — Deponie, letzter Ausweg</div>
+      </div>
+      <div class="hint-box hint-green" style="margin-top:.75rem;">
+        <strong>Merksatz:</strong> Je höher in der Hierarchie, desto besser für Umwelt und Wirtschaft. Immer erst die höhere Stufe prüfen, bevor man entsorgt.
+      </div>
+
+      <div class="explain" style="margin-top:.85rem;"><strong>Recycling-Formen:</strong></div>
+      <div class="compare-grid">
+        <div class="compare-card">
+          <div class="compare-title">Verwertung (für neuen Zweck)</div>
+          <ul class="compare-list">
+            <li><strong>Wiederverwertung:</strong> Material wird in gleiche Produktkategorie zurückgeführt (Altglas → neues Glas)</li>
+            <li><strong>Weiterverwertung:</strong> Material wird für anderen Zweck genutzt (Altpapier → Verpackungskarton)</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <div class="compare-title">Verwendung (für gleichen Zweck)</div>
+          <ul class="compare-list">
+            <li><strong>Wiederverwendung:</strong> Produkt wird nochmal genutzt (Mehrwegflasche)</li>
+            <li><strong>Weiterverwendung:</strong> Produkt geht zu neuem Nutzer (Secondhand)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       1.2.6 MATERIALFLUSSANALYSE
+  ══════════════════════════════════════════════════════════ -->
+  <div id="materialfluss" class="chapter">
+    <div class="chapter-header">
+      <div class="ch-num ch-blue">1.2.6</div>
+      <div class="chapter-header-text">
+        <span class="ch-label">Analyse & Gestaltung</span>
+        <span class="ch-title">Materialflussanalyse & Gestaltung von Logistiksystemen</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Methoden der Materialflussanalyse</div>
+      <div class="card-list">
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-blue"></span>Sankey-Diagramm</div>
+          <div class="card-desc">Visualisiert Materialflüsse als Pfeile – die <strong>Breite des Pfeils</strong> entspricht der Menge. Auf einen Blick sieht man wo große Mengen fließen und wo Engpässe sind.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-green"></span>Mengen-Wege-Diagramm</div>
+          <div class="card-desc">Stellt dar, welche Mengen welche Strecken zurücklegen. Hilft bei der Optimierung von Laufwegen.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-amber"></span>Materialflussmatrix / Transportmatrix</div>
+          <div class="card-desc">Tabelle: Zeilen = Quelle, Spalten = Ziel, Inhalt = transportierte Menge. Zeigt welche Bereiche am stärksten miteinander verbunden sind.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-purple"></span>Wertstromanalyse</div>
+          <div class="card-desc">Analysiert alle Prozessschritte und unterscheidet:<br>
+          · <strong>Wertsteigernde Schritte</strong> (Herstellung – der Kunde zahlt dafür)<br>
+          · <strong>Wertneutrale Schritte</strong> (Rüsten – nötig aber kein direkter Wert)<br>
+          · <strong>Wertsenkende Schritte / Verschwendung</strong> (Warten, Ausschuss, unnötige Transporte – eliminieren!)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Gestaltungsprinzipien (1.2.7)</div>
+      <div class="card-list">
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-blue"></span>Einfachheitsprinzip</div>
+          <div class="card-desc">Logistiksysteme so einfach wie möglich halten. Komplexität erzeugt Fehler, Kosten und Störanfälligkeit.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-green"></span>Entkoppelungsprinzip</div>
+          <div class="card-desc">Bereiche mit unterschiedlichem Takt oder Schwankungen durch Puffer (Lager, Zwischenpuffer) voneinander entkoppeln – so stört eine Störung in Bereich A nicht sofort Bereich B.</div>
+        </div>
+        <div class="card-item">
+          <div class="card-term"><span class="card-dot dot-amber"></span>Näherungsprinzip</div>
+          <div class="card-desc">Bereiche die häufig miteinander kommunizieren oder Material austauschen, räumlich nah anordnen – kurze Wege sparen Zeit und Kosten.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<footer>Persönliches Lernportal · IHK Fachwirt Logistiksysteme · Nur zur privaten Nutzung</footer>
+
+</body>
+</html>
