@@ -1,0 +1,414 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Log. Abläufe & Systemanalyse</title><style>:root {
+  --bg: #f5f4f0; --surface: #ffffff; --border: #e8e6df;
+  --text: #1a1916; --text-2: #6b6860;
+  --sidebar-bg: #1e1e1e; --sidebar-text: #e0ddd6; --sidebar-active: #4a90d9;
+  --blue: #3b6fd4; --blue-bg: #eef3fc;
+  --green: #2d7a4f; --green-bg: #eaf5ef;
+  --yellow: #b8860b; --yellow-bg: #fdf9e3;
+  --red: #c0392b; --red-bg: #fdf0ee;
+  --purple: #6c3483; --purple-bg: #f5eefb;
+  --radius: 8px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; font-size: 15px; line-height: 1.65; }
+aside { width: 240px; min-width: 240px; background: var(--sidebar-bg); color: var(--sidebar-text); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+.sidebar-header { padding: 1.25rem 1rem 0.75rem; border-bottom: 1px solid #333; }
+.sidebar-back { font-size: 12px; color: #888; text-decoration: none; display: block; margin-bottom: 0.5rem; }
+.sidebar-back:hover { color: #ccc; }
+.sidebar-logo { font-size: 13px; color: #aaa; margin-bottom: 2px; }
+.sidebar-sub { font-size: 11px; color: #666; }
+.sidebar-chapter { padding: 0.6rem 1rem 0.2rem; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #555; margin-top: 0.5rem; }
+.sidebar-nav a { display: block; padding: 0.4rem 1rem 0.4rem 1.25rem; font-size: 13px; color: #bbb; text-decoration: none; border-left: 2px solid transparent; transition: all 0.15s; }
+.sidebar-nav a:hover { color: #fff; background: #2a2a2a; }
+.sidebar-nav a.active { color: #fff; border-left-color: var(--sidebar-active); background: #252525; }
+main { flex: 1; max-width: 820px; padding: 2.5rem 3rem; overflow-x: hidden; }
+.section-block { margin-bottom: 3rem; }
+.section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-2); margin-bottom: 0.4rem; }
+h2 { font-size: 26px; font-weight: 700; line-height: 1.2; margin-bottom: 0.4rem; }
+.section-subtitle { color: var(--text-2); font-size: 14px; margin-bottom: 1.5rem; }
+h3 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-2); margin: 1.5rem 0 0.75rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--border); }
+h4 { font-size: 15px; font-weight: 600; margin: 1.25rem 0 0.5rem; }
+p { margin-bottom: 0.6rem; }
+ul, ol { padding-left: 1.4rem; margin-bottom: 0.75rem; }
+li { margin-bottom: 0.25rem; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; margin-bottom: 0.75rem; }
+.card-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.4rem; }
+.card-title { font-size: 16px; font-weight: 700; margin-bottom: 0.3rem; }
+.card p { font-size: 14px; margin: 0 0 0.3rem; }
+.card.blue { border-left: 3px solid var(--blue); background: var(--blue-bg); }
+.card.green { border-left: 3px solid var(--green); background: var(--green-bg); }
+.card.yellow { border-left: 3px solid var(--yellow); background: var(--yellow-bg); }
+.card.red { border-left: 3px solid var(--red); background: var(--red-bg); }
+.card.purple { border-left: 3px solid var(--purple); background: var(--purple-bg); }
+.card.blue .card-label { color: var(--blue); }
+.card.green .card-label { color: var(--green); }
+.card.yellow .card-label { color: var(--yellow); }
+.card.red .card-label { color: var(--red); }
+.card.purple .card-label { color: var(--purple); }
+.merksatz { background: var(--yellow-bg); border: 1px solid #e6d98a; border-left: 4px solid var(--yellow); border-radius: var(--radius); padding: 0.9rem 1.1rem; margin: 0.75rem 0; }
+.merksatz .merksatz-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--yellow); margin-bottom: 0.3rem; }
+.merksatz p { font-size: 14px; margin: 0; }
+.pruefungstipp { background: var(--purple-bg); border: 1px solid #c9a8e8; border-left: 4px solid var(--purple); border-radius: var(--radius); padding: 0.9rem 1.1rem; margin: 0.75rem 0; }
+.pruefungstipp .pt-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--purple); margin-bottom: 0.3rem; }
+.pruefungstipp p { font-size: 14px; margin: 0; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 0.75rem 0; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin: 0.75rem 0; }
+.grid-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.85rem 1rem; }
+.grid-card .gc-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-2); margin-bottom: 0.3rem; }
+.grid-card .gc-title { font-size: 14px; font-weight: 700; margin-bottom: 0.3rem; }
+.grid-card p, .grid-card li { font-size: 13px; }
+.steps { margin: 0.75rem 0; }
+.step { display: flex; gap: 0.75rem; margin-bottom: 0.5rem; align-items: flex-start; }
+.step-num { min-width: 26px; height: 26px; background: var(--blue); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.step-body { font-size: 14px; }
+.step-body strong { display: block; margin-bottom: 0.1rem; }
+.table-wrap { overflow-x: auto; margin: 0.75rem 0; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { background: #2a2a2a; color: #fff; padding: 0.5rem 0.75rem; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+td { padding: 0.45rem 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+tr:nth-child(even) td { background: #fafaf8; }
+.formel { background: #1e1e1e; color: #f0ede6; border-radius: var(--radius); padding: 1rem 1.25rem; font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.9; margin: 0.75rem 0; }
+.notiz-btn { display: flex; align-items: center; gap: 0.4rem; background: none; border: 1px dashed #ccc; border-radius: 6px; padding: 0.3rem 0.75rem; font-size: 12px; color: #999; cursor: pointer; margin-top: 0.5rem; transition: all 0.15s; }
+.notiz-btn:hover { border-color: #999; color: #666; }
+.notiz-area { display: none; width: 100%; margin-top: 0.5rem; border: 1px solid #ddd; border-radius: 6px; padding: 0.5rem 0.75rem; font-size: 13px; font-family: inherit; resize: vertical; background: #fffef8; min-height: 60px; }
+.notiz-area:focus { outline: none; border-color: var(--blue); }
+hr.sep { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+@media (max-width: 800px) { aside { display: none; } main { padding: 1.5rem 1.25rem; } .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+.card .notiz-btn, .grid-card .notiz-btn, .merksatz .notiz-btn,
+.pruefungstipp .notiz-btn, .formel .notiz-btn, .step .notiz-btn,
+.section-block > .notiz-btn {
+  margin-top: 0.6rem;
+  font-size: 11px;
+  padding: 0.2rem 0.6rem;
+  opacity: 0.6;
+}
+.card .notiz-btn:hover, .grid-card .notiz-btn:hover,
+.merksatz .notiz-btn:hover, .pruefungstipp .notiz-btn:hover,
+.formel .notiz-btn:hover, .step .notiz-btn:hover {
+  opacity: 1;
+}
+.card .notiz-area, .grid-card .notiz-area, .merksatz .notiz-area,
+.pruefungstipp .notiz-area, .step .notiz-area {
+  font-size: 12px;
+  min-height: 45px;
+}
+
+</style></head><body>
+<aside><div class="sidebar-header"><a href="index.html" class="sidebar-back">← Übersicht</a><div class="sidebar-logo">Logistik Lernportal</div><div class="sidebar-sub">GK · Kap. 1.1</div></div>
+  <div class="sidebar-chapter">Grundlagen</div>
+  <nav class="sidebar-nav">
+    <a href="#grundlagen">Begriff & Aufgaben</a>
+    <a href="#ziele">Ziele & Objekte</a>
+    <a href="#taetigkeiten">Tätigkeiten & ERP</a>
+  </nav>
+  <div class="sidebar-chapter">Wertschöpfung</div>
+  <nav class="sidebar-nav">
+    <a href="#wertschoepfung">Wertschöpfung & Porter</a>
+  </nav>
+  <div class="sidebar-chapter">Prozesse</div>
+  <nav class="sidebar-nav">
+    <a href="#prozesse">Definition & Merkmale</a>
+    <a href="#prozessgestaltung">4 Schritte Gestaltung</a>
+    <a href="#effektivitaet">Effektivität vs. Effizienz</a>
+  </nav>
+  <div class="sidebar-chapter">Leistungsarten</div>
+  <nav class="sidebar-nav">
+    <a href="#leistungsarten">Nutz/Stütz/Blind/Fehl</a>
+    <a href="#prozesswirkungsgrad">Prozesswirkungsgrad</a>
+  </nav>
+  <div class="sidebar-chapter">SCM & Umfeld</div>
+  <nav class="sidebar-nav">
+    <a href="#scm">SCM</a>
+    <a href="#bullwhip">Bullwhip-Effekt</a>
+    <a href="#umfeld">8 Umfeldfaktoren</a>
+  </nav>
+  <div class="sidebar-chapter">Organisation</div>
+  <nav class="sidebar-nav">
+    <a href="#systemfaktoren">Systemfaktoren</a>
+    <a href="#orgformen">6 Organisationsformen</a>
+  </nav></aside>
+<main>
+<div class="section-block" id="grundlagen">
+  <div class="section-label">Kap. 1.1 · Logistikstruktur</div>
+  <h2>Grundlagen, Ziele & Objekte der Logistik</h2>
+  <div class="grid-2">
+    <div class="card blue"><div class="card-label">Klassisch</div><p>Transport von Waren und Gütern</p></div>
+    <div class="card green"><div class="card-label">Modern</div><p>Vernetzung aller Maßnahmen hinsichtlich Material-, Wert- und Informationsfluss → Logistikkonzepte & SCM</p></div>
+  </div>
+  <h3>Die 5 (bzw. 6) R der Logistik</h3>
+  <div class="grid-3">
+    <div class="grid-card"><div class="gc-label">Richtiges Produkt</div><p>Der korrekte Artikel</p></div>
+    <div class="grid-card"><div class="gc-label">Richtige Menge</div><p>Weder zu viel noch zu wenig</p></div>
+    <div class="grid-card"><div class="gc-label">Richtiger Ort</div><p>Dorthin wo es gebraucht wird</p></div>
+    <div class="grid-card"><div class="gc-label">Richtige Zeit</div><p>Pünktlich – nicht zu früh, nicht zu spät</p></div>
+    <div class="grid-card"><div class="gc-label">Richtige Qualität</div><p>Unbeschädigt, normengerecht</p></div>
+    <div class="grid-card"><div class="gc-label">+ Informationen</div><p>Die richtigen Daten zur richtigen Zeit (6./7. R)</p></div>
+  </div>
+  
+</div>
+
+<div class="section-block" id="ziele">
+  <div class="section-label">Kap. 1.1 · Ziele</div>
+  <h2>Ziele & Objekte der Logistik</h2>
+  <div class="grid-2">
+    <div class="grid-card"><div class="gc-label">Formalziele</div><div class="gc-title">Leistungserfüllung</div><p>Liefertreue, Verfügbarkeit, Qualität sicherstellen.</p></div>
+    <div class="grid-card"><div class="gc-label">Sachziele</div><div class="gc-title">Strategisch & operativ</div><p>Langfristige Positionierung (strategisch) und täglicher Betrieb (operativ).</p></div>
+  </div>
+  <div class="merksatz"><div class="merksatz-label">Zielkonflikt – Prüfungsklassiker!</div>
+  <p>Niedrige Bestände vs. hohe Lieferbereitschaft · Kosten vs. Qualität · Geschwindigkeit vs. Nachhaltigkeit</p></div>
+  <h3>Objekte der Logistik</h3>
+  <div class="grid-3">
+    <div class="grid-card"><div class="gc-label">Güter</div><p>Waren, Rohstoffe, Fertigprodukte</p></div>
+    <div class="grid-card"><div class="gc-label">Personen</div><p>Personenlogistik, Pendlerverkehre</p></div>
+    <div class="grid-card"><div class="gc-label">Kapital</div><p>Finanzströme entlang der Kette</p></div>
+    <div class="grid-card"><div class="gc-label">Energie</div><p>Energieversorgung entlang der Lieferkette</p></div>
+    <div class="grid-card"><div class="gc-label">Informationen</div><p>Bestelldaten, Trackingnummern, Bestandsdaten</p></div>
+  </div>
+  
+</div>
+
+<div class="section-block" id="taetigkeiten">
+  <div class="section-label">Kap. 1.1 · Tätigkeiten</div>
+  <h2>Tätigkeiten & ERP-Systeme</h2>
+  <div class="grid-3">
+    <div class="card blue"><div class="card-label">Physisch – ausführend</div><p>Lagern, Transportieren, Kommissionieren, Verpacken</p></div>
+    <div class="card green"><div class="card-label">Administrativ – informationsverarbeitend</div><p>Informations- und Auftragsabwicklung, Dokumentation</p></div>
+    <div class="card yellow"><div class="card-label">Dispositiv – planend & steuernd</div><p>Planung, Steuerung, Überwachung aller logistischen Prozesse</p></div>
+  </div>
+  <div class="card purple"><div class="card-label">ERP = Enterprise Resource Planning</div>
+  <p>Zentrale Software, die alle Unternehmensbereiche verbindet – von Einkauf über Lager bis Versand. Zwei Haupttreiber: <strong>Digitalisierung</strong> & <strong>Automatisierung</strong> der Prozesse.</p></div>
+  
+</div>
+
+<div class="section-block" id="wertschoepfung">
+  <div class="section-label">Kap. 1.1 · Wertschöpfung</div>
+  <h2>Wertschöpfung & Wertschöpfungskette</h2>
+  <div class="formel">Bruttowertschöpfung = Produktionswert − Vorleistungen
+Nettowertschöpfung = Bruttowertschöpfung − Abschreibungen
+Nettowertschöpfung zu Marktpreisen = + Gütersteuern − Gütersubventionen</div>
+  <h3>Wertschöpfungskette nach Porter</h3>
+  <div class="card blue"><div class="card-label">Primäre Aktivitäten (direkte Wertschöpfung)</div>
+  <p>Eingangslogistik → Produktion → Marketing & Vertrieb → Ausgangslogistik → After-Sales</p></div>
+  <div class="card green"><div class="card-label">Sekundäre Aktivitäten (Unterstützung)</div>
+  <p>Einkauf · Entwicklung · Finanzen & Controlling · Personalwesen – unterstützen alle primären Aktivitäten gleichzeitig</p></div>
+  <h3>Teilbereiche der Unternehmenslogistik</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Bereich</th><th>Lager</th><th>Aufgaben</th></tr>
+    <tr><td><strong>Beschaffung</strong></td><td>Wareneingang</td><td>Einkauf, Lieferantenmanagement, Qualitätsprüfung</td></tr>
+    <tr><td><strong>Produktion</strong></td><td>Zwischenlager</td><td>Materialversorgung der Fertigung, Pufferlager, JIT</td></tr>
+    <tr><td><strong>Absatz</strong></td><td>Warenausgang</td><td>Kommissionierung, Verpackung, Versand</td></tr>
+    <tr><td><strong>Entsorgung</strong></td><td>Retouren</td><td>Rücknahme, Recycling, Verwertung</td></tr>
+  </table></div>
+  
+</div>
+
+<div class="section-block" id="prozesse">
+  <div class="section-label">Kap. 1.1 · Prozesse</div>
+  <h2>Prozesse in der Logistik</h2>
+  <div class="card blue"><div class="card-label">Definition</div>
+  <p>Prozess = Abfolge von Tätigkeiten mit definiertem Anfang und Ende. Wandelt Eingaben (Input) in Ausgaben (Output) um.</p></div>
+  <h3>Merkmale von Prozessen</h3>
+  <div class="grid-3">
+    <div class="grid-card"><div class="gc-label">Zielgerichtet</div><p>Jeder Prozess hat ein klares Ziel (Output)</p></div>
+    <div class="grid-card"><div class="gc-label">Auslöser</div><p>Interne oder externe Trigger starten den Prozess</p></div>
+    <div class="grid-card"><div class="gc-label">Leistungsbezogen</div><p>Der Prozess erbringt eine messbare Leistung</p></div>
+    <div class="grid-card"><div class="gc-label">Abnehmer</div><p>Interne oder externe Abnehmer erhalten den Output</p></div>
+    <div class="grid-card"><div class="gc-label">Verrichtungsprinzip</div><p>Klare Tätigkeiten in definierter Reihenfolge</p></div>
+    <div class="grid-card"><div class="gc-label">Zweckgebunden</div><p>Jede Tätigkeit hat einen Zweck im Gesamtprozess</p></div>
+  </div>
+  <h3>Prozessebenen</h3>
+  <div class="grid-2">
+    <div class="grid-card"><div class="gc-label">Hauptprozesse</div><p>Innerhalb eines Funktionsbereichs – z.B. der gesamte Beschaffungsprozess</p></div>
+    <div class="grid-card"><div class="gc-label">Teilprozesse</div><p>Arbeitsgänge eines Hauptprozesses – z.B. Angebotseinholung</p></div>
+    <div class="grid-card"><div class="gc-label">Primärprozesse</div><p>Kernleistung: Material- und Informationsflüsse</p></div>
+    <div class="grid-card"><div class="gc-label">Sekundärprozesse</div><p>Unterstützungsleistungen und Führungsaufgaben</p></div>
+  </div>
+  
+</div>
+
+<div class="section-block" id="prozessgestaltung">
+  <div class="section-label">Kap. 1.1 · Gestaltung</div>
+  <h2>4 Schritte zur Prozessgestaltung</h2>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Prozess gestalten</strong>Prozessfelder analysieren, Prozess definieren, Umfang festlegen</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Prozess strukturieren</strong>In Teilprozesse zerlegen, Reihenfolge festlegen, Schnittstellen und Verantwortlichkeiten definieren</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Prozess realisieren</strong>Prozess einführen, laufend überwachen</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Prozess optimieren</strong>Soll/Ist-Abgleich, Abweichungsanalyse, Standardisierung, Übernahme ins Managementsystem</div></div>
+  </div>
+  <div class="pruefungstipp"><div class="pt-label">Prüfungstipp</div><p>Diese 4 Schritte kommen gerne in der Prüfung – Reihenfolge und Inhalte merken!</p></div>
+  
+</div>
+
+<div class="section-block" id="effektivitaet">
+  <div class="section-label">Kap. 1.1 · Begriffe</div>
+  <h2>Effektivität vs. Effizienz</h2>
+  <div class="grid-2">
+    <div class="card green"><div class="card-label">Effektivität</div><div class="card-title">„Die richtigen Dinge machen"</div>
+    <p>Erreichen der Prozessziele. Mache ich das Richtige?</p></div>
+    <div class="card blue"><div class="card-label">Effizienz</div><div class="card-title">„Die Dinge richtig machen"</div>
+    <p>Ziele mit geringstem Aufwand erreichen. Mache ich es optimal?</p></div>
+  </div>
+  <div class="merksatz"><div class="merksatz-label">Merksatz</div>
+  <p>Was man nicht messen kann, kann man auch nicht steuern! → Deshalb braucht jeder Prozess klare Kennzahlen (KPIs).</p></div>
+  
+</div>
+
+<div class="section-block" id="leistungsarten">
+  <div class="section-label">Kap. 1.1 · Leistungsarten</div>
+  <h2>Die 4 Leistungsarten</h2>
+  <div class="grid-2">
+    <div class="card green"><div class="card-label">A) Nutzleistung – geplant, direkt wertschöpfend</div>
+    <p>Bsp: Montage · Einkauf/Verkauf · Kommissionierung für direkten Versand</p></div>
+    <div class="card blue"><div class="card-label">B) Stützleistung – geplant, indirekt wertschöpfend</div>
+    <p>Bsp: Rüsten · innerbetriebliche Logistik · Sicherheitspuffer befüllen</p></div>
+    <div class="card yellow"><div class="card-label">C) Blindleistung – ungeplant, keine Wertsteigerung</div>
+    <p>Bsp: Ungeplante Zwischenlagerung · Rückfragen · überhöhte Sicherheitspuffer</p></div>
+    <div class="card red"><div class="card-label">D) Fehlleistung – ungeplant, durch Fehler nicht verwertbar</div>
+    <p>Bsp: Fehlerhaftes Produkt · Ausschuss · Stillstandzeiten</p></div>
+  </div>
+  <div class="pruefungstipp"><div class="pt-label">Prüfungstipp</div>
+  <p>Geplant (A+B) vs. ungeplant (C+D) ist die wichtigste Unterscheidung!</p></div>
+  
+</div>
+
+<div class="section-block" id="prozesswirkungsgrad">
+  <div class="section-label">Kap. 1.1 · Kennzahl</div>
+  <h2>Prozesswirkungsgrad & Toyota 3M</h2>
+  <div class="formel">Prozesswirkungsgrad = Nutzleistung / Gesamtleistung × 100 %
+Gesamtleistung = Nutzleistung + Stützleistung + Blindleistung + Fehlleistung</div>
+  <h3>Toyota 3M Modell</h3>
+  <div class="grid-3">
+    <div class="card red"><div class="card-label">Muda – Verschwendung</div>
+    <p>7 Arten: Überproduktion · Warten · unnötiger Transport · unnötige Bewegung · Bestände · fehlerhafte Prozesse · Nacharbeit</p></div>
+    <div class="card yellow"><div class="card-label">Mura – Ungleichmäßigkeit</div>
+    <p>Schwankungen in Prozessen → Leerlauf oder Warteschlangen</p></div>
+    <div class="card blue"><div class="card-label">Muri – Überlastung</div>
+    <p>Überbeanspruchung von Maschinen/Menschen → Fehler und Nacharbeit</p></div>
+  </div>
+  
+</div>
+
+<div class="section-block" id="scm">
+  <div class="section-label">Kap. 1.1 · SCM</div>
+  <h2>Supply Chain Management</h2>
+  <div class="card blue"><div class="card-label">Definition</div>
+  <p>SCM = Verknüpfung & Optimierung aller logistischen Prozesse vom Lieferanten bis zum Kunden – physisch, informatorisch und monetär. Das SCM steuert in <strong>BEIDE Richtungen</strong>.</p></div>
+  <div class="grid-2">
+    <div class="grid-card"><div class="gc-label">Internes SCM</div><p>Produktentwicklung · Beschaffung · Bestandsführung · Produktion · Vertrieb</p></div>
+    <div class="grid-card"><div class="gc-label">Externes SCM</div><p>Rahmenverträge · klare Verantwortlichkeiten · kompatible Systeme · Win-Win für alle</p></div>
+  </div>
+  
+</div>
+
+<div class="section-block" id="bullwhip">
+  <div class="section-label">Kap. 1.1 · Bullwhip</div>
+  <h2>Bullwhip-Effekt</h2>
+  <div class="card red"><div class="card-label">Definition</div>
+  <p>Kleine Nachfrageänderungen beim Kunden führen zu immer größeren Schwankungen in vorgelagerten Stufen. Jede Stufe hält Sicherheitsbestände, die sich gegenseitig aufschaukeln.</p></div>
+  <div class="grid-2">
+    <div class="grid-card"><div class="gc-label">Gründe</div><ul>
+      <li>Jede Stufe überreagiert auf Schwankungen</li>
+      <li>Keine Echtzeit-Nachfragedaten</li>
+      <li>Jede Stufe disponiert isoliert</li>
+    </ul></div>
+    <div class="grid-card"><div class="gc-label">Gegenmaßnahmen</div><ul>
+      <li>Echtzeit-Datenaustausch in der SC</li>
+      <li>Direkte Verbindung Hersteller ↔ Handel</li>
+      <li>VMI & einheitliche ERP-Systeme</li>
+    </ul></div>
+  </div>
+  
+</div>
+
+<div class="section-block" id="umfeld">
+  <div class="section-label">Kap. 1.1 · Umfeld</div>
+  <h2>8 Umfeldfaktoren (A–H)</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Markt</th><th>Wichtigste Entwicklungen</th><th>Relevanz</th></tr>
+    <tr><td><strong>A) Absatz</strong></td><td>Individualisierung, kürzere Lebenszyklen, Bestandsreduktion</td><td>Mehr Artikel, kleinere Mengen, schnellere Reaktion</td></tr>
+    <tr><td><strong>B) Beschaffung</strong></td><td>Single/Dual/Multiple, Regional, Global Sourcing</td><td>Welche Strategie wann?</td></tr>
+    <tr><td><strong>C) Technologie</strong></td><td>Industrie 4.0, Big Data, RFID, autonome Systeme</td><td>Deine Software wird zunehmend vernetzt</td></tr>
+    <tr><td><strong>D) Arbeit</strong></td><td>Demografischer Wandel, Fachkräftemangel</td><td>Warum Weiterbildung so wichtig ist</td></tr>
+    <tr><td><strong>E) Wettbewerb</strong></td><td>Logistik als strategischer Vorteil</td><td>Gute Logistik = Kundenbindung</td></tr>
+    <tr><td><strong>F) Gesellschaft</strong></td><td>Umweltschutz, Nachhaltigkeit, Retouren</td><td>CO₂, Verpackung, Recycling</td></tr>
+    <tr><td><strong>G) Kapital</strong></td><td>Inflation, steigende Kapitalkosten</td><td>Lagerkapital ist teuer → geringe Bestände</td></tr>
+    <tr><td><strong>H) Staat</strong></td><td>EU-Regulierung, Steuern, Bürokratie</td><td>INCOTERMS, Zölle, Compliance</td></tr>
+  </table></div>
+  
+</div>
+
+<div class="section-block" id="systemfaktoren">
+  <div class="section-label">Kap. 1.1 · Systemfaktoren</div>
+  <h2>Systemfaktoren der Logistik</h2>
+  <div class="grid-2">
+    <div class="grid-card"><div class="gc-label">Interne Faktoren</div><ul>
+      <li>Unternehmensgröße & Struktur</li>
+      <li>Produktpalette & Varianten</li>
+      <li>Fertigungstiefe</li>
+      <li>IT-Infrastruktur</li>
+    </ul></div>
+    <div class="grid-card"><div class="gc-label">Externe Faktoren</div><ul>
+      <li>Lieferantenstruktur & -qualität</li>
+      <li>Kundenforderungen & Servicegrad</li>
+      <li>Marktdynamik & Wettbewerb</li>
+      <li>Gesetzliche Rahmenbedingungen</li>
+    </ul></div>
+  </div>
+  
+</div>
+
+<div class="section-block" id="orgformen">
+  <div class="section-label">Kap. 1.1 · Organisation</div>
+  <h2>Die 6 Organisationsformen</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Form</th><th>Merkmal</th><th>Vorteil</th><th>Nachteil</th></tr>
+    <tr><td><strong>Linienorganisation</strong></td><td>Klare Hierarchie, jeder hat einen Chef</td><td>Klare Verantwortung, einfache Struktur</td><td>Langsame Entscheidungen, starre Kommunikation</td></tr>
+    <tr><td><strong>Stablinienorg.</strong></td><td>Stäbe beraten Führung (ohne Weisungsbefugnis)</td><td>Expertenwissen in Entscheidungen</td><td>Stäbe ohne Durchsetzungsmacht</td></tr>
+    <tr><td><strong>Spartenorg.</strong></td><td>Unternehmen in eigenständige Sparten (Profit Center)</td><td>Eigenverantwortung, Marktnähe</td><td>Hohe Kosten durch Doppelfunktionen</td></tr>
+    <tr><td><strong>Matrixorg.</strong></td><td>Zwei Chefs: Funktion + Projekt/Produkt</td><td>Flexible Ressourcennutzung</td><td>Kompetenzstreitigkeiten, hoher Koordinationsaufwand</td></tr>
+    <tr><td><strong>Tensororg.</strong></td><td>3 Dimensionen: Funktion + Produkt + Region</td><td>Globale Unternehmen sehr flexibel</td><td>Extrem komplex</td></tr>
+    <tr><td><strong>Projektorg.</strong></td><td>Temporäre Teams für definierte Projekte</td><td>Fokus, Flexibilität, Innovationskraft</td><td>Nur temporär, Reintegration nach Projekt</td></tr>
+  </table></div>
+  
+</div>
+</main><script>
+function toggleNotiz(btn) {
+  const a = btn.nextElementSibling;
+  if (a.style.display==='block'){a.style.display='none';btn.textContent='✏ Notiz';}
+  else{a.style.display='block';btn.textContent='✏ Notiz schließen';a.focus();}
+}
+function init(prefix) {
+  // Notiz zu JEDEM dieser Elemente hinzufügen
+  const selectors = [
+    '.card', '.grid-card', '.merksatz', '.pruefungstipp',
+    '.formel', '.axiom-box', '.step', '.section-block'
+  ];
+  let counter = 0;
+  selectors.forEach(sel => {
+    document.querySelectorAll(sel).forEach(el => {
+      if (el.querySelector('.notiz-btn')) return; // bereits vorhanden
+      const k = prefix + counter++;
+      const btn = document.createElement('button');
+      btn.className = 'notiz-btn';
+      btn.textContent = '✏ Notiz';
+      btn.onclick = function(){ toggleNotiz(this); };
+      const area = document.createElement('textarea');
+      area.className = 'notiz-area';
+      area.placeholder = 'Deine Notiz…';
+      // Gespeicherte Notiz laden
+      try { const s=localStorage.getItem(k); if(s){area.value=s;area.style.display='block';btn.textContent='✏ Notiz schließen';} } catch(e){}
+      area.addEventListener('input', ()=>{ try{localStorage.setItem(k,area.value);}catch(e){} });
+      el.appendChild(btn);
+      el.appendChild(area);
+    });
+  });
+  // Aktive Sidebar-Links
+  const ss = document.querySelectorAll('.section-block[id]');
+  const nl = document.querySelectorAll('.sidebar-nav a');
+  ss.forEach(s => new IntersectionObserver(ee=>{ee.forEach(e=>{if(e.isIntersecting){nl.forEach(l=>l.classList.remove('active'));const l=document.querySelector('.sidebar-nav a[href="#'+e.target.id+'"]');if(l)l.classList.add('active');}});},{threshold:0.2}).observe(s));
+}
+
+init("kap1_1_logistische_ablaeufe_");</script>
+</body></html>
