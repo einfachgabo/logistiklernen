@@ -128,7 +128,12 @@ hr.sep { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
   <nav class="sidebar-nav">
     <a href="#systemfaktoren">Systemfaktoren</a>
     <a href="#orgformen">6 Organisationsformen</a>
-  </nav></aside>
+  </nav>  <div style="margin-top:auto;padding:1rem;border-top:1px solid #2a2a2a">
+    <a href="notizen.html" style="display:flex;align-items:center;gap:0.5rem;font-size:13px;color:#aaa;text-decoration:none;padding:0.4rem 0.25rem;border-radius:6px;transition:color 0.15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#aaa'">
+      📝 Meine Notizen
+    </a>
+  </div>
+</aside>
 <main>
 <div class="section-block" id="grundlagen">
   <div class="section-label">Kap. 1.1 · Logistikstruktur</div>
@@ -376,11 +381,10 @@ Gesamtleistung = Nutzleistung + Stützleistung + Blindleistung + Fehlleistung</d
 </main><script>
 function toggleNotiz(btn) {
   const a = btn.nextElementSibling;
-  if (a.style.display==='block'){a.style.display='none';btn.textContent='✏ Notiz';}
+  if (a.style.display==='block'){a.style.display='none';btn.textContent='✏ Notiz hinzufügen';}
   else{a.style.display='block';btn.textContent='✏ Notiz schließen';a.focus();}
 }
 function init(prefix) {
-  // Notiz zu JEDEM dieser Elemente hinzufügen
   const selectors = [
     '.card', '.grid-card', '.merksatz', '.pruefungstipp',
     '.formel', '.axiom-box', '.step', '.section-block'
@@ -388,23 +392,21 @@ function init(prefix) {
   let counter = 0;
   selectors.forEach(sel => {
     document.querySelectorAll(sel).forEach(el => {
-      if (el.querySelector('.notiz-btn')) return; // bereits vorhanden
+      if (el.querySelector('.notiz-btn')) return;
       const k = prefix + counter++;
       const btn = document.createElement('button');
       btn.className = 'notiz-btn';
-      btn.textContent = '✏ Notiz';
+      btn.textContent = '✏ Notiz hinzufügen';
       btn.onclick = function(){ toggleNotiz(this); };
       const area = document.createElement('textarea');
       area.className = 'notiz-area';
       area.placeholder = 'Deine Notiz…';
-      // Gespeicherte Notiz laden
       try { const s=localStorage.getItem(k); if(s){area.value=s;area.style.display='block';btn.textContent='✏ Notiz schließen';} } catch(e){}
       area.addEventListener('input', ()=>{ try{localStorage.setItem(k,area.value);}catch(e){} });
       el.appendChild(btn);
       el.appendChild(area);
     });
   });
-  // Aktive Sidebar-Links
   const ss = document.querySelectorAll('.section-block[id]');
   const nl = document.querySelectorAll('.sidebar-nav a');
   ss.forEach(s => new IntersectionObserver(ee=>{ee.forEach(e=>{if(e.isIntersecting){nl.forEach(l=>l.classList.remove('active'));const l=document.querySelector('.sidebar-nav a[href="#'+e.target.id+'"]');if(l)l.classList.add('active');}});},{threshold:0.2}).observe(s));
