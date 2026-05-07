@@ -169,6 +169,7 @@ hr.sep { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
   <nav class="sidebar-nav">
     <a href="#exp-glaettung-1">Glättung 1. Ordnung</a>
     <a href="#exp-glaettung-2">Glättung 2. Ordnung</a>
+    <a href="#exp-glaettung-3">Glättungsfaktor ermitteln</a>
   </nav>
 
   <div class="sidebar-chapter">Lagerhaltungskennzahlen</div>
@@ -358,6 +359,87 @@ hr.sep { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
       <span class="l-eq a">b  =  0,5 / 0,5  ·  (425  −  412,5)  =  1  ×  12,5  =  <strong>12,5</strong></span>
       <span class="l-result">Prognosewert  =  437,5  +  12,5  =  <strong>450 Stück</strong></span>
       <div class="l-step" style="margin-top:.4rem;">→ Die 2. Ordnung erkennt, dass der Verbrauch um 50 Stück über der Prognose lag und korrigiert die neue Vorhersage entsprechend nach oben.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Aufgabe 5: Limettenkonzentrat ══ -->
+<div class="aufgabe-block" id="exp-glaettung-3">
+  <div class="aufgabe-meta">
+    <span><strong>Bedarfsermittlung · Stochastische Methoden</strong> · Glättungsfaktor α rückwärts ermitteln</span>
+    <span class="punkte-badge">7 Punkte</span>
+  </div>
+  <div class="aufgabe-body">
+    <div class="aufgabe-title">Aufgabe 5 – Limettenkonzentrat</div>
+    <div class="aufgabe-text">
+      Für das Limettenkonzentrat wurde mittels exponentieller Glättung erster Ordnung ein Bedarf von <strong>515 Liter</strong> für den Monat August prognostiziert. Der tatsächliche Verbrauch im August betrug <strong>500 Liter</strong>. Der Prognosewert für den Monat September beträgt <strong>504,5 Liter</strong>.
+    </div>
+    <div class="teilaufgaben">
+      <div class="teil">
+        <span class="teil-badge">a</span>
+        <span class="teil-text"><span class="mgl">Mögliche Punktzahl: 4</span>Ermitteln Sie rechnerisch den Glättungsfaktor α, auf dem die Septemberprognose basiert.</span>
+      </div>
+      <div class="teil">
+        <span class="teil-badge">b</span>
+        <span class="teil-text"><span class="mgl">Mögliche Punktzahl: 2</span>Beurteilen Sie Ihr in Teilaufgabe a) ermitteltes Ergebnis.</span>
+      </div>
+      <div class="teil">
+        <span class="teil-badge">c</span>
+        <span class="teil-text"><span class="mgl">Mögliche Punktzahl: 1</span>Stellen Sie dar, unter welcher Voraussetzung die Prognosewerte für den August und September übereinstimmen würden.</span>
+      </div>
+    </div>
+  </div>
+
+  <button class="loesung-toggle" onclick="toggle(this)"><span class="toggle-arrow">▶</span> Lösung einblenden</button>
+  <div class="loesung">
+    <div class="loesung-label">Musterlösung mit Lösungsweg</div>
+
+    <div class="l-block">
+      <div class="l-title"><span class="l-badge">a</span>Glättungsfaktor α ermitteln – Schritt für Schritt</div>
+
+      <div class="l-step" style="margin-bottom:.5rem;"><strong>Was wissen wir?</strong> Wir kennen alle Werte außer α – also stellen wir die normale Formel nach α um.</div>
+
+      <div class="l-step">📌 <strong>Schritt 1 – Formel aufschreiben (so wie immer):</strong></div>
+      <span class="l-eq">F̂(Sep)  =  α · X(Aug)  +  (1 − α) · F̂(Aug)</span>
+      <div class="l-step" style="color:#888;font-size:12px;margin-bottom:.5rem;">→ Septemberprognose = α × Ist-August + (1−α) × Augustprognose</div>
+
+      <div class="l-step">📌 <strong>Schritt 2 – Bekannte Zahlen einsetzen:</strong></div>
+      <span class="l-eq">504,5  =  α · 500  +  (1 − α) · 515</span>
+      <div class="l-step" style="color:#888;font-size:12px;margin-bottom:.5rem;">→ F̂(Sep) = 504,5 · X(Aug) = 500 · F̂(Aug) = 515 – alles bekannt, nur α fehlt</div>
+
+      <div class="l-step">📌 <strong>Schritt 3 – Klammer auflösen:</strong></div>
+      <span class="l-eq">504,5  =  500α  +  515  −  515α</span>
+      <div class="l-step" style="color:#888;font-size:12px;margin-bottom:.5rem;">→ (1 − α) · 515 ausgerechnet: 1·515 − α·515 = 515 − 515α</div>
+
+      <div class="l-step">📌 <strong>Schritt 4 – α-Terme auf eine Seite, Zahlen auf die andere:</strong></div>
+      <span class="l-eq">504,5  −  515  =  500α  −  515α</span>
+      <span class="l-eq">−10,5  =  −15α</span>
+      <div class="l-step" style="color:#888;font-size:12px;margin-bottom:.5rem;">→ Links: 504,5 − 515 = −10,5 · Rechts: 500α − 515α = −15α</div>
+
+      <div class="l-step">📌 <strong>Schritt 5 – Nach α auflösen (beide Seiten durch −15 teilen):</strong></div>
+      <span class="l-eq a">α  =  −10,5  ÷  −15  =  10,5  ÷  15</span>
+      <span class="l-result">α  =  0,7</span>
+      <div class="l-step" style="color:#888;font-size:12px;margin-top:.3rem;">→ Minus ÷ Minus = Plus, also fällt das Vorzeichen weg</div>
+
+      <div class="l-step" style="margin-top:.6rem;">✅ <strong>Probe (immer empfohlen!):</strong></div>
+      <span class="l-eq g">F̂(Sep)  =  0,7 · 500  +  0,3 · 515  =  350  +  154,5  =  504,5 ✓</span>
+    </div>
+
+    <div class="l-block">
+      <div class="l-title"><span class="l-badge">b</span>Beurteilung des Ergebnisses</div>
+      <div class="l-step"><strong>α = 0,7 ist ein hoher Glättungsfaktor.</strong></div>
+      <div class="l-step">Das bedeutet: 70 % des neuen Prognosewertes basieren auf dem <em>tatsächlichen</em> Verbrauch, nur 30 % auf der alten Prognose. Die Methode reagiert also <strong>sehr schnell und sensibel</strong> auf aktuelle Veränderungen.</div>
+      <div class="l-step" style="margin-top:.4rem;"><strong>Wann sinnvoll?</strong> Bei stark schwankender oder trendmäßig steigender/fallender Nachfrage – z. B. saisonale Produkte, Modeware, frische Lebensmittel.</div>
+      <div class="l-step"><strong>Wann nicht sinnvoll?</strong> Bei stabilem, gleichmäßigem Verbrauch – dort würde ein kleines α (0,1–0,3) ruhigere, verlässlichere Prognosen liefern.</div>
+    </div>
+
+    <div class="l-block">
+      <div class="l-title"><span class="l-badge">c</span>Voraussetzung für übereinstimmende Prognosewerte</div>
+      <div class="l-step">Die Septemberprognose wäre gleich der Augustprognose (515 Liter), wenn der <strong>tatsächliche Verbrauch im August genau dem Prognosewert entsprochen hätte</strong> – also X(Aug) = 515 Liter.</div>
+      <div class="l-step" style="margin-top:.3rem;">Warum? Wenn Ist = Prognose, gibt es keinen „Fehler" zu korrigieren:</div>
+      <span class="l-eq g">F̂(Sep)  =  α · 515  +  (1 − α) · 515  =  515 · (α + 1 − α)  =  515</span>
+      <div class="l-step" style="color:#888;font-size:12px;">→ Egal wie groß α ist – wenn beide Terme gleich sind, bleibt das Ergebnis identisch.</div>
+      <div class="l-step" style="margin-top:.4rem;">Merksatz: <strong>Ist-Wert = Prognose → kein Korrekturimpuls → nächste Prognose bleibt gleich.</strong></div>
     </div>
   </div>
 </div>
@@ -995,6 +1077,7 @@ window.addEventListener('load', function() {
   }
 });
 
+function toggle(btn) {
   const loesung = btn.nextElementSibling;
   const isOpen = loesung.classList.contains('visible');
   loesung.classList.toggle('visible', !isOpen);
