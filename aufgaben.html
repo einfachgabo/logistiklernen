@@ -172,6 +172,11 @@ hr.sep { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
     <a href="#exp-glaettung-3">Glättungsfaktor ermitteln</a>
   </nav>
 
+  <div class="sidebar-chapter">Andler-Formel</div>
+  <nav class="sidebar-nav">
+    <a href="#andler-domino">Domino KG (24.000 Stück)</a>
+  </nav>
+
   <div class="sidebar-chapter">Lagerhaltungskennzahlen</div>
   <nav class="sidebar-nav">
     <a href="#a3-industrie">Fremdbezugsteil (150.000)</a>
@@ -440,6 +445,95 @@ hr.sep { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
       <span class="l-eq g">F̂(Sep)  =  α · 515  +  (1 − α) · 515  =  515 · (α + 1 − α)  =  515</span>
       <div class="l-step" style="color:#888;font-size:12px;">→ Egal wie groß α ist – wenn beide Terme gleich sind, bleibt das Ergebnis identisch.</div>
       <div class="l-step" style="margin-top:.4rem;">Merksatz: <strong>Ist-Wert = Prognose → kein Korrekturimpuls → nächste Prognose bleibt gleich.</strong></div>
+    </div>
+  </div>
+</div>
+
+<h3 id="andler-abschnitt">Andler-Formel · Optimale Bestellmenge</h3>
+
+<!-- ══ Aufgabe: Domino KG ══ -->
+<div class="aufgabe-block" id="andler-domino">
+  <div class="aufgabe-meta">
+    <span><strong>Geprüfte/-r Industriefachwirt/-in</strong> · Betriebliche Situationsbeschreibung; abgeleitete Aufgabenstellung 1 · IHK 22.03.2018</span>
+    <span class="punkte-badge">9 Punkte</span>
+  </div>
+  <div class="aufgabe-body">
+    <div class="aufgabe-title">Aufgabe 5 – Domino KG</div>
+    <div class="aufgabe-text">
+      Die Domino KG ist angehalten, die Kosten in der Beschaffung/Lagerhaltung zu reduzieren. Hierzu findet eine Analyse der Kosten statt.
+    </div>
+    <div class="teilaufgaben">
+      <div class="teil">
+        <span class="teil-badge">a</span>
+        <span class="teil-text"><span class="mgl">Mögliche Punktzahl: 4</span>Ermitteln Sie die optimale Bestellmenge für ein Kaufteil, dessen Jahresbedarf bei <strong>24.000 Stück</strong> liegt. Die Kosten für einen Bestellvorgang (inklusive Transportkosten) betragen <strong>400 €</strong>, der Einstandspreis beträgt <strong>3 € pro Stück</strong>. Der Lagerkostensatz wird mit <strong>20 %</strong> kalkuliert. Erstellen Sie außerdem eine Kostentabelle.</span>
+      </div>
+      <div class="teil">
+        <span class="teil-badge">b</span>
+        <span class="teil-text"><span class="mgl">Mögliche Punktzahl: 2</span>Erstellen und beschriften Sie ein Diagramm, in dem alle Kostenverläufe erkennbar sind.</span>
+      </div>
+      <div class="teil">
+        <span class="teil-badge">c</span>
+        <span class="teil-text"><span class="mgl">Mögliche Punktzahl: 3</span>Erläutern Sie anhand von drei Argumenten, wieso in der Praxis nur mit Einschränkungen nach der Andler-Formel disponiert werden kann.</span>
+      </div>
+    </div>
+  </div>
+
+  <button class="loesung-toggle" onclick="toggle(this)"><span class="toggle-arrow">▶</span> Lösung einblenden</button>
+  <div class="loesung">
+    <div class="loesung-label">Musterlösung mit Lösungsweg</div>
+
+    <div class="l-block">
+      <div class="l-title"><span class="l-badge">F</span>Formel – Andlersche Formel</div>
+      <span class="l-eq">x_opt  =  √(  2 × Jahresbedarf × Bestellkosten  /  Einstandspreis × Lagerkostensatz  )</span>
+      <div class="l-step" style="margin-top:.4rem;">Merke: Lagerkostensatz immer als Dezimalzahl → 20 % = 0,20</div>
+    </div>
+
+    <div class="l-block">
+      <div class="l-title"><span class="l-badge">a</span>Optimale Bestellmenge – Schritt für Schritt</div>
+      <div class="l-step">📌 <strong>Schritt 1 – Werte einsetzen:</strong></div>
+      <span class="l-eq">x_opt  =  √(  2 × 24.000 × 400  /  3 × 0,20  )</span>
+      <div class="l-step">📌 <strong>Schritt 2 – Zähler ausrechnen:</strong></div>
+      <span class="l-eq">2 × 24.000 × 400  =  19.200.000</span>
+      <div class="l-step">📌 <strong>Schritt 3 – Nenner ausrechnen:</strong></div>
+      <span class="l-eq">3 × 0,20  =  0,60</span>
+      <div class="l-step">📌 <strong>Schritt 4 – Dividieren:</strong></div>
+      <span class="l-eq">19.200.000  ÷  0,60  =  32.000.000</span>
+      <div class="l-step">📌 <strong>Schritt 5 – Wurzel ziehen:</strong></div>
+      <span class="l-eq a">√32.000.000  =  √(32 × 1.000.000)  =  √32 × 1.000  ≈  5.657 Stück</span>
+      <span class="l-result">x_opt  ≈  5.657 Stück</span>
+      <div class="l-step" style="margin-top:.5rem;">→ Anzahl Bestellungen pro Jahr: 24.000 ÷ 5.657 ≈ <strong>4,24 mal</strong></div>
+    </div>
+
+    <div class="l-block">
+      <div class="l-title"><span class="l-badge">T</span>Kostentabelle – verschiedene Bestellmengen im Vergleich</div>
+      <div class="l-step" style="margin-bottom:.5rem;">Bestellkosten = (Jahresbedarf ÷ Bestellmenge) × Bestellkostensatz &nbsp;|&nbsp; Lagerkosten = (Bestellmenge ÷ 2) × Einstandspreis × Lagerkostensatz</div>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Bestellungen/Jahr</th><th>Bestellmenge</th><th>Lagerwert (Ø)</th><th>Bestellkosten</th><th>Lagerkosten</th><th>Gesamtkosten</th></tr>
+          <tr><td>1</td><td>24.000</td><td>36.000 €</td><td>400 €</td><td>7.200 €</td><td>7.600 €</td></tr>
+          <tr><td>2</td><td>12.000</td><td>18.000 €</td><td>800 €</td><td>3.600 €</td><td>4.400 €</td></tr>
+          <tr><td>3</td><td>8.000</td><td>12.000 €</td><td>1.200 €</td><td>2.400 €</td><td>3.600 €</td></tr>
+          <tr><td>4</td><td>6.000</td><td>9.000 €</td><td>1.600 €</td><td>1.800 €</td><td>3.400 €</td></tr>
+          <tr style="background:#eaf5ef;font-weight:600"><td>≈ 4,24 <strong>(opt.)</strong></td><td>5.657</td><td>8.486 €</td><td>1.697 €</td><td>1.697 €</td><td><strong>3.394 €</strong></td></tr>
+          <tr><td>6</td><td>4.000</td><td>6.000 €</td><td>2.400 €</td><td>1.200 €</td><td>3.600 €</td></tr>
+          <tr><td>8</td><td>3.000</td><td>4.500 €</td><td>3.200 €</td><td>900 €</td><td>4.100 €</td></tr>
+          <tr><td>12</td><td>2.000</td><td>3.000 €</td><td>4.800 €</td><td>600 €</td><td>5.400 €</td></tr>
+        </table>
+      </div>
+      <div class="l-step">→ Am optimalen Punkt sind <strong>Bestellkosten = Lagerkosten</strong> (beide 1.697 €). Das ist kein Zufall – das ist immer so bei der Andler-Formel!</div>
+
+      <!-- Diagramm -->
+      <div style="position:relative;width:100%;height:260px;margin-top:1rem;">
+        <canvas id="andler-chart" role="img" aria-label="Kostenverläufe Andler-Formel: Bestellkosten sinken, Lagerkosten steigen, Gesamtkosten haben Minimum bei optimaler Bestellmenge"></canvas>
+      </div>
+    </div>
+
+    <div class="l-block">
+      <div class="l-title"><span class="l-badge">c</span>Drei Einschränkungen der Andler-Formel in der Praxis</div>
+      <div class="l-step"><strong>1. Konstanter Jahresbedarf unrealistisch:</strong> Die Formel geht von einem gleichmäßigen, planbaren Jahresbedarf aus. In der Praxis schwankt die Nachfrage – saisonal, konjunkturell oder durch Kundenschwankungen.</div>
+      <div class="l-step"><strong>2. Lagerkapazität wird ignoriert:</strong> Die optimale Bestellmenge kann größer sein als die verfügbare Lagerfläche. Platz- und Kapazitätsbeschränkungen werden nicht berücksichtigt.</div>
+      <div class="l-step"><strong>3. Mindestabnahmemengen & Rabattstaffeln:</strong> Lieferanten schreiben oft Mindestbestellmengen vor oder bieten Mengenrabatte an, die die rechnerisch optimale Menge wirtschaftlich unattraktiv machen.</div>
+      <div class="l-step" style="margin-top:.3rem;color:#888;font-size:12px;">Weitere mögliche Argumente: Lieferzeiten variieren · Sicherheitsbestand nicht enthalten · Einstandspreise schwanken · Verderb/Schwund bei bestimmten Waren</div>
     </div>
   </div>
 </div>
@@ -1072,10 +1166,39 @@ window.addEventListener('load', function() {
   if (typeof Chart !== 'undefined') {
     eg1_render(0.1);
     eg2_render();
+    andler_chart();
   } else {
-    setTimeout(function() { eg1_render(0.1); eg2_render(); }, 800);
+    setTimeout(function() { eg1_render(0.1); eg2_render(); andler_chart(); }, 800);
   }
 });
+
+function andler_chart() {
+  const el = document.getElementById('andler-chart');
+  if (!el) return;
+  const mengen = [2000, 3000, 4000, 5000, 5657, 6000, 7000, 8000, 10000, 12000];
+  const bestell = mengen.map(m => Math.round((24000 / m) * 400));
+  const lager   = mengen.map(m => Math.round((m / 2) * 3 * 0.20));
+  const gesamt  = mengen.map((m, i) => bestell[i] + lager[i]);
+  new Chart(el, {
+    type: 'line',
+    data: {
+      labels: mengen.map(m => m.toLocaleString('de')),
+      datasets: [
+        { label: 'Bestellkosten', data: bestell, borderColor: '#3b6fd4', backgroundColor: 'rgba(59,111,212,0.08)', borderWidth: 2, pointRadius: 3, tension: 0.4, borderDash: [5,3] },
+        { label: 'Lagerkosten',   data: lager,   borderColor: '#2d7a4f', backgroundColor: 'rgba(45,122,79,0.08)',  borderWidth: 2, pointRadius: 3, tension: 0.4, borderDash: [2,2] },
+        { label: 'Gesamtkosten',  data: gesamt,  borderColor: '#c0392b', backgroundColor: 'rgba(192,57,43,0.08)', borderWidth: 2.5, pointRadius: 3, tension: 0.4 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'top', labels: { font: { size: 11 }, boxWidth: 12, padding: 10 } } },
+      scales: {
+        x: { title: { display: true, text: 'Bestellmenge (Stück)', font: { size: 11 } }, grid: { color: 'rgba(0,0,0,0.06)' }, ticks: { font: { size: 10 } } },
+        y: { title: { display: true, text: 'Kosten (€)', font: { size: 11 } }, grid: { color: 'rgba(0,0,0,0.06)' }, ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+}
 
 function toggle(btn) {
   const loesung = btn.nextElementSibling;
